@@ -81,7 +81,7 @@ const secondaryCategories = ref<CategoryItem[]>([])
 const isLoading = ref(true)
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
-//获取标签页数据
+//获取标签页数据 3333333
 const tabs = ref<string[]>([])
 
 //rightScrollTop
