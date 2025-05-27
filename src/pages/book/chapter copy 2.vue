@@ -1,23 +1,16 @@
 <template>
   <view
-    :class="[
-      'h-screen box-border relative overflow-auto text-sm',
-      { nightMode: isNightMode }
-    ]"
+    :class="['chapter-page', { nightMode: isNightMode }]"
     :style="{ backgroundColor: computedBgColor }">
     <!-- 章节内容 -->
     <rich-text
-      class="pt-[15px] px-[15px] leading-[1.75] indent-8 min-h-[80vh] text-gray-800 w-full box-border block break-words"
+      class="chapter-content"
       @click="onPageClick"
       :nodes="chapterDetailsConver"
       :style="{ fontSize: chapterFontSize + 'px' }" />
 
     <!-- 底部菜单 -->
-    <view
-      :class="[
-        'fixed bottom-0 left-0 right-0 bg-white text-black transition-transform duration-300 ease-in-out translate-y-full flex flex-row items-center justify-around h-[100px]',
-        { 'translate-y-0': showFooterBar }
-      ]">
+    <view :class="['chapter-footbar', { show: showFooterBar }]">
       <view @click="toggleCategoryList" class="flex flex-col">
         <uni-icons type="wallet" size="30"></uni-icons>
         <text>目录</text>
@@ -36,11 +29,9 @@
       </view>
 
       <!-- 设置面板 -->
-      <view
-        class="absolute bottom-full left-0 right-0 bg-white py-[1px] px-5 border-b border-[#4e4e4e]"
-        v-show="showFooterBar && showSettingPanel">
+      <view class="setting-panel" v-show="showFooterBar && showSettingPanel">
         <!-- 亮度调节面板 -->
-        <view class="py-[5px] flex items-center">
+        <view class="lightness setting-panel-normal">
           <text>亮度</text>
           <slider
             min="0"
@@ -61,7 +52,7 @@
           </view>
         </view>
         <!-- 字体大小调节面板 -->
-        <view class="py-[5px] flex items-center">
+        <view class="font-size setting-panel-normal">
           <text>字体</text>
           <slider
             min="12"
@@ -75,7 +66,7 @@
             @change="changeFontSize" />
         </view>
         <!-- 背景颜色调节面板 -->
-        <view class="py-[5px] flex items-center">
+        <view class="background-color setting-panel-normal">
           <text>背景</text>
           <view class="flex-1 flex flex-row justify-around items-center">
             <view
@@ -90,77 +81,72 @@
     </view>
 
     <!-- 目录 -->
-    <!-- 目录 -->
-    <uni-section
-      :class="[
-        'chapter-picker relative h-full overflow-y-auto',
-        { showDirectory: showDirectory }
-      ]"
-      @click="toggleCategoryList">
-      <!-- 头部：小说信息 -->
+<!-- 目录 -->
+<uni-section
+    :class="['chapter-picker relative h-full overflow-y-auto', { showDirectory: showDirectory }]"
+    @click="toggleCategoryList">
+    <!-- 头部：小说信息 -->
+    <view class="novel-header sticky top-0 z-10 bg-white p-[15px] border-b border-[#eee]">
+      <image
+        class="cover-img"
+        src="/static/novel-cover.jpg"
+        mode="widthFix" />
+      <view class="novel-meta">
+        <text class="novel-title">《九界独尊》</text>
+        <text class="novel-author">作者：风笑天</text>
+      </view>
+    </view>
+
+    <!-- 目录/书签切换tab -->
+    <view class="tab-container sticky top-[80px] z-10 bg-white border-b border-[#eee]">
       <view
-        class="novel-header sticky top-0 z-10 bg-white p-[15px] border-b border-[#eee]">
-        <image
-          class="cover-img"
-          src="/static/novel-cover.jpg"
-          mode="widthFix" />
-        <view class="novel-meta">
-          <text class="novel-title">《九界独尊》</text>
-          <text class="novel-author">作者：风笑天</text>
-        </view>
+        :class="['tab-item', { active: currentTab === 'directory' }]"
+        @click="currentTab = 'directory'">
+        目录
       </view>
-
-      <!-- 目录/书签切换tab -->
       <view
-        class="tab-container sticky top-[80px] z-10 bg-white border-b border-[#eee]">
-        <view
-          :class="['tab-item', { active: currentTab === 'directory' }]"
-          @click="currentTab = 'directory'">
-          目录
-        </view>
-        <view
-          :class="['tab-item', { active: currentTab === 'bookmark' }]"
-          @click="currentTab = 'bookmark'">
-          书签(3)
-        </view>
+        :class="['tab-item', { active: currentTab === 'bookmark' }]"
+        @click="currentTab = 'bookmark'">
+        书签(3)
+      </view>
+    </view>
+
+    <!-- 内容列表 -->
+    <view class="list-content pt-[160px]">
+      <!-- 目录列表 -->
+      <view v-if="currentTab === 'directory'">
+        <uni-list>
+          <uni-list-item
+            :key="item.id"
+            :class="{
+              active:
+                currentChapterSectionIndex * CHAPTER_SECTION_COUNT + index ===
+                currentPageIndex
+            }"
+            v-for="(item, index) in currentChapterSection"
+            :title="item.title"
+            @click="gotoTargeChapterFromItem(item, index)"
+            class="chapter-item"
+            hover-class="uni-list-item-hover" />
+        </uni-list>
       </view>
 
-      <!-- 内容列表 -->
-      <view class="list-content pt-[160px]">
-        <!-- 目录列表 -->
-        <view v-if="currentTab === 'directory'">
-          <uni-list>
-            <uni-list-item
-              :key="item.id"
-              :class="{
-                active:
-                  currentChapterSectionIndex * CHAPTER_SECTION_COUNT + index ===
-                  currentPageIndex
-              }"
-              v-for="(item, index) in currentChapterSection"
-              :title="item.title"
-              @click="gotoTargeChapterFromItem(item, index)"
-              class="chapter-item"
-              hover-class="uni-list-item-hover" />
-          </uni-list>
-        </view>
-
-        <!-- 书签列表（假数据） -->
-        <view v-else>
-          <uni-list>
-            <uni-list-item
-              v-for="(item, index) in bookmarkList"
-              :key="item.id"
-              :title="item.title"
-              :extra="`第${item.page}页`"
-              @click="gotoTargeChapterFromItem(item, index)"
-              class="bookmark-item"
-              show-extra
-              hover-class="uni-list-item-hover" />
-          </uni-list>
-        </view>
+      <!-- 书签列表（假数据） -->
+      <view v-else>
+        <uni-list>
+          <uni-list-item
+            v-for="(item, index) in bookmarkList"
+            :key="item.id"
+            :title="item.title"
+            :extra="`第${item.page}页`"
+            @click="gotoTargeChapterFromItem(item, index)"
+            class="bookmark-item"
+            show-extra
+            hover-class="uni-list-item-hover" />
+        </uni-list>
       </view>
-    </uni-section>
+    </view>
+  </uni-section>
   </view>
 </template>
 
@@ -540,17 +526,17 @@ $primaryColor: #4393e2;
   font-size: 14px;
 }
 
-// .chapter-content {
-//   padding: 15px 15px 0;
-//   line-height: 1.75;
-//   text-indent: 2em;
-//   min-height: 80vh;
-//   color: #333;
-//   width: 100%;
-//   box-sizing: border-box;
-//   display: block;
-//   word-wrap: break-word;
-// }
+.chapter-content {
+  padding: 15px 15px 0;
+  line-height: 1.75;
+  text-indent: 2em;
+  min-height: 80vh;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  word-wrap: break-word;
+}
 
 .turnPage {
   padding: 30px 15px 20px;
@@ -779,4 +765,6 @@ $primaryColor: #4393e2;
     color: #666;
   }
 }
+
+
 </style>

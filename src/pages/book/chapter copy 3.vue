@@ -1,23 +1,19 @@
 <template>
   <view
-    :class="[
-      'h-screen box-border relative overflow-auto text-sm',
-      { nightMode: isNightMode }
-    ]"
+    class="chapter-page h-screen box-border relative overflow-auto text-sm"
+    :class="{ nightMode: isNightMode }"
     :style="{ backgroundColor: computedBgColor }">
     <!-- 章节内容 -->
     <rich-text
-      class="pt-[15px] px-[15px] leading-[1.75] indent-8 min-h-[80vh] text-gray-800 w-full box-border block break-words"
+      class="chapter-content pt-[15px] px-[15px] leading-7 indent-8 min-h-[80vh] text-gray-900 w-full box-border block break-words"
       @click="onPageClick"
       :nodes="chapterDetailsConver"
       :style="{ fontSize: chapterFontSize + 'px' }" />
 
     <!-- 底部菜单 -->
     <view
-      :class="[
-        'fixed bottom-0 left-0 right-0 bg-white text-black transition-transform duration-300 ease-in-out translate-y-full flex flex-row items-center justify-around h-[100px]',
-        { 'translate-y-0': showFooterBar }
-      ]">
+      class="chapter-footbar fixed bottom-0 left-0 right-0 bg-white text-black transition-transform duration-300 ease-in-out translate-y-full flex flex-row items-center justify-around h-[100px]"
+      :class="{ 'show: translate-y-0': showFooterBar }">
       <view @click="toggleCategoryList" class="flex flex-col">
         <uni-icons type="wallet" size="30"></uni-icons>
         <text>目录</text>
@@ -37,12 +33,13 @@
 
       <!-- 设置面板 -->
       <view
-        class="absolute bottom-full left-0 right-0 bg-white py-[1px] px-5 border-b border-[#4e4e4e]"
+        class="setting-panel absolute bottom-full left-0 right-0 bg-white py-[1px] px-[20px] border-b border-[#4e4e4e]"
         v-show="showFooterBar && showSettingPanel">
         <!-- 亮度调节面板 -->
-        <view class="py-[5px] flex items-center">
+        <view class="lightness setting-panel-normal py-[5px] flex items-center">
           <text>亮度</text>
           <slider
+            class="flex-1"
             min="0"
             max="1"
             :value="lightness"
@@ -53,7 +50,7 @@
             @changing="changeLightNess"
             @change="changeLightNess" />
           <view>
-            <text style="margin-right: 10px">常亮</text>
+            <text class="mr-2">常亮</text>
             <switch
               type="checkbox"
               :checked="isKeepLight"
@@ -61,9 +58,10 @@
           </view>
         </view>
         <!-- 字体大小调节面板 -->
-        <view class="py-[5px] flex items-center">
+        <view class="font-size setting-panel-normal py-[5px] flex items-center">
           <text>字体</text>
           <slider
+            class="flex-1"
             min="12"
             max="30"
             :value="chapterFontSize"
@@ -75,7 +73,8 @@
             @change="changeFontSize" />
         </view>
         <!-- 背景颜色调节面板 -->
-        <view class="py-[5px] flex items-center">
+        <view
+          class="background-color setting-panel-normal py-[5px] flex items-center">
           <text>背景</text>
           <view class="flex-1 flex flex-row justify-around items-center">
             <view
@@ -90,7 +89,6 @@
     </view>
 
     <!-- 目录 -->
-    <!-- 目录 -->
     <uni-section
       :class="[
         'chapter-picker relative h-full overflow-y-auto',
@@ -98,35 +96,47 @@
       ]"
       @click="toggleCategoryList">
       <!-- 头部：小说信息 -->
-      <view
-        class="novel-header sticky top-0 z-10 bg-white p-[15px] border-b border-[#eee]">
+      <view class="novel-header flex p-[15px] border-b border-[#eee]">
         <image
-          class="cover-img"
+          class="cover-img w-[60px] h-[80px] rounded mr-3"
           src="/static/novel-cover.jpg"
           mode="widthFix" />
-        <view class="novel-meta">
-          <text class="novel-title">《九界独尊》</text>
-          <text class="novel-author">作者：风笑天</text>
+        <view class="novel-meta flex-1 flex flex-col justify-center">
+          <text class="novel-title text-base font-semibold mb-1">
+            《九界独尊》
+          </text>
+          <text class="novel-author text-sm text-gray-600">作者：风笑天</text>
         </view>
       </view>
 
       <!-- 目录/书签切换tab -->
-      <view
-        class="tab-container sticky top-[80px] z-10 bg-white border-b border-[#eee]">
+      <view class="tab-container flex border-b border-[#eee]">
         <view
-          :class="['tab-item', { active: currentTab === 'directory' }]"
+          :class="[
+            'tab-item flex-1 text-center py-3 text-[15px] text-gray-600',
+            {
+              'text-[#4393e2] font-semibold border-b-2 border-[#4393e2]':
+                currentTab === 'directory'
+            }
+          ]"
           @click="currentTab = 'directory'">
           目录
         </view>
         <view
-          :class="['tab-item', { active: currentTab === 'bookmark' }]"
+          :class="[
+            'tab-item flex-1 text-center py-3 text-[15px] text-gray-600',
+            {
+              'text-[#4393e2] font-semibold border-b-2 border-[#4393e2]':
+                currentTab === 'bookmark'
+            }
+          ]"
           @click="currentTab = 'bookmark'">
           书签(3)
         </view>
       </view>
 
       <!-- 内容列表 -->
-      <view class="list-content pt-[160px]">
+      <view class="list-content p-[15px]">
         <!-- 目录列表 -->
         <view v-if="currentTab === 'directory'">
           <uni-list>
@@ -140,7 +150,7 @@
               v-for="(item, index) in currentChapterSection"
               :title="item.title"
               @click="gotoTargeChapterFromItem(item, index)"
-              class="chapter-item"
+              class="chapter-item py-2 text-sm border-b border-[#f5f5f5] last:border-0"
               hover-class="uni-list-item-hover" />
           </uni-list>
         </view>
@@ -154,7 +164,7 @@
               :title="item.title"
               :extra="`第${item.page}页`"
               @click="gotoTargeChapterFromItem(item, index)"
-              class="bookmark-item"
+              class="bookmark-item py-2 text-sm text-gray-600 border-b border-[#f5f5f5] last:border-0"
               show-extra
               hover-class="uni-list-item-hover" />
           </uni-list>
@@ -182,9 +192,6 @@ const computedBgColor = ref(backgroundColorList.value[currentColorIndex.value])
 const changeBackgroundColor = (index: number) => {
   currentColorIndex.value = index
   const backgroundColor = backgroundColorList.value[index]
-  // 修改组件背景色 <view :class="['chapter-page', { nightMode: isNightMode }]">
-
-  console.log('backgroundColor index', index)
   if (index == 4) {
     isNightMode.value = true
     computedBgColor.value = backgroundColor
@@ -392,8 +399,6 @@ const chapterDetailsConver = ref([
 const isNightMode = ref(false)
 const chapterFontSize = ref(16)
 const currentPageIndex = ref(0)
-const chaptersSectionCount = ref(10)
-const fromOtherPlace = ref(true)
 const showFooterBar = ref(false)
 const showSettingPanel = ref(false)
 const lightness = ref(0.5)
@@ -442,49 +447,35 @@ const currentChapterSection = ref([
   { id: 39, title: '章节 39' },
   { id: 40, title: '章节 40' }
 ])
-const chapterListDataId = ref(1)
 const CHAPTER_SECTION_COUNT = 1
 const showDirectory = ref(false)
 
 // 方法实现
 const onPageClick = () => {
-  console.log('页面被点击')
   showFooterBar.value = !showFooterBar.value
 }
 
 const gotoTargeChapter = (index: number) => {
   currentPageIndex.value = index
-  console.log(`跳转到章节 ${index}`)
-}
-
-const gotoHome = () => {
-  console.log('返回书架')
 }
 
 // 切换黑夜和白天模式
 const toggleNightOrDay = () => {
   isNightMode.value = !isNightMode.value
-  console.log(`切换到 ${isNightMode.value ? '夜间' : '白天'} 模式`)
-
   if (isNightMode.value) {
-    // 切换到夜间模式
-    console.log('切换到夜间模式')
     changeBackgroundColor(4)
   } else {
     changeBackgroundColor(0)
-    console.log('切换到白天模式')
   }
 }
 
 // 切换设置面板显示状态
 const toggleSettingPanel = () => {
   showSettingPanel.value = !showSettingPanel.value
-  console.log(`设置面板 ${showSettingPanel.value ? '显示' : '隐藏'}`)
 }
 
 const toggleCategoryList = () => {
   showDirectory.value = !showDirectory.value
-  console.log('切换目录列表显示状态')
 }
 
 const gotoSourcePage = (id: number) => {
@@ -494,7 +485,6 @@ const gotoSourcePage = (id: number) => {
 // 修改屏幕亮度
 const changeLightNess = (e: any) => {
   lightness.value = e.detail.value
-  console.log(`亮度调整为 ${lightness.value}`)
   uni.setScreenBrightness({
     value: lightness.value,
     success: function () {
@@ -506,7 +496,6 @@ const changeLightNess = (e: any) => {
 // 设置是否常亮
 const toggleScreenLight = (e: any) => {
   isKeepLight.value = e.detail.value
-  console.log(`屏幕常亮状态: ${isKeepLight.value}`)
   uni.setKeepScreenOn({
     keepScreenOn: isKeepLight.value
   })
@@ -514,269 +503,25 @@ const toggleScreenLight = (e: any) => {
 
 const changeFontSize = (e: any) => {
   chapterFontSize.value = e.detail.value
-  console.log(`字体大小调整为 ${chapterFontSize.value}px`)
 }
 
 const chapterSectionArrayChange = (e: any) => {
   currentChapterSectionIndex.value = e.detail.value
-  console.log(`当前章节段索引变更为 ${currentChapterSectionIndex.value}`)
 }
 
 const gotoTargeChapterFromItem = (item: any, index: number) => {
   currentPageIndex.value =
     currentChapterSectionIndex.value * CHAPTER_SECTION_COUNT + index
-  console.log(`从目录项跳转到章节 ${currentPageIndex.value}`)
 }
 </script>
 
 <style lang="scss" scoped>
-$primaryColor: #4393e2;
-
-.chapter-page {
-  height: 100vh;
-  box-sizing: border-box;
-  position: relative;
-  overflow: auto;
-  font-size: 14px;
-}
-
-// .chapter-content {
-//   padding: 15px 15px 0;
-//   line-height: 1.75;
-//   text-indent: 2em;
-//   min-height: 80vh;
-//   color: #333;
-//   width: 100%;
-//   box-sizing: border-box;
-//   display: block;
-//   word-wrap: break-word;
-// }
-
-.turnPage {
-  padding: 30px 15px 20px;
-  display: flex;
-  justify-content: space-between;
-
-  .button {
-    background-color: transparent;
-    flex: 1;
-    border-radius: 30px;
-    border: 1px solid #999;
-    color: #666;
-    outline: none;
-    font-size: 14px;
-    text-align: center;
-    padding: 6px 0;
-
-    &.next {
-      flex: 1.8;
-      margin-left: 20px;
-    }
-  }
-}
-
-.chapter-footbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  color: black;
-  transition: transform 0.3s ease;
-  transform: translateY(100%);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  height: 100px;
-  &.show {
-    transform: translateY(0);
-  }
-}
-
-.setting-panel {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  padding: 1px 20px;
-  border-bottom: 1px solid #4e4e4e;
-
-  .setting-panel-normal {
-    padding: 5px 0;
-    display: flex;
-    align-items: center;
-
-    slider {
-      flex: 1;
-    }
-
-    &.lightness > div {
-      display: inline-flex;
-      align-items: center;
-    }
-  }
-}
-
-.chapter-picker {
-  color: #333;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background: #fff;
-  overflow: auto;
-  transform: translate3d(-100%, 0, 0);
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(#333, 0.375);
-
-    .picker {
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .icon-dropDown {
-      font-size: 12px;
-      margin-left: 5px;
-    }
+.nightMode {
+  background: #333;
+ 
+  .chapter-content {
+    color: #777;
   }
 
-  & > ul {
-    flex: 1;
-    overflow: auto;
-
-    li {
-      padding: 10px 20px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      &.active {
-        color: #fff;
-        background-color: rgba($primaryColor, 0.75);
-      }
-    }
-  }
-
-  &.showDirectory {
-    transform: translate3d(0, 0, 0);
-  }
-
-  > button {
-    width: 100%;
-    background-color: $primaryColor;
-    outline: none;
-    border-radius: 0;
-    border: 0;
-    font-size: 14px;
-    color: #fff;
-    padding: 5px 0;
-    box-shadow: 0 0 10px rgba($primaryColor, 0.375);
-  }
-}
-
-// 主题调整
-.chapter-page {
-  // 夜间模式
-  &.nightMode {
-    background: #333;
-
-    .chapter-content {
-      color: #777;
-    }
-
-    .chapter-picker {
-      background: #333;
-
-      header,
-      > ul {
-        color: #666;
-      }
-
-      li.active {
-        color: $primaryColor;
-        background-color: transparent;
-      }
-    }
-  }
-}
-
-/* 新增样式 */
-.novel-header {
-  display: flex;
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-
-  .cover-img {
-    width: 60px;
-    height: 80px;
-    border-radius: 4px;
-    margin-right: 12px;
-  }
-
-  .novel-meta {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    .novel-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .novel-author {
-      font-size: 14px;
-      color: #666;
-    }
-  }
-}
-
-.tab-container {
-  display: flex;
-  border-bottom: 1px solid #eee;
-
-  .tab-item {
-    flex: 1;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 15px;
-    color: #666;
-
-    &.active {
-      color: #4393e2;
-      font-weight: 600;
-      border-bottom: 2px solid #4393e2;
-    }
-  }
-}
-
-.list-content {
-  padding: 15px;
-
-  .chapter-item,
-  .bookmark-item {
-    padding: 10px 0;
-    font-size: 14px;
-    border-bottom: 1px solid #f5f5f5;
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  .bookmark-item {
-    color: #666;
-  }
 }
 </style>
