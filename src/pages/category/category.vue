@@ -37,7 +37,7 @@
           </scroll-view>
           <!-- 右侧：二级分类 -->
           <scroll-view
-            class="flex-1 overflow-hidden h-full rounded-t-lg bg-slate-500"
+            class="flex-1 overflow-hidden h-full rounded-t-lg bg-gradient-to-t from-lime-100 to-lime-400 via-lime-200"
             scroll-y
             scroll-with-animation
             :scroll-top="rightScrollTop"

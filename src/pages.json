@@ -11,30 +11,41 @@
 		{
 			"path": "pages/bookstore/bookstore",
 			"style": {
-        	"navigationStyle": "custom",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "书城"
 			}
 		},
-
 		{
 			"path": "pages/category/category",
 			"style": {
-        	"navigationStyle": "custom",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "分类"
 			}
 		},
 		{
 			"path": "pages/bookshelf/bookshelf",
 			"style": {
-        	"navigationStyle": "custom",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "书架"
 			}
 		},
 		{
 			"path": "pages/my/my",
 			"style": {
-        	"navigationStyle": "custom",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/book/detail",
+			"style": {
+				"navigationBarTitleText": "书本详情"
+			}
+		},
+		{
+			"path": "pages/book/chapter",
+			"style": {
+				"navigationBarTitleText": "章节"
 			}
 		}
 	],

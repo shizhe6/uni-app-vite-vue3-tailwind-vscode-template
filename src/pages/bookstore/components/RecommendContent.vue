@@ -7,17 +7,24 @@
         v-for="(rank, index) in rankList"
         :key="index"
         :class="{ active: activeRank === index }"
-        @click="switchRank(index)"
-      >
+        @click="switchRank(index)">
         {{ rank.title }}
       </view>
-      <view class="nav-item" @click="handleViewFullList" style="margin-right: 0"> 完整榜单> </view>
+      <view
+        class="nav-item"
+        @click="handleViewFullList"
+        style="margin-right: 0">
+        完整榜单>
+      </view>
 
       <!-- 当前榜单内容 -->
       <swiper class="rank-swiper" circular :autoplay="false">
         <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
           <view class="book-grid">
-            <view v-for="(book, bIndex) in page" :key="bIndex" class="book-item">
+            <view
+              v-for="(book, bIndex) in page"
+              :key="bIndex"
+              class="book-item">
               <image class="book-cover" :src="book.cover" mode="aspectFill" />
               <view class="book-number">
                 <text>{{ book.rank }}</text>
@@ -29,7 +36,9 @@
                 </view>
                 <view class="book-info-details">
                   <text class="book-genre">{{ book.genre }}</text>
-                  <text class="book-popularity">🔥 {{ book.popularity }}万</text>
+                  <text class="book-popularity">
+                    🔥 {{ book.popularity }}万
+                  </text>
                 </view>
               </view>
             </view>
@@ -44,14 +53,22 @@
         <text class="title">猜你喜欢</text>
       </view>
       <view class="recommend-grid">
-        <view v-for="(item, idx) in recommendList" :key="idx" class="recommend-grid-item">
-          <navigator class="recommend-item" url="/pages/book/book">
-            <image class="recommend-cover" :src="item.cover" mode="aspectFill" />
+        <view
+          v-for="(item, idx) in recommendList"
+          :key="idx"
+          class="recommend-grid-item">
+          <navigator class="recommend-item" url="/pages/book/detail">
+            <image
+              class="recommend-cover"
+              :src="item.cover"
+              mode="aspectFill" />
             <text class="recommend-book-name">
               {{ item.name }}
             </text>
             <text class="recommend-book-description">
-              {{ item.description ? item.description.slice(0, 20) + '...' : '' }}
+              {{
+                item.description ? item.description.slice(0, 20) + '...' : ''
+              }}
             </text>
           </navigator>
         </view>
@@ -75,8 +92,8 @@ const rankList = ref([
         cover: `https://picsum.photos/200/300?random=${i + 1}`,
         name: `畅销书籍 ${i + 1}`,
         genre: ['都市', '言情', '科幻'][i % 3],
-        popularity: (300 + i * 10).toFixed(1),
-      })),
+        popularity: (300 + i * 10).toFixed(1)
+      }))
   },
   {
     title: '新书榜',
@@ -87,8 +104,8 @@ const rankList = ref([
         cover: `https://picsum.photos/200/300?n=${i + 100}`,
         name: `新书推荐 ${i + 1}`,
         genre: ['悬疑', '历史', '奇幻'][i % 3],
-        popularity: (200 + i * 15).toFixed(1),
-      })),
+        popularity: (200 + i * 15).toFixed(1)
+      }))
   },
   {
     title: '人气榜',
@@ -99,9 +116,9 @@ const rankList = ref([
         cover: `https://picsum.photos/200/300?p=${i + 200}`,
         name: `人气作品 ${i + 1}`,
         genre: ['武侠', '职场', '玄幻'][i % 3],
-        popularity: (400 + i * 20).toFixed(1),
-      })),
-  },
+        popularity: (400 + i * 20).toFixed(1)
+      }))
+  }
 ])
 // 数据加载方法
 const loadData = async () => {
@@ -117,7 +134,7 @@ const switchRank = (index: number) => {
 
 const handleViewFullList = () => {
   uni.navigateTo({
-    url: '/pages/bookstore/rank',
+    url: '/pages/bookstore/rank'
   })
 }
 
@@ -141,16 +158,19 @@ interface RankList {
 const pagedBooks = computed<Book[][]>(() => {
   const pageSize = 4
 
-  return currentBooks.value.reduce<Book[][]>((resultArray, item: Book, index) => {
-    const chunkIndex = Math.floor(index / pageSize)
+  return currentBooks.value.reduce<Book[][]>(
+    (resultArray, item: Book, index) => {
+      const chunkIndex = Math.floor(index / pageSize)
 
-    if (!resultArray[chunkIndex]) {
-      resultArray[chunkIndex] = []
-    }
+      if (!resultArray[chunkIndex]) {
+        resultArray[chunkIndex] = []
+      }
 
-    resultArray[chunkIndex].push(item)
-    return resultArray
-  }, [])
+      resultArray[chunkIndex].push(item)
+      return resultArray
+    },
+    []
+  )
 })
 
 // recommendList 添加数据
@@ -159,68 +179,68 @@ const recommendList = ref([
     cover: 'https://picsum.photos/200/300?random=1',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=2',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=3',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=4',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=5',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=6',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=7',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=8',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=9',
     name: '放下个人素质，享无敌人生',
     description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来',
+      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
   },
   {
     cover: 'https://picsum.photos/200/300?random=10',
-    name: '放下个人素质，享无敌人生',
+    name: '放下个人素质，享无敌人生'
   },
   {
     cover: 'https://picsum.photos/200/300?random=11',
-    name: '放下个人素质，享无敌人生',
+    name: '放下个人素质，享无敌人生'
   },
   {
     cover: 'https://picsum.photos/200/300?random=12',
-    name: '放下个人素质，享无敌人生',
-  },
+    name: '放下个人素质，享无敌人生'
+  }
 ])
 </script>
 

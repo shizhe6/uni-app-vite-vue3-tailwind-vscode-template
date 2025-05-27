@@ -31,6 +31,12 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: postcssPlugins
+    },
+    preprocessorOptions: {
+      scss: {
+        api: "modern-compiler",
+        silenceDeprecations: ["legacy-js-api"]
+      }
     }
   }
 })
