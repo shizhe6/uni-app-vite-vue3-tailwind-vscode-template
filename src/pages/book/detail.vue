@@ -15,17 +15,21 @@
 
     <!-- 第二部分：作者信息 -->
     <view class="flex flex-col items-start justify-center m-[10px]">
-      <view class="flex flex-row items-center justify-around">
+      <!-- 作者信息 -->
+      <view class="flex flex-row items-center justify-around w-full">
         <image
           class="w-10 h-10 rounded-full"
           :src="authorInfo.avatar"
           mode="aspectFill"></image>
         <view class="flex-1 flex flex-col pl-3">
-          <text class=" text-black">{{ authorInfo.name }}</text>
-          <text class=" text-slate-400 text-sm">关注我，掌握最新动态</text>
+          <text class="text-black">{{ authorInfo.name }}</text>
+          <text class="text-slate-400 text-sm">关注我，掌握最新动态</text>
         </view>
-        <button class="text-sm text-red-500 px-2 py-2 rounded-lg">+ 关注</button>
+        <button class="text-sm text-red-500 px-2 py-2 rounded-lg">
+          + 关注
+        </button>
       </view>
+      <!-- 评分和阅读数 -->
       <view class="flex flex-row items-center justify-between w-full">
         <view class="flex flex-col">
           <text class="text-lg text-black">{{ authorInfo.rating }}★★★★★</text>
@@ -39,11 +43,24 @@
     </view>
 
     <!-- 第三部分：书籍简介 -->
-    <view class="intro-section">
-      <text class="section-title">书籍简介</text>
-      <text class="intro-content">{{ bookInfo.intro }}</text>
-      <view class="tag-list">
-        <text v-for="tag in bookInfo.tags" :key="tag" class="tag-item">
+    <view class="mt-[20px] flex flex-col m-2">
+      <!-- 简介内容容器 -->
+      <view
+        class="text-sm text-slate-400 overflow-hidden"
+        :class="{ 'line-clamp-3': !isExpanded }">
+        {{ bookInfo.intro }}
+      </view>
+      <!-- 展开/收起按钮 -->
+      <button
+        class="text-sm text-blue-500 mt-2"
+        @click="isExpanded = !isExpanded">
+        {{ isExpanded ? '收起' : '展开' }}
+      </button>
+      <view class="text-sm">
+        <text
+          v-for="tag in bookInfo.tags"
+          :key="tag"
+          class="text-xs text-slate-400 pr-2 bg-gray-300 rounded-lg text-center mr-3">
           {{ tag }}
         </text>
       </view>
@@ -66,6 +83,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+// 添加控制展开状态的响应式变量
+const isExpanded = ref(false) // 初始状态为折叠
 
 // 假数据
 const bookInfo = ref({
@@ -74,7 +93,8 @@ const bookInfo = ref({
   type: '科幻/冒险',
   status: '连载中',
   wordCount: '120万',
-  intro: '夜幕低垂，星辰在天际闪烁...（此处为简介正文）',
+  intro:
+    '夜幕低垂，星辰在天际闪烁，一艘神秘的飞船划破寂静的夜空，驶向未知的星际深处，展开冒险之旅。在这漫长的旅途中，船员们不仅要面对宇宙中各种奇异的天体和恶劣的环境，还要与潜藏在黑暗中的神秘势力斗智斗勇，他们能否揭开星际的秘密，平安归来，一切都充满了未知。',
   tags: ['星际探险', '成长故事', '硬科幻']
 })
 
@@ -126,8 +146,6 @@ const authorInfo = ref({
     }
   }
 }
-
-
 
 /* 第三部分样式 */
 .intro-section {
@@ -199,5 +217,12 @@ const authorInfo = ref({
   height: 100vh;
   background-color: #f8f8f8;
   border: 1px solid rgb(34, 238, 51);
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 </style>
