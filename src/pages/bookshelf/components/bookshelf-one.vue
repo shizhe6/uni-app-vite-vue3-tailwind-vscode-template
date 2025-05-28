@@ -22,7 +22,7 @@
 
     <!-- 列表模式 -->
     <view class="book-container-list" v-else>
-      <view v-for="book in bookList" :key="book.id" class="book-item">
+      <navigator v-for="book in bookList" :key="book.id" class="book-item" url="/pages/book/detail">
         <!-- 书籍封面 -->
         <image class="book-cover" :src="book.cover" mode="aspectFill" />
 
@@ -46,7 +46,7 @@
             <text class="chapter-count">（{{ book.totalChapters }}章）</text>
           </view>
         </view>
-      </view>
+      </navigator>
     </view>
   </view>
 </template>

@@ -12,13 +12,13 @@
     </view>
     <!-- 宫格模式 -->
     <view class="book-container-grid" v-if="isGrid">
-      <view v-for="book in bookList" :key="book.id" class="grid-book-item">
+      <navigator v-for="book in bookList" :key="book.id" class="grid-book-item" url="/pages/book/detail">
         <image class="grid-cover" :src="book.cover" mode="aspectFill" />
         <view class="grid-info">
           <text class="grid-title">{{ book.title }}</text>
           <text class="grid-update">更新至{{ book.totalChapters }}章</text>
         </view>
-      </view>
+      </navigator>
     </view>
 
     <!-- 列表模式 -->

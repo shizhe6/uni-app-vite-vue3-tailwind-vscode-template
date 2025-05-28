@@ -14,19 +14,28 @@
     </view>
 
     <!-- 第二部分：作者信息 -->
-    <view class="author-section">
-      <image
-        class="author-avatar"
-        :src="authorInfo.avatar"
-        mode="aspectFill"></image>
-      <view class="author-info">
-        <text class="author-name">{{ authorInfo.name }}</text>
-        <view class="stats">
-          <text class="rating">评分：{{ authorInfo.rating }}★</text>
-          <text class="read-count">阅读：{{ authorInfo.readCount }}万+</text>
+    <view class="flex flex-col items-start justify-center m-[10px]">
+      <view class="flex flex-row items-center justify-around">
+        <image
+          class="w-10 h-10 rounded-full"
+          :src="authorInfo.avatar"
+          mode="aspectFill"></image>
+        <view class="flex-1 flex flex-col pl-3">
+          <text class=" text-black">{{ authorInfo.name }}</text>
+          <text class=" text-slate-400 text-sm">关注我，掌握最新动态</text>
+        </view>
+        <button class="text-sm text-red-500 px-2 py-2 rounded-lg">+ 关注</button>
+      </view>
+      <view class="flex flex-row items-center justify-between w-full">
+        <view class="flex flex-col">
+          <text class="text-lg text-black">{{ authorInfo.rating }}★★★★★</text>
+          <text class="text-sm text-slate-400">本书评分</text>
+        </view>
+        <view class="flex flex-col">
+          <text class="text-lg text-black">{{ authorInfo.readCount }}万人</text>
+          <text class="text-sm text-slate-400">正在阅读</text>
         </view>
       </view>
-      <button class="follow-btn">+ 关注</button>
     </view>
 
     <!-- 第三部分：书籍简介 -->
@@ -72,7 +81,7 @@ const bookInfo = ref({
 const authorInfo = ref({
   name: '流浪诗人',
   avatar: 'https://picsum.photos/200/300?random=2',
-  rating: '4.8',
+  rating: '9.8',
   readCount: '890'
 })
 </script>
@@ -81,9 +90,8 @@ const authorInfo = ref({
 /* 第一部分样式 */
 .book-base {
   display: flex;
-  gap: 30rpx;
-  margin-bottom: 50rpx;
-  background-color: #e6e6e6;
+  margin: 10px;
+
   .cover {
     width: 240rpx;
     height: 320rpx;
@@ -96,7 +104,7 @@ const authorInfo = ref({
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 16rpx;
+
     .name {
       font-size: 34rpx;
       font-weight: 600;
@@ -119,55 +127,12 @@ const authorInfo = ref({
   }
 }
 
-/* 第二部分样式 */
-.author-section {
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
-  padding: 30rpx 0;
-  border-top: 8rpx solid #f5f5f5;
-  border-bottom: 8rpx solid #f5f5f5;
-  margin-bottom: 50rpx;
-  .author-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
-  }
 
-  .author-info {
-    flex: 1;
-  }
-
-  .author-name {
-    font-size: 32rpx;
-    font-weight: 500;
-    color: #333;
-  }
-
-  .stats {
-    display: flex;
-    gap: 20rpx;
-    margin-top: 8rpx;
-    .rating,
-    .read-count {
-      font-size: 28rpx;
-      color: #666;
-    }
-  }
-
-  .follow-btn {
-    padding: 8rpx 24rpx;
-    font-size: 28rpx;
-    color: #ff4d4f;
-    border: 1rpx solid #ff4d4f;
-    border-radius: 32rpx;
-    background: transparent;
-  }
-}
 
 /* 第三部分样式 */
 .intro-section {
   margin-bottom: 50rpx;
+
   .section-title {
     font-size: 32rpx;
     font-weight: 500;
@@ -186,6 +151,7 @@ const authorInfo = ref({
     display: flex;
     gap: 16rpx;
     flex-wrap: wrap;
+
     .tag-item {
       font-size: 28rpx;
       color: #2d8cf0;
@@ -207,9 +173,11 @@ const authorInfo = ref({
   padding: 20rpx 40rpx;
   background-color: #ffffff;
   box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.08);
+
   .primary {
     background-color: #f7ad4c;
   }
+
   .action-btn {
     flex: 1;
     display: flex;
@@ -226,9 +194,10 @@ const authorInfo = ref({
 
 /* 调整滚动区域底部边距，避免内容被按钮遮挡 */
 .content {
-  padding-bottom: 180rpx; /* 根据按钮高度调整 */
+  padding-bottom: 180rpx;
+  /* 根据按钮高度调整 */
   height: 100vh;
   background-color: #f8f8f8;
-  padding: 40rpx;
+  border: 1px solid rgb(34, 238, 51);
 }
 </style>

@@ -21,7 +21,8 @@
       <swiper class="rank-swiper" circular :autoplay="false">
         <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
           <view class="book-grid">
-            <view
+            <navigator
+            url="/pages/book/detail"
               v-for="(book, bIndex) in page"
               :key="bIndex"
               class="book-item">
@@ -41,7 +42,7 @@
                   </text>
                 </view>
               </view>
-            </view>
+            </navigator>
           </view>
         </swiper-item>
       </swiper>
