@@ -14,7 +14,7 @@
         class="nav-item"
         @click="handleViewFullList"
         style="margin-right: 0">
-        完整榜单>
+        完整榜单 >
       </view>
 
       <!-- 当前榜单内容 -->
@@ -142,10 +142,9 @@ const handleScrollToLower = () => {
 
 <style lang="scss" scoped>
 .container {
-
   .rank-nav {
     border-radius: 10px;
-    border: 1px solid black;
+    // border: 1px solid black;
     background-color: #ffffff;
     border-radius: 10px;
     margin: 10px;
@@ -153,12 +152,13 @@ const handleScrollToLower = () => {
       display: inline-block;
       padding: 16rpx 0rpx;
       margin-right: 30rpx;
+      margin-left: 30rpx;
       border-radius: 40rpx;
       color: #666;
       font-size: 28rpx;
 
       &.active {
-        color: rgb(25, 25, 25);
+        color: rgb(239, 151, 75);
       }
     }
 
