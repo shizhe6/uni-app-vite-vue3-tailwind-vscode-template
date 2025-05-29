@@ -15,7 +15,7 @@
         @click="handleViewFullList"
         style="margin-right: 0">
         完整榜单 >
-      </view>
+      </view> 
 
       <!-- 当前榜单内容 -->
       <swiper class="h-[65vh]" circular :autoplay="false">
@@ -99,7 +99,7 @@ const switchRank = (index: number) => {
  */
 const handleViewFullList = () => {
   uni.navigateTo({
-    url: '/pages/bookstore/rank'
+    url: '/pages/rank/rank'
   })
 }
 /**

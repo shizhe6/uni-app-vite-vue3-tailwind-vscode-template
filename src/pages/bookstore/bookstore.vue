@@ -43,8 +43,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
+import { ref } from 'vue'
 import Classic from './components/ClassicContent.vue'
 import Drama from './components/DramaContent.vue'
 import Knowledge from './components/KnowledgeContent.vue'
@@ -131,7 +131,7 @@ const onSwiperChange = (e: any) => {
  */
 const handleSearch = () => {
   uni.navigateTo({
-    url: '/pages/bookstore/search'
+    url: '/pages/search/search'
   })
 }
 </script>

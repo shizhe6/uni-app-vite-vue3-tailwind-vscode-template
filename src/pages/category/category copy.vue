@@ -1,55 +1,59 @@
 <template>
-  <view class="viewreport">
+  <view class="h-screen flex flex-col">
     <!-- 标题栏 -->
-    <view class="top-tabs" :style="{ paddingTop: safeAreaInsets!.top + 'px'}">
+    <view
+      class="flex flex-row justify-around items-end h-20 bg-slate-100 border-solid border-yellow-600"
+      :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
       <view
         v-for="(tab, index) in tabs"
         :key="index"
-        class="tab"
-        :class="{ active: currentTabIndex === index }"
-        @click="handleTabClick(index)"
-      >
+        class="inline-block px-5 py-0 text-black relative"
+        :class="`${currentTabIndex === index ? 'font-bold text-black' : ''}`"
+        @click="handleTabClick(index)">
         {{ tab }}
       </view>
     </view>
 
-    <view class="middle-container">
-      <swiper class="swiper" @change="onSwiperChange">
-        <swiper-item class="swiper-item" v-for="(tab, index) in tabs" :key="index">
+    <view class="flex-1 px-0 py-0 overflow-hidden">
+      <swiper class="h-screen" @change="onSwiperChange">
+        <!-- 内容区域,头部标题 -->
+        <swiper-item
+          class="h-screen flex flex-row overflow-hidden"
+          v-for="(tab, index) in tabs"
+          :key="index">
           <!-- 左侧：一级分类 -->
-          <scroll-view class="left-primary-category-container" scroll-y>
+          <scroll-view
+            class="w-20 flex-none h-full bg-slate-100"
+            scroll-y
+            show-scrollbar="false">
             <view
               v-for="(category, index) in primaryCategories"
               :key="category.id"
-              class="left-category-item"
-              :class="{ 'left-category-item-active': index === activePrimaryIndex }"
-              @tap="setActivePrimaryCategory(index)"
-            >
+              class="flex flex-col items-center justify-center h-20 text-black relative"
+              :class="`${index === activePrimaryIndex ? 'text-yellow-600' : ''}`"
+              @tap="setActivePrimaryCategory(index)">
               <text>{{ category.name }}</text>
             </view>
           </scroll-view>
           <!-- 右侧：二级分类 -->
           <scroll-view
-            class="right-secondary-category-container"
+            class="flex-1 overflow-hidden h-full rounded-t-lg bg-gradient-to-t from-lime-100 to-lime-400 via-lime-200"
             scroll-y
             scroll-with-animation
             :scroll-top="rightScrollTop"
-            @scroll="onRightScroll"
-          >
+            @scroll="onRightScroll">
             <view
               v-for="(category, index) in primaryCategories"
               :key="category.id"
-              :class="['right-secondary-category-item', 'right-secondary-category-item-' + index]"
-            >
-              <view class="right-secondary-category-item-top-name">
+              class="flex flex-col">
+              <view class="h-12 text-lg text-black text-center">
                 {{ category.name }}
               </view>
-              <view class="right-secondary-category-item-bottom-content">
+              <view class="grid grid-cols-3 gap-2">
                 <view
-                  class="item-name"
+                  class="h-6 text-black text-center"
                   v-for="(subCategory, subIndex) in category.children"
-                  :key="subIndex"
-                >
+                  :key="subIndex">
                   {{ subCategory.name }}
                 </view>
               </view>
@@ -77,7 +81,7 @@ const secondaryCategories = ref<CategoryItem[]>([])
 const isLoading = ref(true)
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
-//获取标签页数据
+//获取标签页数据 3333333
 const tabs = ref<string[]>([])
 
 //rightScrollTop
@@ -95,12 +99,14 @@ onMounted(() => {
       // 检查 data 是否为数组，避免类型错误
       if (Array.isArray(data)) {
         // 过滤掉可能为 undefined 的 top 值，确保返回的是 number 类型的数组
-        leftDomsTop.value = data.map((v) => v.top).filter((top): top is number => top !== undefined)
+        leftDomsTop.value = data
+          .map((v) => v.top)
+          .filter((top): top is number => top !== undefined)
       } else {
         // 如果 data 不是数组，将 leftDomsTop 设为空数组
         leftDomsTop.value = []
       }
-      console.log('左边top：', leftDomsTop.value)
+      // console.log('左边top：', leftDomsTop.value)
     })
     .exec()
   query
@@ -118,7 +124,7 @@ onMounted(() => {
         // 如果 data 不是数组，将 rightDomsTop 设为空数组
         rightDomsTop.value = []
       }
-      console.log('右边top：', rightDomsTop.value)
+      // console.log('右边top：', rightDomsTop.value)
     })
     .exec()
 })
@@ -170,7 +176,7 @@ const setActivePrimaryCategory = (index: number) => {
   // 右边scroll-view滚动到对应区块
   // 修正类型错误，正确访问 ref 变量的值
   rightScrollTop.value = rightDomsTop.value[index]
-  console.log('rightScrollTop.value:' + rightScrollTop.value)
+  // console.log('rightScrollTop.value:' + rightScrollTop.value)
 }
 
 //滚动右侧区域，左侧联动，具体这个284值，需要根据自己的实际情况来调整
@@ -188,9 +194,9 @@ const onRightScroll = (e: any) => {
 
   if (minIndex !== -1) {
     activePrimaryIndex.value = minIndex
-    console.log(`找到比${scrollTop}大的最小元素：${minGreater}，索引：${minIndex}`)
+    // console.log(`找到比${scrollTop}大的最小元素：${minGreater}，索引：${minIndex}`)
   } else {
-    console.log(`未找到比${scrollTop}大的元素`)
+    // console.log(`未找到比${scrollTop}大的元素`)
   }
 }
 // 获取分类数据方法
@@ -209,7 +215,7 @@ const categoryNames = [
   '玄幻',
   '科幻',
   '都市',
-  '诸天万界',
+  '诸天万界'
 ]
 
 const fetchOneCategoriesData = async (index: number) => {
@@ -223,8 +229,8 @@ const fetchOneCategoriesData = async (index: number) => {
           .fill({})
           .map((_, j) => ({
             id: j + 1,
-            name: categoryNames[j % categoryNames.length],
-          })),
+            name: categoryNames[j % categoryNames.length]
+          }))
       }))
   })
 }
@@ -235,126 +241,126 @@ const fetchTwoCategoriesData = async (parentId: number) => {
       .fill({})
       .map((_, i) => ({
         id: i + 1,
-        name: categoryNames[i % categoryNames.length],
+        name: categoryNames[i % categoryNames.length]
       }))
   })
 }
 </script>
 
 <style lang="scss">
-.viewreport {
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background-color: #f6f6f6;
-}
+// .viewreport {
+//   height: 100%;
+//   overflow: hidden;
+//   display: flex;
+//   flex-direction: column;
+//   background-color: #f6f6f6;
+// }
 // 顶部标签
-.top-tabs {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  height: 80px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+// .top-tabs {
+//   // display: flex;
+//   // justify-content: space-around;
+//   // align-items: flex-end;
+//   // height: 80px;
+//   // position: sticky;
+//   // top: 0;
+//   // z-index: 100;
 
-  .tab {
-    display: inline-block;
-    padding: 0 20rpx;
-    font-size: 32rpx;
-    color: #929292;
-    position: relative;
+//   .tab {
+//     // display: inline-block;
+//     // padding: 0 20rpx;
+//     // font-size: 32rpx;
+//     // color: #929292;
+//     // position: relative;
 
-    &.active {
-      color: #000000;
-      font-weight: bold;
-    }
-  }
-}
+//     // &.active {
+//     //   color: #000000;
+//     //   font-weight: bold;
+//     // }
+//   }
+// }
 
 // 底部容器
-.middle-container {
-  flex: 1;
+// .middle-container {
+//   flex: 1;
 
-  padding: 0 20px;
+//   padding: 0 20px;
 
-  .swiper {
-    height: 100%;
-    height: 85vh;
-    .swiper-item {
-      // 必须有一个固定高度
-      height: 100vh;
-      display: flex;
-      flex-direction: row;
-      /* 一级分类样式 */
-      .left-primary-category-container {
-        /* 隐藏溢出内容 */
-        overflow: hidden;
-        /* 设置宽度 */
-        width: 180rpx;
-        /* 不占据剩余空间 */
-        flex: none;
-        /* 设置背景颜色 */
-        height: 100%;
-        /* 一级分类项样式 */
-        .left-category-item {
-          /* 使用Flex布局，子元素垂直居中，水平居中 */
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          /* 设置高度 */
-          height: 96rpx;
-          /* 设置字体大小 */
-          font-size: 26rpx;
-          /* 设置文字颜色 */
-          color: black;
-          /* 设置相对定位 */
-          position: relative;
-        }
+// .swiper {
+// height: 100%;
+// height: 85vh;
+// .swiper-item {
+// 必须有一个固定高度
+// height: 100vh;
+// display: flex;
+// flex-direction: row;
+/* 一级分类样式 */
+// .left-primary-category-container {
+/* 隐藏溢出内容 */
+// overflow: hidden;
+/* 设置宽度 */
+// width: 180rpx;
+/* 不占据剩余空间 */
+// flex: none;
+/* 设置背景颜色 */
+// height: 100%;
+/* 一级分类项样式 */
+// .left-category-item {
+/* 使用Flex布局，子元素垂直居中，水平居中 */
+// display: flex;
+// justify-content: center;
+// align-items: center;
+// /* 设置高度 */
+// height: 96rpx;
+// /* 设置字体大小 */
+// font-size: 26rpx;
+// /* 设置文字颜色 */
+// color: black;
+// /* 设置相对定位 */
+// position: relative;
+// }
 
-        /* 激活的一级分类项样式 */
-        .left-category-item-active {
-          color: #e96846;
-        }
-      }
-      /* 二级分类样式 */
-      .right-secondary-category-container {
-        flex: 1;
-        .right-secondary-category-item {
-          display: flex;
-          flex-direction: column;
-          // border: 1px solid #e96846;
-          .right-secondary-category-item-top-name {
-            height: 50px;
-            // border: 1px solid #757575;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-          }
-          .right-secondary-category-item-bottom-content {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding: 10px;
-            box-sizing: border-box;
-            .item-name {
-              min-width: 100rpx; // 增加最小宽度约束
-              border-radius: 16rpx;
-              padding: 20rpx;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 24rpx;
-              line-height: 1.5;
-              box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1); // 增加视觉层次
-              white-space: nowrap; // 防止文本换行;
-            }
-          }
-        }
-      }
-    }
-  }
-}
+/* 激活的一级分类项样式 */
+// .left-category-item-active {
+//           // color: #e96846;
+//         }
+//       }
+//       /* 二级分类样式 */
+//       .right-secondary-category-container {
+//         flex: 1;
+//         .right-secondary-category-item {
+//           display: flex;
+//           flex-direction: column;
+//           // border: 1px solid #e96846;
+//           .right-secondary-category-item-top-name {
+//             height: 50px;
+//             // border: 1px solid #757575;
+//             display: flex;
+//             align-items: center;
+//             justify-content: space-around;
+//           }
+//           .right-secondary-category-item-bottom-content {
+//             flex: 1;
+//             display: grid;
+//             grid-template-columns: repeat(3, 1fr);
+//             gap: 10px;
+//             padding: 10px;
+//             box-sizing: border-box;
+//             .item-name {
+//               min-width: 100rpx; // 增加最小宽度约束
+//               border-radius: 16rpx;
+//               padding: 20rpx;
+//               display: flex;
+//               align-items: center;
+//               justify-content: center;
+//               font-size: 24rpx;
+//               line-height: 1.5;
+//               box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1); // 增加视觉层次
+//               white-space: nowrap;
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 </style>
