@@ -63,8 +63,8 @@ defineExpose({
 
 <style lang="scss">
 .recommend-section {
+  margin: 10px;
   height: 400px;
-  background-color: antiquewhite;
   .section-header {
     padding: 30rpx 20rpx;
 
@@ -80,7 +80,7 @@ defineExpose({
     gap: 20rpx;
 
     .recommend-item {
-      height: 300px;
+      height: 320px;
       background: #fff;
       border-radius: 16rpx;
       box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);

@@ -18,28 +18,32 @@
       </view>
 
       <!-- 当前榜单内容 -->
-      <swiper class="rank-swiper" circular :autoplay="false">
+      <swiper class="h-[65vh]" circular :autoplay="false">
         <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
           <view class="book-grid">
             <navigator
               url="/pages/book/detail"
               v-for="(book, bIndex) in page"
               :key="bIndex"
-              class="book-item">
-              <image class="book-cover" :src="book.cover" mode="aspectFill" />
-              <view class="book-number">
+              class="h-24 flex items-center p-[10px]">
+              <view class="h-24 w-20 rounded-lg bg-lime-300">
+                <image
+                  class="h-full w-full rounded-lg"
+                  :src="book.cover"
+                  mode="aspectFill" />
+              </view>
+
+              <view class="h-20 text-lg mr-3">
                 <text>{{ book.rank }}</text>
               </view>
 
-              <view class="book-info">
-                <view class="book-name">
+              <view class="flex-1">
+                <view class="flex justify-start">
                   <text>{{ book.name }}</text>
                 </view>
-                <view class="book-info-details">
-                  <text class="book-genre">{{ book.genre }}</text>
-                  <text class="book-popularity">
-                    🔥 {{ book.popularity }}万
-                  </text>
+                <view class="flex">
+                  <text>{{ book.genre }}</text>
+                  <text>🔥 {{ book.popularity }}万</text>
                 </view>
               </view>
             </navigator>
@@ -138,15 +142,13 @@ const handleScrollToLower = () => {
 
 <style lang="scss" scoped>
 .container {
-  padding: 20rpx;
-  background-color: #f6f6f6;
 
   .rank-nav {
-    white-space: nowrap;
-    padding: 20rpx;
-    background: #fff;
     border-radius: 10px;
-
+    border: 1px solid black;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 10px;
     .nav-item {
       display: inline-block;
       padding: 16rpx 0rpx;
@@ -161,7 +163,7 @@ const handleScrollToLower = () => {
     }
 
     .rank-swiper {
-      height: 55vh;
+      height: 70vh;
 
       .book-grid {
         display: flex;
@@ -175,8 +177,6 @@ const handleScrollToLower = () => {
           padding: 20rpx;
 
           .book-cover {
-            height: 150rpx;
-            width: 20%;
             border-radius: 8rpx;
           }
 
@@ -205,5 +205,9 @@ const handleScrollToLower = () => {
       }
     }
   }
+}
+
+.book-cover {
+  border-radius: 8rpx;
 }
 </style>

@@ -1,38 +1,42 @@
 <template>
-  <view class="container">
+  <view class="flex flex-col h-screen">
     <!-- 安全区域 & 渐变背景 -->
-    <view class="header" :style="{ paddingTop: safeAreaInsets!.top + 'px'}">
+    <view
+      class="p-5 header"
+      :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
       <!-- 搜索框 -->
       <uni-easyinput
-        class="search-box"
         prefixIcon="search"
         placeholder="重生之我在ktv当少爷"
-        @focus="handleSearch"
-      ></uni-easyinput>
+        @focus="handleSearch"></uni-easyinput>
     </view>
 
     <!-- 标题栏 -->
-    <view class="tabs">
+    <view class="flex py-2">
       <view
         v-for="(tab, index) in tabs"
         :key="index"
-        class="tab"
-        :class="{ active: currentIndex === index }"
-        @click="currentIndex = index"
-      >
+        class="py-2 text-lg m-[10px] text-gray-400"
+        :class="{
+          'font-bold text-amber-600': currentIndex === index
+        }"
+        @click="currentIndex = index">
         {{ tab }}
       </view>
     </view>
 
     <!-- 内容区域 -->
-    <swiper :current="currentIndex" @change="onSwiperChange" class="content-swiper">
+    <swiper
+      :current="currentIndex"
+      @change="onSwiperChange"
+      class="flex-1 bg-gray-100">
       <swiper-item v-for="(tab, index) in tabs" :key="index">
-          <Recommend v-if="isRecommendLoaded" />
-          <Classic v-if="isClassicLoaded" />
-          <Knowledge v-if="isKnowledgeLoaded" />
-          <Audiobook v-if="isAudiobookLoaded" />
-          <Drama v-if="isDramaLoaded" />
-          <NewArrival v-if="isNewArrivalLoaded" />
+        <Recommend v-if="isRecommendLoaded" />
+        <Classic v-if="isClassicLoaded" />
+        <Knowledge v-if="isKnowledgeLoaded" />
+        <Audiobook v-if="isAudiobookLoaded" />
+        <Drama v-if="isDramaLoaded" />
+        <NewArrival v-if="isNewArrivalLoaded" />
       </swiper-item>
     </swiper>
   </view>
@@ -40,7 +44,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-
 import { onShow } from '@dcloudio/uni-app'
 import Classic from './components/ClassicContent.vue'
 import Drama from './components/DramaContent.vue'
@@ -49,9 +52,7 @@ import NewArrival from './components/LatestContent.vue'
 import Audiobook from './components/ListeningContent.vue'
 import Recommend from './components/RecommendContent.vue'
 
-const tabs = ref(['推荐', '经典', '知识', '听书', '看剧', '最新上架'])
-const currentIndex = ref(0)
-
+//
 const isLoading = ref(false)
 const isRecommendLoaded = ref(false)
 const isClassicLoaded = ref(false)
@@ -60,6 +61,25 @@ const isAudiobookLoaded = ref(false)
 const isDramaLoaded = ref(false)
 const isNewArrivalLoaded = ref(false)
 
+// 获取屏幕边界到安全区域距离
+const { safeAreaInsets } = uni.getSystemInfoSync()
+const tabs = ref(['推荐', '经典', '知识', '听书', '看剧', '最新上架'])
+const currentIndex = ref(0)
+
+/**
+ * 页面显示时触发
+ * 用于初始化数据
+ * 这里可以添加一些初始化逻辑
+ * 例如：加载数据、重置状态等
+ */
+onShow(() => {
+  isRecommendLoaded.value = true
+
+  //暂停1秒
+  setTimeout(() => {
+    isLoading.value = false
+  }, 1000)
+})
 // 重置所有组件加载状态
 const resetLoadedStates = () => {
   isRecommendLoaded.value = false
@@ -70,21 +90,19 @@ const resetLoadedStates = () => {
   isNewArrivalLoaded.value = false
 }
 
-// 刷新搜索处理
-const handleRefreshSearch = () => {
-  isLoading.value = true
-  resetLoadedStates()
-}
-
-// 修改滑动切换处理
+/**
+ * 修改滑动切换处理函数
+ * @param e swiper change事件
+ */
 const onSwiperChange = (e: any) => {
+  //1.获取当前页面索引
   currentIndex.value = e.detail.current
   isLoading.value = true
 
-  // 重置所有组件加载状态
+  // 2.重置所有组件加载状态
   resetLoadedStates()
 
-  // 根据当前索引加载对应组件
+  // 3.根据当前索引加载对应组件
   switch (currentIndex.value) {
     case 0:
       isRecommendLoaded.value = true
@@ -107,86 +125,19 @@ const onSwiperChange = (e: any) => {
   }
 }
 
-// 页面展示时加载推荐内容
-onShow(() => {
-  isRecommendLoaded.value = true
-
-  //暂停1秒
-  setTimeout(() => {
-    isLoading.value = false
-  }, 1000)
-})
-
-// 获取屏幕边界到安全区域距离
-const { safeAreaInsets } = uni.getSystemInfoSync()
-
-// 新增搜索跳转方法
+/**
+ * 新增搜索跳转方法
+ * 跳转到搜索页面
+ */
 const handleSearch = () => {
   uni.navigateTo({
-    url: '/pages/bookstore/search', // 跳转到搜索页面
+    url: '/pages/bookstore/search'
   })
 }
 </script>
 
 <style lang="scss">
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  padding-top: env(safe-area-inset-top);
-}
-
 .header {
   background: linear-gradient(180deg, #f6ece0 0%, #f8f1eb 50%, #f7f5e6 100%);
-  padding: 30rpx 30rpx 0;
-  .search-box {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 40rpx;
-    padding: 15rpx 30rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-}
-
-.tabs {
-  white-space: nowrap;
-  padding: 30rpx 0;
-  background-color: #f6f6f6;
-  .tab {
-    display: inline-block;
-    padding: 0 20rpx;
-    font-size: 32rpx;
-    color: #929292;
-    position: relative;
-
-    &.active {
-      color: #000000;
-      font-weight: bold;
-    }
-  }
-
-  .underline {
-    position: absolute;
-    bottom: -10rpx;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 6rpx;
-    width: 0;
-    transition: all 0.3s ease;
-    border-radius: 3rpx;
-  }
-}
-
-.content-swiper {
-  flex: 1;
-  background-color: #f6f6f6;
-  border-radius: 30rpx 30rpx 0 0;
-  overflow: hidden;
-
-  .content-item {
-    padding: 30rpx;
-    font-size: 28rpx;
-    color: #666;
-  }
 }
 </style>
