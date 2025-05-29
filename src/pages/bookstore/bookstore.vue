@@ -27,19 +27,12 @@
     <!-- 内容区域 -->
     <swiper :current="currentIndex" @change="onSwiperChange" class="content-swiper">
       <swiper-item v-for="(tab, index) in tabs" :key="index">
-        <scroll-view
-          class="content-scroll"
-          scroll-y
-          :show-scrollbar="false"
-          @refresherrefresh="handleRefreshSearch"
-        >
           <Recommend v-if="isRecommendLoaded" />
           <Classic v-if="isClassicLoaded" />
           <Knowledge v-if="isKnowledgeLoaded" />
           <Audiobook v-if="isAudiobookLoaded" />
           <Drama v-if="isDramaLoaded" />
           <NewArrival v-if="isNewArrivalLoaded" />
-        </scroll-view>
       </swiper-item>
     </swiper>
   </view>

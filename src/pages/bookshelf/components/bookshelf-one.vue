@@ -343,8 +343,8 @@ onShow(() => {
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 
     .book-cover {
-      width: 180rpx;
-      height: 240rpx;
+      width: 100%;;
+      height: 140px;
       border-radius: 8rpx;
       margin-right: 30rpx;
     }

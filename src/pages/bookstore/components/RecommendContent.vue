@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <scroll-view class="container" scroll-y @scrolltolower="handleScrollToLower">
     <!-- 榜单导航 -->
     <view class="rank-nav">
       <view
@@ -22,7 +22,7 @@
         <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
           <view class="book-grid">
             <navigator
-            url="/pages/book/detail"
+              url="/pages/book/detail"
               v-for="(book, bIndex) in page"
               :key="bIndex"
               class="book-item">
@@ -49,118 +49,71 @@
     </view>
 
     <!-- 推荐书籍模块保持不变 -->
-    <view class="recommend-section">
-      <view class="section-header">
-        <text class="title">猜你喜欢</text>
-      </view>
-      <view class="recommend-grid">
-        <view
-          v-for="(item, idx) in recommendList"
-          :key="idx"
-          class="recommend-grid-item">
-          <navigator class="recommend-item" url="/pages/book/detail">
-            <image
-              class="recommend-cover"
-              :src="item.cover"
-              mode="aspectFill" />
-            <text class="recommend-book-name">
-              {{ item.name }}
-            </text>
-            <text class="recommend-book-description">
-              {{
-                item.description ? item.description.slice(0, 20) + '...' : ''
-              }}
-            </text>
-          </navigator>
-        </view>
-      </view>
-    </view>
-  </view>
+    <BookRecommend ref="recommendRef" />
+  </scroll-view>
 </template>
 
 <script setup lang="ts">
+import { initRankListAPI, initRecommendListAPI } from '@/services/book'
+import { BookItem, RankListItem } from '@/types/book'
 import { computed, onMounted, ref } from 'vue'
+import BookRecommend from './BookRecommend.vue'
 // 引入 onShow 钩子函数
 const activeRank = ref(0)
-
-const rankList = ref([
-  {
-    title: '畅销榜',
-    books: Array(16)
-      .fill({})
-      .map((_, i) => ({
-        rank: i + 1,
-        cover: `https://picsum.photos/200/300?random=${i + 1}`,
-        name: `畅销书籍 ${i + 1}`,
-        genre: ['都市', '言情', '科幻'][i % 3],
-        popularity: (300 + i * 10).toFixed(1)
-      }))
-  },
-  {
-    title: '新书榜',
-    books: Array(16)
-      .fill({})
-      .map((_, i) => ({
-        rank: i + 1,
-        cover: `https://picsum.photos/200/300?n=${i + 100}`,
-        name: `新书推荐 ${i + 1}`,
-        genre: ['悬疑', '历史', '奇幻'][i % 3],
-        popularity: (200 + i * 15).toFixed(1)
-      }))
-  },
-  {
-    title: '人气榜',
-    books: Array(16)
-      .fill({})
-      .map((_, i) => ({
-        rank: i + 1,
-        cover: `https://picsum.photos/200/300?p=${i + 200}`,
-        name: `人气作品 ${i + 1}`,
-        genre: ['武侠', '职场', '玄幻'][i % 3],
-        popularity: (400 + i * 20).toFixed(1)
-      }))
-  }
-])
-// 数据加载方法
-const loadData = async () => {
-  console.log('推荐页面加载数据')
-}
+// 定义rankList
+const rankList = ref<RankListItem[]>([])
 
 // 触发加载：页面显示或组件挂载时
-onMounted(() => loadData())
+onMounted(() => {
+  loadData()
+})
+/**
+ * 加载数据
+ * 包括榜单和推荐书籍
+ * 可以根据需要添加更多数据加载逻辑
+ */
+const loadData = async () => {
+  console.log('推荐页面加载数据')
 
-const switchRank = (index: number) => {
-  activeRank.value = index
+  // 模拟加载推荐书籍数据
+  rankList.value = initRankListAPI()
 }
 
+/**
+ *
+ * @param index 切换榜单
+ * 切换榜单时重置页码
+ */
+const switchRank = (index: number) => {
+  activeRank.value = index
+  console.log('切换榜单', index)
+  // 重置页码
+}
+
+/**
+ * 查看完整榜单
+ */
 const handleViewFullList = () => {
   uni.navigateTo({
     url: '/pages/bookstore/rank'
   })
 }
+/**
+ * 获取当前榜单书籍
 
+ */
 const currentBooks = computed(() => {
   return rankList.value[activeRank.value]?.books || []
 })
-
-interface Book {
-  rank: number
-  cover: string
-  name: string
-  genre: string
-  popularity: string
-}
-
-interface RankList {
-  title: string
-  books: Book[]
-}
-
-const pagedBooks = computed<Book[][]>(() => {
+/**
+ * 获取分页后的书籍数据
+ * 每页显示4本书
+ */
+const pagedBooks = computed<BookItem[][]>(() => {
   const pageSize = 4
 
-  return currentBooks.value.reduce<Book[][]>(
-    (resultArray, item: Book, index) => {
+  return currentBooks.value.reduce<BookItem[][]>(
+    (resultArray, item: BookItem, index) => {
       const chunkIndex = Math.floor(index / pageSize)
 
       if (!resultArray[chunkIndex]) {
@@ -174,75 +127,13 @@ const pagedBooks = computed<Book[][]>(() => {
   )
 })
 
-// recommendList 添加数据
-const recommendList = ref([
-  {
-    cover: 'https://picsum.photos/200/300?random=1',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=2',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=3',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=4',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=5',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=6',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=7',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=8',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=9',
-    name: '放下个人素质，享无敌人生',
-    description:
-      '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=10',
-    name: '放下个人素质，享无敌人生'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=11',
-    name: '放下个人素质，享无敌人生'
-  },
-  {
-    cover: 'https://picsum.photos/200/300?random=12',
-    name: '放下个人素质，享无敌人生'
-  }
-])
+/**
+ * 滚动到底部加载更多,触发子组件BookRecommend的handleScrollToLower方法
+ */
+const recommendRef = ref<InstanceType<typeof BookRecommend>>()
+const handleScrollToLower = () => {
+  recommendRef.value?.handleScrollToLower()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -278,7 +169,7 @@ const recommendList = ref([
         padding: 20rpx;
 
         .book-item {
-          height: 200rpx;
+          height: 150rpx;
           display: flex;
           align-items: center;
           padding: 20rpx;
@@ -310,51 +201,6 @@ const recommendList = ref([
               }
             }
           }
-        }
-      }
-    }
-  }
-
-  .recommend-section {
-    .section-header {
-      padding: 30rpx 20rpx;
-
-      .title {
-        font-size: 34rpx;
-        font-weight: bold;
-      }
-    }
-
-    .recommend-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20rpx;
-
-      .recommend-item {
-        height: 300px;
-        background: #fff;
-        border-radius: 16rpx;
-        box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
-
-        .recommend-cover {
-          width: 100%;
-          height: 200px;
-          border-radius: 10px 10px 0 0;
-        }
-        .recommend-book-name {
-          font-weight: 800;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          padding: 5px;
-          padding: 5px 10px;
-        }
-
-        .recommend-book-description {
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          padding: 5px;
         }
       }
     }

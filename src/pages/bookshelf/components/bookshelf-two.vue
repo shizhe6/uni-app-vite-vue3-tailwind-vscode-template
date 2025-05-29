@@ -412,8 +412,8 @@ onShow(() => {
     align-items: flex-start;
 
     .grid-cover {
-      width: 180rpx;
-      height: 240rpx;
+     width: 100%;;
+      height: 140px;
       border-radius: 8rpx;
       margin-bottom: 15rpx;
       border: 1px solid #ccc;

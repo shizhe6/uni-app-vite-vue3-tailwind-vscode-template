@@ -1,5 +1,5 @@
 <template>
-  <scroll-view class="content" scroll-y>
+  <scroll-view class=" h-screen pb-3 bg-gray-50" scroll-y>
     <!-- 第一部分：书籍基础信息 -->
     <view class="book-base">
       <image class="cover" :src="bookInfo.cover" mode="widthFix"></image>
@@ -44,6 +44,7 @@
 
     <!-- 第三部分：书籍简介 -->
     <view class="mt-[20px] flex flex-col m-2">
+      <view class="text-lg text-black">书籍简介</view>
       <!-- 简介内容容器 -->
       <view
         class="text-sm text-slate-400 overflow-hidden"
@@ -52,15 +53,15 @@
       </view>
       <!-- 展开/收起按钮 -->
       <button
-        class="text-sm text-blue-500 mt-2"
+        class="text-sm text-gray-500 mt-2"
         @click="isExpanded = !isExpanded">
         {{ isExpanded ? '收起' : '展开' }}
       </button>
-      <view class="text-sm">
+      <view class="text-sm flex flex-row">
         <text
           v-for="tag in bookInfo.tags"
           :key="tag"
-          class="text-xs text-slate-400 pr-2 bg-gray-300 rounded-lg text-center mr-3">
+          class="text-xs text-slate-400 pr-2 bg-gray-300 p-1 rounded-lg mr-2">
           {{ tag }}
         </text>
       </view>
@@ -69,12 +70,8 @@
 
   <!-- 第四部分：操作按钮（固定底部） -->
   <view class="action-btns">
-    <button class="action-btn">
-      <uni-icons type="headphones" size="28"></uni-icons>
-    </button>
-    <button class="action-btn">
-      <uni-icons type="download" size="28"></uni-icons>
-    </button>
+    <uni-icons type="headphones" size="28"></uni-icons>
+    <uni-icons type="download" size="28"></uni-icons>
     <navigator class="action-btn primary" url="/pages/book/chapter">
       免费阅读
     </navigator>
@@ -107,6 +104,7 @@ const authorInfo = ref({
 </script>
 
 <style lang="scss">
+
 /* 第一部分样式 */
 .book-base {
   display: flex;
@@ -187,14 +185,13 @@ const authorInfo = ref({
   left: 0;
   right: 0;
   display: flex;
+  justify-content: space-around;
+  align-items: center;
   gap: 20rpx;
   padding: 20rpx 40rpx;
   background-color: #ffffff;
   box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.08);
 
-  .primary {
-    background-color: #f7ad4c;
-  }
 
   .action-btn {
     flex: 1;
@@ -204,20 +201,14 @@ const authorInfo = ref({
     align-items: center;
     padding: 24rpx 0;
     border-radius: 16rpx;
-    background-color: #fff;
     box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
     height: 40px;
+    color: #ffffff;
+    background-color: #f7ad4c;
   }
 }
 
-/* 调整滚动区域底部边距，避免内容被按钮遮挡 */
-.content {
-  padding-bottom: 180rpx;
-  /* 根据按钮高度调整 */
-  height: 100vh;
-  background-color: #f8f8f8;
-  border: 1px solid rgb(34, 238, 51);
-}
+
 
 .line-clamp-3 {
   display: -webkit-box;

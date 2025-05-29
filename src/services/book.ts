@@ -1,5 +1,15 @@
-import { BookMarkItem, ChapterItem, ChapterNodesItem } from '@/types/book'
-
+import {
+  BookItem,
+  BookMarkItem,
+  ChapterItem,
+  ChapterNodesItem,
+  RankListItem
+} from '@/types/book'
+/**
+ *
+ * @param id 书籍id
+ * @returns 书签列表
+ */
 export const initBookMarkListAPI = (id: number): BookMarkItem[] => {
   return [
     { id: 1, title: '第1章 初入九界', page: 1 },
@@ -12,6 +22,11 @@ export const initBookMarkListAPI = (id: number): BookMarkItem[] => {
     { id: 20, title: '第20章 独尊之路', page: 20 }
   ]
 }
+/**
+ *
+ * @param id  书籍id
+ * @returns 当前章节内容
+ */
 
 export const initChapterNodesAPI = (id: number): ChapterNodesItem[] => {
   return [
@@ -189,7 +204,11 @@ export const initChapterNodesAPI = (id: number): ChapterNodesItem[] => {
     }
   ]
 }
-
+/**
+ *
+ * @param id  书籍id
+ * @returns  {ChapterItem[]} 章节列表
+ */
 export const initChapterListAPI = (id: number): ChapterItem[] => {
   return [
     { id: 1, title: '第1章 初入九界' },
@@ -212,5 +231,96 @@ export const initChapterListAPI = (id: number): ChapterItem[] => {
     { id: 18, title: '第18章 玄铁剑鸣' },
     { id: 19, title: '第19章 九界秘辛' },
     { id: 20, title: '第20章 独尊之路' }
+  ]
+}
+
+/**
+ *
+ * @returns 畅销榜
+ *
+ */
+export const initRankListAPI = (): RankListItem[] => {
+  return [
+    {
+      title: '畅销榜',
+      books: Array(16)
+        .fill({})
+        .map((_, i) => ({
+          rank: i + 1,
+          cover: `https://picsum.photos/200/300?random=${i + 1}`,
+          name: `畅销书籍 ${i + 1}`,
+          genre: ['都市', '言情', '科幻'][i % 3],
+          popularity: (300 + i * 10).toFixed(1)
+        }))
+    },
+    {
+      title: '新书榜',
+      books: Array(16)
+        .fill({})
+        .map((_, i) => ({
+          rank: i + 1,
+          cover: `https://picsum.photos/200/300?n=${i + 100}`,
+          name: `新书推荐 ${i + 1}`,
+          genre: ['悬疑', '历史', '奇幻'][i % 3],
+          popularity: (200 + i * 15).toFixed(1)
+        }))
+    },
+    {
+      title: '人气榜',
+      books: Array(16)
+        .fill({})
+        .map((_, i) => ({
+          rank: i + 1,
+          cover: `https://picsum.photos/200/300?p=${i + 200}`,
+          name: `人气作品 ${i + 1}`,
+          genre: ['武侠', '职场', '玄幻'][i % 3],
+          popularity: (400 + i * 20).toFixed(1)
+        }))
+    }
+  ]
+}
+/**
+ *
+ * @returns 推荐列表
+ *
+ */
+export const initRecommendListAPI = (): BookItem[] => {
+  return [
+    {
+      cover: 'https://picsum.photos/200/300?random=1',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=2',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=3',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=4',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=5',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=6',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    }
   ]
 }

@@ -13,3 +13,17 @@ export type ChapterItem = {
   id: number
   title: string
 }
+
+export type BookItem = {
+  rank?: number
+  cover: string
+  name: string
+  genre?: string
+  popularity?: string
+  description?: string
+}
+
+export type RankListItem = {
+  title: string
+  books: BookItem[]
+}
