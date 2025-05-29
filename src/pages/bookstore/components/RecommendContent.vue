@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { initRankListAPI, initRecommendListAPI } from '@/services/book'
+import { initRankListAPI } from '@/services/book'
 import { BookItem, RankListItem } from '@/types/book'
 import { computed, onMounted, ref } from 'vue'
 import BookRecommend from './BookRecommend.vue'
