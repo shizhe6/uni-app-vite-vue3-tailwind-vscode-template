@@ -16,11 +16,11 @@
       <view
         v-for="(tab, index) in tabs"
         :key="index"
-        class="py-2 text-lg m-[10px] text-gray-400"
+        class="py-2 text-lg m-[10px]"
         :class="{
           'font-bold text-amber-600': currentIndex === index
         }"
-        @click="currentIndex = index">
+        @click="handleTabClick(index)">
         {{ tab }}
       </view>
     </view>
@@ -97,7 +97,6 @@ const resetLoadedStates = () => {
 const onSwiperChange = (e: any) => {
   //1.获取当前页面索引
   currentIndex.value = e.detail.current
-  isLoading.value = true
 
   // 2.重置所有组件加载状态
   resetLoadedStates()
@@ -133,6 +132,13 @@ const handleSearch = () => {
   uni.navigateTo({
     url: '/pages/search/search'
   })
+}
+
+/**
+ *切换标签
+ */
+const handleTabClick = (index: number) => {
+  currentIndex.value = index
 }
 </script>
 

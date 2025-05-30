@@ -2,15 +2,18 @@ import {
   BookItem,
   BookMarkItem,
   ChapterItem,
-  ChapterNodesItem,
+  ParagraphItem,
   RankListItem
 } from '@/types/book'
+
 /**
  *
- * @param id 书籍id
+ * @param bookId 书籍id
  * @returns 书签列表
  */
-export const initBookMarkListAPI = (id: number): BookMarkItem[] => {
+export const initBookMarkItemListAPI = (
+  currentBookId: number
+): BookMarkItem[] => {
   return [
     { id: 1, title: '第1章 初入九界', page: 1 },
     { id: 2, title: '第2章 玄铁认主', page: 2 },
@@ -24,183 +27,153 @@ export const initBookMarkListAPI = (id: number): BookMarkItem[] => {
 }
 /**
  *
- * @param id  书籍id
+ * @param currentChapterId  当前章节id
  * @returns 当前章节内容
  */
 
-export const initChapterNodesAPI = (id: number): ChapterNodesItem[] => {
+export const initParagraphItemListAPI = (
+  currentChapterId: number
+): ParagraphItem[] => {
   return [
-    { type: 'text', text: '  第142章 冲突  跟上他们的身形。', name: '' },
-    { name: 'br' },
-    { type: 'text', text: '  还偷偷摸摸，故意遮掩气息。' },
-    { type: 'text', text: '  他身上携带的恶意，已经昭然若揭！' },
-    { name: 'br' },
-    { type: 'text', text: '  季浮游thoughts流转。' },
-    { type: 'text', text: '  心中瞬间有了决断。' },
-    { name: 'br' },
-    { type: 'text', text: '  他不想节外生枝得罪周忘川，可现在的问题是……' },
-    { type: 'text', text: '  对方已经将主意打到他们身上了！' },
-    { name: 'br' },
-    { type: 'text', text: '  目的……' },
-    { type: 'text', text: '  想渔翁得利？' },
-    { type: 'text', text: '  还是其他原因？' },
-    { type: 'text', text: '  都不重要了！' },
-    { name: 'br' },
     {
-      type: 'text',
-      text: '  就在这人潜至离季浮游所属雕像不远时，季浮游动了。'
+      id: 1,
+      name: '第1章 浮游',
+      content: '大商联邦。',
+      charts: [
+        {
+          id: 1,
+          userName: '小飞飞',
+          content: '你小子是争不知道啥叫嫩头青啊',
+          time: '2024-03-16 12:00:00',
+          likeCount: 10,
+          unLikeCount: 2,
+          isLike: true
+        },
+        {
+          id: 2,
+          userName: '小飞飞',
+          content: '你小子是争不知道啥叫嫩头青啊',
+          time: '2024-03-16 12:00:00',
+          likeCount: 10,
+          unLikeCount: 2,
+          isLike: true
+        }
+      ]
     },
     {
-      type: 'text',
-      text: '  本就保持着半蹲状态下的他，劲力爆发，浑身气血犹如烘炉运转，提供源源不断的能量灌注全身。'
-    },
-    { name: 'br' },
-    { type: 'text', text: '  与此同时，他长剑刺出，剑意勃发！' },
-    {
-      type: 'text',
-      text: '  大成境界的守真剑意仿佛能撕裂灵魂，瞬间让这位意识到自己暴露的男子脸上涌现出遏制不住的惊恐。'
-    },
-    { name: 'br' },
-    { type: 'text', text: '  “住手……”' },
-    { type: 'text', text: '  他张口就要大叫。' },
-    { name: 'br' },
-    { type: 'text', text: '  可季浮游这一剑来的太快。' },
-    { type: 'text', text: '  以幻真无影术藏在一侧，再暴起出手，且剑意勃发。' },
-    {
-      type: 'text',
-      text: '  这种迅如惊雷的一剑，如何是这个体魄估计只有23、24左右的武者所能抵挡？'
-    },
-    { name: 'br' },
-    { type: 'text', text: '  他甚至只能堪堪做出横刀身前的动作……' },
-    {
-      type: 'text',
-      text: '  没等来得及封锁住冷钢剑的进攻轨迹，冷冽的剑锋已经贯穿了他的喉咙，将他接下来的惨叫声全部堵了回去。'
-    },
-    { name: 'br' },
-    { type: 'text', text: '  “嗤！”' },
-    { type: 'text', text: '  刺剑、拔剑！' },
-    { name: 'br' },
-    {
-      type: 'text',
-      text: '  动作完成的前一秒，季浮游更是左手一击，狠狠打在他心脏位置。'
-    },
-    { type: 'text', text: '  伤口处即将喷涌而出的鲜血竟是被生生凝滞。' },
-    { type: 'text', text: '  仿佛所有血液失去了输送、运转之力，冻结在体内。' },
-    { type: 'text', text: '' },
-    {
-      type: 'text',
-      text: '  而后，季浮游抓起这道男子的身躯，一步虚跨，瞬间进入了不远处的祷告室。'
+      id: 2,
+      name: '第1章 浮游',
+      content: '楚州，星光市，和谐苑小区。',
+      charts: [
+        {
+          id: 1,
+          userName: '小飞飞',
+          content: '你小子是争不知道啥叫嫩头青啊',
+          time: '2024-03-16 12:00:00',
+          likeCount: 10,
+          unLikeCount: 2,
+          isLike: true
+        }
+      ]
     },
     {
-      type: 'text',
-      text: '  这个时候，杨开泰亦是听到了外面传来的动静，迅速迎了上来。'
+      id: 3,
+      name: '第1章 浮游',
+      content: '“叮铃铃！”  一阵电话声将床上的季浮游惊醒。',
+      charts: []
     },
-    { name: 'br' },
-    { type: 'text', text: '  “队长……”' },
+
     {
-      type: 'text',
-      text: '  当看到他手上提来的那道已经化为尸体的身影，眼瞳猛然一缩：“周忘川的人！？”'
-    },
-    { name: 'br' },
-    {
-      type: 'text',
-      text: '  “偷偷摸摸的跟上来，还特意隐藏气息，你的精神都没感知到吧？般鬼鬼祟祟，目的不用我多说了。”'
-    },
-    { type: 'text', text: '  季浮游简短的道了一声。' },
-    { name: 'br' },
-    {
-      type: 'text',
-      text: '  杨开泰眼尖：“周忘川，好大的胆子，当真以为我们好欺负不成！”'
-    },
-    { type: 'text', text: '  他看一眼祷告室内那些怪物和人类尸体……' },
-    { type: 'text', text: '  这一两公里路上他们就遇到周忘川一行人。' },
-    { name: 'br' },
-    { type: 'text', text: '  十有八九……' },
-    { type: 'text', text: '  那以严松为首的九位狩猎者就是死在他们手上。' },
-    { name: 'br' },
-    { type: 'text', text: '  季浮游将尸体往里面一丢：“准备一下！”' },
-    { type: 'text', text: '  “周忘川那些人……”' },
-    {
-      type: 'text',
-      text: '  “他们敢打我们的主意，就得做好被我们反杀的准备！”'
-    },
-    { type: 'text', text: '  季浮游直接道：“迎上去！”' },
-    { name: 'br' },
-    { type: 'text', text: '  “和他们动手？”' },
-    { type: 'text', text: '  杨开泰微微一怔。' },
-    { type: 'text', text: '  周忘川那一行人可不是弱者。' },
-    { type: 'text', text: '  实力怕是丝毫不在他们之下。' },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  不对！' },
-    { type: 'text', text: '  他们有季浮游！' },
-    { type: 'text', text: '  季浮游的实力比之他们来高出一个层次！' },
-    { type: 'text', text: '' },
-    {
-      type: 'text',
-      text: '  再加上此刻他们已经减员一人，真打起来，他们一方的胜率至少有七八成。'
-    },
-    { type: 'text', text: '  七八成胜率，那还有什么好怕的？' },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  “就依队长所说。”' },
-    {
-      type: 'text',
-      text: '  杨开泰重重一点头：“他们中，最厉害的是周忘川和秦舟！其中，秦舟应该有不逊色于小雪的实力，至于周忘川……我可以牵制他一段时间！”'
-    },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  “可以！”' },
-    {
-      type: 'text',
-      text: '  季浮游点了点头：“秦舟我解决，你们四个，对付他们三个，不要求你们战胜他们，至少得确保将他们牵制住，有没有问题？”'
-    },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  “好！”' },
-    { type: 'text', text: '  “秦舟和我差不多？要么我去对付？”' },
-    { type: 'text', text: '  “听从队长安排。”' },
-    { type: 'text', text: '  方栖云、萧寒雪、柳依人纷纷表态。' },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  当下，六人迅速出了祷告室。' },
-    { type: 'text', text: '  直奔那道身影潜伏而来的方向而去。' },
-    { type: 'text', text: '' },
-    {
-      type: 'text',
-      text: '  很快，杨开泰、季浮游两人已经感应到了一道探查而来的精神力。'
-    },
-    { type: 'text', text: '  “在那边！”' },
-    { type: 'text', text: '  杨开泰道。' },
-    { type: 'text', text: '' },
-    {
-      type: 'text',
-      text: '  不过，似乎是季浮游一行人表现的太过气势汹汹，这种明显有恃无恐的姿态让他们心生忌惮。'
+      id: 4,
+      name: '第1章 浮游',
+      content: '“差一点！这次，差一点就反杀了！”  他眼中有尚未消散的凌厉。',
+      charts: []
     },
     {
-      type: 'text',
-      text: '  精神力一接触，周忘川竟是带人转身就走，丝毫没有为自家队员报仇的意思。'
+      id: 5,
+      name: '第1章 浮游',
+      content:
+        '他眼中有尚未消散的凌厉。  随着电话声持续响起，似乎将他唤回现实，这种凌厉亦渐渐散去。',
+      charts: [
+        {
+          id: 1,
+          userName: '小飞飞',
+          content: '你小子是争不知道啥叫嫩头青啊',
+          time: '2024-03-16 12:00:00',
+          likeCount: 10,
+          unLikeCount: 2,
+          isLike: true
+        }
+      ]
     },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  “追！”' },
-    { type: 'text', text: '  季浮游当即下令，大步流星。' },
-    { type: 'text', text: '' },
-    { type: 'text', text: '  而一追击，双方的距离渐渐拉开。' },
-    { type: 'text', text: '  季浮游、萧寒雪是第一梯队。' },
-    { type: 'text', text: '  方栖云、关越是第二梯队。' },
-    { type: 'text', text: '  柳依人和杨开泰自然就落入第三梯队了。' },
-    { type: 'text', text: '' },
+
     {
-      type: 'text',
-      text: '  不过，这种追击持续了数百米后，杨开泰却仿佛意识到了什么：“不对！”'
+      id: 6,
+      name: '第1章 浮游',
+      content:
+        '“我想做一个能让大家都喜欢的角色，所以我会努力让大家都喜欢我。”  季浮游的话中，他似乎对自己的选择充满了期待。',
+      charts: []
     },
     {
-      type: 'text',
-      text: '  他突然道：“如果他们要逃，按理说应该朝反方向逃，可现在……他们逃跑的方向……似乎在将我们往里面引……”'
-    },
-    { type: 'text', text: '<br>' },
-    {
-      type: 'br',
-      text: '  几乎在杨开泰察觉到这一点的同时，周忘川身上的精神波动猛然积蓄到了极致。'
+      id: 7,
+      name: '第1章 浮游',
+      content:
+        '“我会努力让大家都喜欢我。”  季浮游的话中，他似乎对自己的选择充满了期待。',
+      charts: []
     },
     {
-      type: 'text',
-      text: '  下一刻，这些精神力量凝聚一股，仿佛一道划过迷雾的长箭，直往离他们仅百余米的一个大门紧锁的房间射去。'
+      id: 8,
+      name: '第1章 浮游',
+      content:
+        '穿到和以前差不多的时代背景，偏向未来，却又不多，尤其是阶级更加固化，资本垄断几乎所有行业，封锁了所有上升通道。 ',
+      charts: []
+    },
+    {
+      id: 9,
+      name: '第1章 浮游',
+      content: ' 流量为王，ai盛行的时代，这种能力，早就落时了。 ',
+      charts: []
+    },
+    {
+      id: 10,
+      name: '第1章 浮游',
+      content:
+        '收拾好自己，季浮游出了这间租金600的老房子，在楼下骑上新买一个月的电动车朝姐姐季清清发来的地址而去。 ',
+      charts: []
+    },
+    {
+      id: 11,
+      name: '第1章 浮游',
+      content:
+        '季浮游抬头，只见足足十几架武装直升机呈先后战术编队，带着一阵轰鸣自城市上空掠过，杀气腾腾朝城外飞去。 ',
+      charts: []
+    },
+    {
+      id: 12,
+      name: '第1章 浮游',
+      content:
+        '同时有些意外：“星光市又不是沿海城市、边境城市，这种十几架直升机的场面可不常见。” ',
+      charts: []
+    },
+    {
+      id: 13,
+      name: '第1章 浮游',
+      content: '只要能赚到钱，人人无所不用其极。 ',
+      charts: []
+    },
+    {
+      id: 14,
+      name: '第1章 浮游',
+      content:
+        '娱乐大众的网红算是普通人最有希望翻身改命的赛道，涌入者不计其数。 ',
+      charts: []
+    },
+    {
+      id: 15,
+      name: '第1章 浮游',
+      content:
+        '妆容未卸，戴着银色圆圈耳环，看上去充满精致都市丽人气质的季清清摇下车窗，头一晃：“后面上车。” ',
+      charts: []
     }
   ]
 }
@@ -209,7 +182,7 @@ export const initChapterNodesAPI = (id: number): ChapterNodesItem[] => {
  * @param id  书籍id
  * @returns  {ChapterItem[]} 章节列表
  */
-export const initChapterListAPI = (id: number): ChapterItem[] => {
+export const initChapterItemListAPI = (): ChapterItem[] => {
   return [
     { id: 1, title: '第1章 初入九界' },
     { id: 2, title: '第2章 玄铁认主' },
@@ -236,7 +209,7 @@ export const initChapterListAPI = (id: number): ChapterItem[] => {
 
 /**
  *
- * @returns 畅销榜
+ * @returns 榜单数据
  *
  */
 export const initRankListAPI = (): RankListItem[] => {
@@ -318,6 +291,42 @@ export const initRecommendListAPI = (): BookItem[] => {
     },
     {
       cover: 'https://picsum.photos/200/300?random=6',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=7',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=8',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=9',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=10',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=11',
+      name: '放下个人素质，享无敌人生',
+      description:
+        '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'
+    },
+    {
+      cover: 'https://picsum.photos/200/300?random=12',
       name: '放下个人素质，享无敌人生',
       description:
         '帮我写一个html+css的代码，实现20本书，分为5列，4行，左右滑动，切换不同的列，书的排序从第1列到5列，从上到下，你用数字表示，帮我把整体的样式写出来'

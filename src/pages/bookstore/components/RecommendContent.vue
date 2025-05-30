@@ -10,12 +10,7 @@
         @click="switchRank(index)">
         {{ rank.title }}
       </view>
-      <view
-        class="nav-item"
-        @click="handleViewFullList"
-        style="margin-right: 0">
-        完整榜单 >
-      </view> 
+      <navigator class="nav-item" url="/pages/rank/rank">完整榜单 ></navigator>
 
       <!-- 当前榜单内容 -->
       <swiper class="h-[65vh]" circular :autoplay="false">
@@ -26,14 +21,19 @@
               v-for="(book, bIndex) in page"
               :key="bIndex"
               class="h-24 flex items-center p-[10px]">
-              <view class="h-24 w-20 rounded-lg bg-lime-300">
+              <view class="h-24 w-20 rounded-lg">
                 <image
                   class="h-full w-full rounded-lg"
                   :src="book.cover"
                   mode="aspectFill" />
               </view>
 
-              <view class="h-20 text-lg mr-3">
+              <view
+                class="h-20 text-lg mr-3 ml-3"
+                :class="{
+                  'text-amber-600':
+                    book.rank !== undefined && [1, 2, 3].includes(book.rank)
+                }">
                 <text>{{ book.rank }}</text>
               </view>
 
@@ -95,40 +95,35 @@ const switchRank = (index: number) => {
 }
 
 /**
- * 查看完整榜单
- */
-const handleViewFullList = () => {
-  uni.navigateTo({
-    url: '/pages/rank/rank'
-  })
-}
-/**
  * 获取当前榜单书籍
-
  */
 const currentBooks = computed(() => {
   return rankList.value[activeRank.value]?.books || []
 })
 /**
- * 获取分页后的书籍数据
+ * 定义一个计算属性 pagedBooks，返回类型是 BookItem 数组的数组
  * 每页显示4本书
  */
 const pagedBooks = computed<BookItem[][]>(() => {
+  // 每页显示4本书
   const pageSize = 4
+  // 当前榜单书籍
+  const currentItems = currentBooks.value
+  // 定义一个空数组，用于存储分页后的数据
+  const resultArray: BookItem[][] = []
+  //遍历当前书籍列表，将其分成每页4本书的数组
+  for (let index = 0; index < currentItems.length; index++) {
+    const item = currentItems[index]
+    const chunkIndex = Math.floor(index / pageSize)
 
-  return currentBooks.value.reduce<BookItem[][]>(
-    (resultArray, item: BookItem, index) => {
-      const chunkIndex = Math.floor(index / pageSize)
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = []
+    }
 
-      if (!resultArray[chunkIndex]) {
-        resultArray[chunkIndex] = []
-      }
+    resultArray[chunkIndex].push(item)
+  }
 
-      resultArray[chunkIndex].push(item)
-      return resultArray
-    },
-    []
-  )
+  return resultArray
 })
 
 /**

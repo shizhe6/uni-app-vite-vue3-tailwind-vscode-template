@@ -4,11 +4,36 @@
     :class="{ nightMode: isNightMode }"
     :style="{ backgroundColor: computedBgColor }">
     <!-- 1.章节内容 -->
-    <rich-text
-      class="chapter-content"
+    <!-- 标题 -->
+    <view class="flex justify-center items-center text-lg font-bold mb-8">
+      {{ chapterItemList[0].title }}
+    </view>
+    <!-- 段落内容 -->
+    <view
       @click="onPageClick"
-      :nodes="chapterNodesData"
-      :style="{ fontSize: chapterFontSize + 'px' }" />
+      class="ph-content mb-8  m-2"
+      v-for="(paragraphItem, index) in paragraphItemList"
+      :key="index">
+      <!-- 段落内容 -->
+      <text
+        class="pl-8 text-sm leading-relaxed"
+        :style="{ fontSize: chapterFontSize + 'px' }">
+        {{ paragraphItem.content }}
+      </text>
+      <uni-badge
+        v-if="paragraphItem.charts.length > 0"
+        :text="paragraphItem.charts.length"
+        absolute="rightTop"
+        size="small">
+        <view @click.stop="showCharts()" class="box">
+          <uni-icons
+            type="chat"
+            size="30"
+            class="relative"
+            hover-stop-propagation="true"></uni-icons>
+        </view>
+      </uni-badge>
+    </view>
 
     <!-- 2.底部菜单 -->
     <view :class="['chapter-footbar', { show: showFooterBar }]">
@@ -69,7 +94,7 @@
             @change="changeFontSize" />
         </view>
         <!-- 背景颜色调节面板 -->
-        <view class=" setting-panel-normal">
+        <view class="setting-panel-normal">
           <text>背景</text>
           <view class="flex-1 flex flex-row justify-around items-center">
             <view
@@ -126,7 +151,7 @@
           <uni-list v-if="currentTab === 'directory'">
             <uni-list-item
               :key="item.id"
-              v-for="(item, index) in chapterListData"
+              v-for="(item, index) in chapterItemList"
               :title="item.title"
               @click="gotoTargeChapterFromItem(item, index)"
               class="py-1 text-sm border-b border-[#f5f5f5] last:border-0"
@@ -136,7 +161,7 @@
             <uni-list-item
               clickable
               :key="item.id"
-              v-for="(item, index) in bookmMarkListData"
+              v-for="(item, index) in bookmMarkItemList"
               :title="item.title"
               @click="gotoTargeChapterFromItem(item, index)"
               class="py-1 text-sm border-b border-[#f5f5f5] last:border-0"
@@ -150,21 +175,14 @@
 
 <script setup lang="ts">
 import {
-  initBookMarkListAPI,
-  initChapterListAPI,
-  initChapterNodesAPI
+  initBookMarkItemListAPI,
+  initChapterItemListAPI,
+  initParagraphItemListAPI
 } from '@/services/book'
-import { BookMarkItem, ChapterItem, ChapterNodesItem } from '@/types/book'
-import { ref } from 'vue'
+import { BookMarkItem, ChapterItem, ParagraphItem } from '@/types/book'
 
-// 当前显示的tab（directory-目录，bookmark-书签）
 const currentTab = ref<'directory' | 'bookmark'>('directory')
-//章节数据
-const chapterListData = ref<ChapterItem[]>([])
-// 书签列表
-const bookmMarkListData = ref<BookMarkItem[]>([])
-//当前章节数据
-const chapterNodesData = ref<ChapterNodesItem[]>([])
+
 //背景色列表
 const backgroundColorList = ref<string[]>([])
 // 背景色，取第一个颜色
@@ -172,20 +190,37 @@ const computedBgColor = ref()
 //当前背景色索引
 const currentColorIndex = ref(0)
 
+//当前章节数据
+const chapterItemList = ref<ChapterItem[]>([])
+
+// 书签列表
+const bookmMarkItemList = ref<BookMarkItem[]>([])
+// 初始化章节数据
+const paragraphItemList = ref<ParagraphItem[]>([])
+// 当前章节id
+const currentChapterId = ref(0)
+// 当前书籍的id
+const currentBookId = ref(0)
+
 // 初始化数据
 onLoad(() => {
-  // 初始化章节数据
-  initChapterDetailsData()
-  // 初始化目录数据
-  initBookmarkListData()
-  // 初始化章节数据
-  initChapterListData()
-  // 初始化背景颜色
+  // 1.初始化当前章节数据
+  initChapterItemList()
+
+  // 2.初始化章节数据
+  currentChapterId.value = 1
+  initParagraphItemList(currentChapterId.value)
+
+  // 3.初始化目录数据
+  initBookMarkItemList(currentBookId.value)
+
+  // 4.初始化背景颜色
   initBackgroundColorListData()
 })
 
 // 定义小说的图片名称作者
 const novelInfo = {
+  id: 1,
   cover: 'https://picsum.photos/200/300?random=1',
   title: '九界独尊',
   author: '风笑天'
@@ -219,14 +254,28 @@ const changeBackgroundColor = (color: string, index: number) => {
     computedBgColor.value = color
   }
 }
-const initChapterListData = () => {
-  chapterListData.value = initChapterListAPI(1)
+
+// popup
+const showPopup = ref(false)
+// 明确指定 event 参数的类型为 MouseEvent，解决隐式 any 类型问题
+const showCharts = () => {
+  console.log('显示聊天记录', showPopup.value)
+  uni.navigateTo({
+    url: '/pages/chart/chart'
+  })
 }
-const initBookmarkListData = () => {
-  bookmMarkListData.value = initBookMarkListAPI(1)
+/**
+ *
+ * @returns 章节列表数据
+ */
+const initChapterItemList = () => {
+  chapterItemList.value = initChapterItemListAPI()
 }
-const initChapterDetailsData = () => {
-  chapterNodesData.value = initChapterNodesAPI(1)
+const initBookMarkItemList = (currentBookId: number) => {
+  bookmMarkItemList.value = initBookMarkItemListAPI(currentBookId)
+}
+const initParagraphItemList = (currentChapterId: number) => {
+  paragraphItemList.value = initParagraphItemListAPI(1)
 }
 
 const isNightMode = ref(false)
@@ -241,7 +290,6 @@ const currentChapterSectionIndex = ref(0)
 
 const CHAPTER_SECTION_COUNT = 1
 const showDirectory = ref(false)
-
 // 方法实现
 const onPageClick = () => {
   console.log('页面被点击')
@@ -254,10 +302,10 @@ const toggleNightOrDay = () => {
   if (isNightMode.value) {
     // 切换到夜间模式
     console.log('切换到夜间模式')
-     computedBgColor.value =  backgroundColorList.value[4]
+    computedBgColor.value = backgroundColorList.value[4]
   } else {
     console.log('切换到白天模式')
-     computedBgColor.value =  backgroundColorList.value[0]
+    computedBgColor.value = backgroundColorList.value[0]
   }
 }
 
@@ -274,7 +322,7 @@ const toggleCategoryList = () => {
   showDirectoyPanel.value = !showDirectoyPanel.value
 
   // 关闭设置面板
-showSettingPanel.value = false
+  showSettingPanel.value = false
   console.log('切换目录列表显示状态')
 }
 
@@ -319,7 +367,7 @@ const gotoTargeChapterFromItem = (item: any, index: number) => {
   position: relative;
   overflow: auto;
   font-size: 14px;
-    // 夜间模式
+  // 夜间模式
   &.nightMode {
     .chapter-content {
       color: #fff5f5;
@@ -358,7 +406,6 @@ const gotoTargeChapterFromItem = (item: any, index: number) => {
   }
 }
 
-
 // 设置面板
 .setting-panel {
   position: absolute;
@@ -387,5 +434,32 @@ const gotoTargeChapterFromItem = (item: any, index: number) => {
   background-color: #fff;
   padding: 1px 20px;
   border-bottom: 1px solid #e64f4f;
+}
+
+.box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+}
+
+// 目录面板
+.chart-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 1px 20px;
+  border-bottom: 1px solid #e64f4f;
+  height: 400px;
+}
+
+.uni-badge-left-margin {
+  border: 1px solid #e64f4f;
 }
 </style>

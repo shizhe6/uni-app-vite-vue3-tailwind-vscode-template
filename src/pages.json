@@ -51,15 +51,21 @@
 		{
 			"path": "pages/search/search",
 			"style": {
-        "navigationStyle": "custom",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "搜索"
 			}
 		},
 		{
 			"path": "pages/rank/rank",
 			"style": {
-        "navigationStyle": "custom",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "排行榜"
+			}
+		},
+		{
+			"path": "pages/chart/chart",
+			"style": {
+				"navigationBarTitleText": "聊天记录"
 			}
 		}
 	],
