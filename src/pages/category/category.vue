@@ -1,6 +1,6 @@
 <template>
   <view class="viewreport">
-    <!-- 标题栏 -->
+    <!-- 头部标题栏 -->
     <view class="top-tabs" :style="{ paddingTop: safeAreaInsets!.top + 'px'}">
       <view
         v-for="(tab, index) in tabs"
@@ -13,6 +13,7 @@
       </view>
     </view>
 
+    <!-- 中间内容 -->
     <view class="middle-container">
       <swiper class="swiper" @change="onSwiperChange">
         <swiper-item class="swiper-item" v-for="(tab, index) in tabs" :key="index">
@@ -278,11 +279,13 @@ const fetchTwoCategoriesData = async (parentId: number) => {
   flex: 1;
 
   padding: 0 20px;
+  border: #fd3939 solid 1px;
 
   .swiper {
-    height: 100%;
     height: 85vh;
     .swiper-item {
+      border: #000000 solid 1px;
+
       // 必须有一个固定高度
       height: 100vh;
       display: flex;

@@ -18,7 +18,7 @@
 		{
 			"path": "pages/category/category",
 			"style": {
-				"navigationStyle": "custom",
+				// "navigationStyle": "custom",
 				"navigationBarTitleText": "分类"
 			}
 		},
@@ -58,8 +58,8 @@
 		{
 			"path": "pages/rank/rank",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": "排行榜"
+				// "navigationStyle": "custom",
+				"navigationBarTitleText": "番茄排行榜"
 			}
 		},
 		{

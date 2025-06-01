@@ -1,6 +1,5 @@
 <template>
-  <loading v-if="isLoading"></loading>
-  <view class="flex flex-col h-screen" v-else>
+  <view class="flex flex-col h-screen">
     <!-- 安全区域 & 渐变背景 -->
     <view
       class="p-5 header"
@@ -51,7 +50,6 @@ import Drama from './components/DramaContent.vue'
 import Knowledge from './components/KnowledgeContent.vue'
 import NewArrival from './components/LatestContent.vue'
 import Audiobook from './components/ListeningContent.vue'
-import Loading from './components/Loading.vue'
 import Recommend from './components/RecommendContent.vue'
 // 页面加载状态 
 const isLoading = ref(false)
@@ -85,9 +83,7 @@ onShow(() => {
   isLoading.value = true
 
   // 加载推荐组件数据
-  setTimeout(() => {
-    isRecommendLoaded.value = true
-  }, 10000)
+  isRecommendLoaded.value = true
 
   // 加载完成
   isLoading.value = false
