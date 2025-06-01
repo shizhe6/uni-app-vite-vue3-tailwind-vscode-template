@@ -1,26 +1,35 @@
 <template>
-  <scroll-view class="container" scroll-y @scrolltolower="handleScrollToLower">
-    <!-- 榜单导航 -->
-    <view class="rank-nav">
+  <loading v-if="isLoading"></loading>
+  <scroll-view v-else scroll-y @scrolltolower="handleScrollToLower">
+    <!-- 1.榜单模块 -->
+    <view class="rounded-lg bg-white mx-2">
+      <!--  榜单标题 -->
       <view
-        class="nav-item"
+        class="inline-block py-2 mx-3 text-sm"
         v-for="(rank, index) in rankList"
         :key="index"
-        :class="{ active: activeRank === index }"
+        :class="{ 'text-amber-600': activeRank === index }"
         @click="switchRank(index)">
         {{ rank.title }}
       </view>
-      <navigator class="nav-item" url="/pages/rank/rank">完整榜单 ></navigator>
+      <!-- 完整榜单 -->
+      <navigator
+        class="inline-block py-2 mx-3  text-gray-600 text-sm"
+        url="/pages/rank/rank">
+        完整榜单 >
+      </navigator>
 
       <!-- 当前榜单内容 -->
       <swiper class="h-[65vh]" circular :autoplay="false">
         <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
-          <view class="book-grid">
+            <!--  书籍项   -->
             <navigator
               url="/pages/book/detail"
               v-for="(book, bIndex) in page"
               :key="bIndex"
-              class="h-24 flex items-center p-[10px]">
+              class="h-24 flex items-center p-2">
+
+              <!-- 封面 -->
               <view class="h-24 w-20 rounded-lg">
                 <image
                   class="h-full w-full rounded-lg"
@@ -28,8 +37,9 @@
                   mode="aspectFill" />
               </view>
 
+              <!-- 排名  -->
               <view
-                class="h-20 text-lg mr-3 ml-3"
+                class="h-20 text-lg mx-3"
                 :class="{
                   'text-amber-600':
                     book.rank !== undefined && [1, 2, 3].includes(book.rank)
@@ -37,22 +47,22 @@
                 <text>{{ book.rank }}</text>
               </view>
 
+              <!-- 书籍信息 -->
               <view class="flex-1">
                 <view class="flex justify-start">
                   <text>{{ book.name }}</text>
                 </view>
                 <view class="flex">
-                  <text>{{ book.genre }}</text>
+                  <text class="text-amber-300">{{ book.genre }}</text>
                   <text>🔥 {{ book.popularity }}万</text>
                 </view>
               </view>
             </navigator>
-          </view>
         </swiper-item>
       </swiper>
     </view>
 
-    <!-- 推荐书籍模块保持不变 -->
+    <!-- 2.推荐书籍模块 -->
     <BookRecommend ref="recommendRef" />
   </scroll-view>
 </template>
@@ -62,14 +72,31 @@ import { initRankListAPI } from '@/services/book'
 import { BookItem, RankListItem } from '@/types/book'
 import { computed, onMounted, ref } from 'vue'
 import BookRecommend from './BookRecommend.vue'
-// 引入 onShow 钩子函数
+import Loading from './Loading.vue'
+// 当前 榜单索引
 const activeRank = ref(0)
-// 定义rankList
+// 榜单列表
 const rankList = ref<RankListItem[]>([])
+// 页面加载状态
+const isLoading = ref(false)
 
-// 触发加载：页面显示或组件挂载时
+
+
+/**
+ * 页面挂载时加载数据
+ * 
+ */ 
 onMounted(() => {
+  //开启数据加载状态
+  isLoading.value = true
+
+  // 加载数据
   loadData()
+
+  // 关闭数据加载状态
+  setTimeout(() => {
+    isLoading.value = false
+  }, 1000)
 })
 /**
  * 加载数据
@@ -91,11 +118,11 @@ const loadData = async () => {
 const switchRank = (index: number) => {
   activeRank.value = index
   console.log('切换榜单', index)
-  // 重置页码
 }
 
 /**
- * 获取当前榜单书籍
+ * 获取当前榜单书籍，监听器
+ * 当前榜单书籍 = 榜单列表[当前榜单索引].books
  */
 const currentBooks = computed(() => {
   return rankList.value[activeRank.value]?.books || []
@@ -135,74 +162,4 @@ const handleScrollToLower = () => {
 }
 </script>
 
-<style lang="scss" scoped>
-.container {
-  .rank-nav {
-    border-radius: 10px;
-    // border: 1px solid black;
-    background-color: #ffffff;
-    border-radius: 10px;
-    margin: 10px;
-    .nav-item {
-      display: inline-block;
-      padding: 16rpx 0rpx;
-      margin-right: 30rpx;
-      margin-left: 30rpx;
-      border-radius: 40rpx;
-      color: #666;
-      font-size: 28rpx;
-
-      &.active {
-        color: rgb(239, 151, 75);
-      }
-    }
-
-    .rank-swiper {
-      height: 70vh;
-
-      .book-grid {
-        display: flex;
-        flex-direction: column;
-        padding: 20rpx;
-
-        .book-item {
-          height: 150rpx;
-          display: flex;
-          align-items: center;
-          padding: 20rpx;
-
-          .book-cover {
-            border-radius: 8rpx;
-          }
-
-          .book-number {
-            margin: 0 20px;
-            height: 80px;
-            font-weight: 500;
-          }
-
-          .book-info {
-            flex: 1;
-
-            .book-name {
-              display: flex;
-              justify-content: flex-start;
-            }
-
-            .book-info-details {
-              display: flex;
-              .book-genre {
-                color: #fbd78f;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-.book-cover {
-  border-radius: 8rpx;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -1,5 +1,6 @@
 <template>
-  <view class="flex flex-col h-screen">
+  <loading v-if="isLoading"></loading>
+  <view class="flex flex-col h-screen" v-else>
     <!-- 安全区域 & 渐变背景 -->
     <view
       class="p-5 header"
@@ -7,7 +8,7 @@
       <!-- 搜索框 -->
       <uni-easyinput
         prefixIcon="search"
-        placeholder="重生之我在ktv当少爷"
+        :placeholder="searchKeywords"
         @focus="handleSearch"></uni-easyinput>
     </view>
 
@@ -50,10 +51,11 @@ import Drama from './components/DramaContent.vue'
 import Knowledge from './components/KnowledgeContent.vue'
 import NewArrival from './components/LatestContent.vue'
 import Audiobook from './components/ListeningContent.vue'
+import Loading from './components/Loading.vue'
 import Recommend from './components/RecommendContent.vue'
-
-//
+// 页面加载状态 
 const isLoading = ref(false)
+// 标签页组件加载状态
 const isRecommendLoaded = ref(false)
 const isClassicLoaded = ref(false)
 const isKnowledgeLoaded = ref(false)
@@ -61,9 +63,15 @@ const isAudiobookLoaded = ref(false)
 const isDramaLoaded = ref(false)
 const isNewArrivalLoaded = ref(false)
 
+// 推荐搜索书籍名称ji
+const searchKeywords = ref('重生之我在ktv当少爷')
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
+
+// 标签页数据 
 const tabs = ref(['推荐', '经典', '知识', '听书', '看剧', '最新上架'])
+// 当前标签索引
 const currentIndex = ref(0)
 
 /**
@@ -73,21 +81,32 @@ const currentIndex = ref(0)
  * 例如：加载数据、重置状态等
  */
 onShow(() => {
-  isRecommendLoaded.value = true
+  //开启数据加载状态
+  isLoading.value = true
 
-  //暂停1秒
+  // 加载推荐组件数据
   setTimeout(() => {
-    isLoading.value = false
-  }, 1000)
+    isRecommendLoaded.value = true
+  }, 10000)
+
+  // 加载完成
+  isLoading.value = false
+
 })
 // 重置所有组件加载状态
 const resetLoadedStates = () => {
-  isRecommendLoaded.value = false
-  isClassicLoaded.value = false
-  isKnowledgeLoaded.value = false
-  isAudiobookLoaded.value = false
-  isDramaLoaded.value = false
-  isNewArrivalLoaded.value = false
+  Object.values(tabLoadedMap).forEach(loaded => loaded.value = false);
+}
+
+
+// 新增：创建标签索引与加载状态的映射对象
+const tabLoadedMap: Record<number, Ref<boolean>> = {
+  0: isRecommendLoaded,
+  1: isClassicLoaded,
+  2: isKnowledgeLoaded,
+  3: isAudiobookLoaded,
+  4: isDramaLoaded,
+  5: isNewArrivalLoaded
 }
 
 /**
@@ -102,25 +121,9 @@ const onSwiperChange = (e: any) => {
   resetLoadedStates()
 
   // 3.根据当前索引加载对应组件
-  switch (currentIndex.value) {
-    case 0:
-      isRecommendLoaded.value = true
-      break
-    case 1:
-      isClassicLoaded.value = true
-      break
-    case 2:
-      isKnowledgeLoaded.value = true
-      break
-    case 3:
-      isAudiobookLoaded.value = true
-      break
-    case 4:
-      isDramaLoaded.value = true
-      break
-    case 5:
-      isNewArrivalLoaded.value = true
-      break
+  const targetLoaded = tabLoadedMap[currentIndex.value]
+  if (targetLoaded) {
+    targetLoaded.value = true // 确保索引有效时才设置
   }
 }
 

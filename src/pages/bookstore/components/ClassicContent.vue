@@ -1,17 +1,31 @@
 <template>
-  <view class="content-container"> 3333333 </view>
+    <loading v-if="isLoading"></loading>
+  <view class="content-container" v-else> 3333333 </view>
 </template>
 
 <script setup lang="ts">
-import { onLoad, onShow } from '@dcloudio/uni-app'
 import { onMounted } from 'vue'
+import Loading from './Loading.vue'
 // 数据加载方法
 const loadData = async () => {
   console.log('经典页面加载数据')
 }
 
+// 页面加载状态 
+const isLoading = ref(false)
 // 触发加载：页面显示或组件挂载时
-onMounted(() => loadData())
+onMounted(() => {
+    //开启数据加载状态
+    isLoading.value = true
+    // 加载数据
+  loadData()
+
+  // 关闭数据加载状态
+  setTimeout(() => {
+    isLoading.value = false 
+  }, 1000)
+
+})
 </script>
 
 <style lang="scss" scoped>
