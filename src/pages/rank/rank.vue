@@ -53,7 +53,7 @@
               <view
                 class="flex-1 ml-[20rpx] flex flex-col justify-center items-start">
                 <text class="block text-[30rpx] font-medium mb-[10rpx]">
-                  {{ book.title }}
+                  {{ book.name }}
                 </text>
                 <view class="text-[#999]">
                   <text>{{ book.type }} ·</text>
