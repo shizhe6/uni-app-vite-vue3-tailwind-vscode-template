@@ -1,60 +1,66 @@
 <template>
-  <view class="h-full flex flex-col">
-    <!-- 头部标题栏 -->
-    <view class="flex flex-row justify-around items-center h-[40px]">
+  <view class="h-full flex flex-col relative mb-6">
+    <!-- 一级分类 -->
+    <view
+      class="flex justify-start items-center h-[40px] overflow-x-auto flex-nowrap scroll-smooth fixed bg-white">
       <view
-        v-for="(tab, index) in tabs"
+        v-for="(primaryCategory, index) in primaryCategoryData"
         :key="index"
         class="px-[20rpx] text-[32rpx] relative whitespace-nowrap"
-        :class="{ 'font-bold text-amber-600': currentTabIndex === index }"
-        @click="handleTabClick(index)">
-        {{ tab }}
+        :class="{ 'font-bold text-amber-600': activePrimaryIndex === index }"
+        @click="handlePrimaryClick(index)">
+        {{ primaryCategory.name }}
       </view>
     </view>
 
     <!-- 中间内容 -->
-    <view class="flex-1">
-      <swiper class="h-screen" @change="onSwiperChange">
+    <view class="flex-1 relative mt-[40px]">
+      <swiper class="h-[100vh]" @change="onSwiperChange">
         <swiper-item
           class="flex flex-row overflow-hidden"
-          v-for="(tab, index) in tabs"
+          v-for="(item, index) in primaryCategoryData"
           :key="index">
-          <!-- 左侧：一级分类 -->
-          <scroll-view class="left-primary-category-container" scroll-y>
+          <!-- 左侧：二级分类 -->
+          <scroll-view class="left-category-container" scroll-y>
             <view
-              v-for="(category, index) in primaryCategories"
-              :key="category.id"
+              v-for="(secondCategory, index) in secondCategoryData"
+              :key="secondCategory.id"
               class="left-category-item"
               :class="{
-                'left-category-item-active': index === activePrimaryIndex
+                'font-bold text-amber-600': activeSecondIndex === index
               }"
-              @tap="setActivePrimaryCategory(index)">
-              <text>{{ category.name }}</text>
+              @tap="handleSecondClick(index)">
+              <text>{{ secondCategory.name }}</text>
             </view>
           </scroll-view>
-          <!-- 右侧：二级分类 -->
+          <!-- 右侧：三级分类 -->
           <scroll-view
-            class="right-secondary-category-container"
+            class="right-category-container"
             scroll-y
             scroll-with-animation
             :scroll-top="rightScrollTop"
             @scroll="onRightScroll">
             <view
-              v-for="(category, index) in primaryCategories"
-              :key="category.id"
-              :class="[
-                'right-secondary-category-item',
-                'right-secondary-category-item-' + index
-              ]">
-              <view class="right-secondary-category-item-top-name">
-                {{ category.name }}
+              v-for="(secondCategory, index) in secondCategoryData"
+              :key="secondCategory.id"
+              class="right-category-item">
+              <view class="right-category-item-top">
+                <view>{{ secondCategory.name }}</view>
+                <view
+                  v-if="secondCategory.children.length > 30"
+                  @click="toggleShowAll = !toggleShowAll">
+                  {{ toggleShowAll ? '收起 ˄' : '展开 ˅' }}
+                </view>
               </view>
-              <view class="right-secondary-category-item-bottom-content">
+
+              <view class="right-category-item-bottom-content">
                 <view
                   class="item-name"
-                  v-for="(subCategory, subIndex) in category.children"
+                  v-for="(threeCategory, subIndex) in toggleShowAll
+                    ? secondCategory.children
+                    : secondCategory.children.slice(0, 30)"
                   :key="subIndex">
-                  {{ subCategory.name }}
+                  {{ threeCategory.name }}
                 </view>
               </view>
             </view>
@@ -66,29 +72,42 @@
 </template>
 
 <script setup lang="ts">
+import {
+  initCategoryListAPI,
+  initThreeCategoryListAPI
+} from '@/services/category'
+import { CategoryItem } from '@/types/category'
 import { onShow } from '@dcloudio/uni-app'
 import { getCurrentInstance, onMounted, ref } from 'vue'
-// 标签页数据
-const currentTabIndex = ref(0)
 // 当前激活的一级分类索引
 const activePrimaryIndex = ref(0)
-// 一级分类列表
-const primaryCategories = ref<CategoryItem[]>([])
-// 二级分类列表
-const secondaryCategories = ref<CategoryItem[]>([])
+// 当前激活的二级分类索引
+const activeSecondIndex = ref(0)
+
+// 一级分类和二级分类数据
+const primaryCategoryData = ref<CategoryItem[]>([])
+// 二级分类数据和三级分类数据
+const secondCategoryData = ref<CategoryItem[]>([])
 
 // 加载状态
-const isLoading = ref(true)
-// 获取屏幕边界到安全区域距离
-const { safeAreaInsets } = uni.getSystemInfoSync()
-//获取标签页数据
-const tabs = ref<string[]>([])
+const isLoading = ref(false)
 
-//rightScrollTop
+// 滚动事件的节流定时器
 const rightScrollTop = ref(0)
+// 记录每个二级分类的 top 值
 const rightDomsTop = ref<number[]>([])
+// 记录每个三级分类的 top 值
 const leftDomsTop = ref<number[]>([])
 
+// toggleShowAll
+const toggleShowAll = ref(false)
+
+/**
+ * 监听滚动事件
+ * 1.监听左边的scroll-view的滚动事件
+ * 2.监听右边的scroll-view的滚动事件
+ * 3.根据滚动事件，计算出右边scroll-view的scrollTop值
+ */
 onMounted(() => {
   const instance = getCurrentInstance()
 
@@ -110,9 +129,9 @@ onMounted(() => {
     })
     .exec()
   query
-    .selectAll('.right-secondary-category-item')
+    .selectAll('.right-category-item')
     .boundingClientRect((data) => {
-      // console.log('右边data：', data)
+      console.log('右边data：', data)
 
       // 检查 data 是否为数组，避免类型错误
       if (Array.isArray(data)) {
@@ -128,63 +147,73 @@ onMounted(() => {
     })
     .exec()
 })
-
+/**
+ * 页面加载时调用
+ */
 onShow(async () => {
-  //1.获取标签页数据
-  getTabsData()
-  //2.获取左侧二级分类数据
-  await fetchOneCategoriesData(1)
+  // 开启加载状态
+  isLoading.value = true
+  //1.获取一级分类列表数据
+  await initCategoryListData()
   //3.获取三级分类数据
-  await fetchTwoCategoriesData(1)
+  await initThreeCategoryListData()
+  // 关闭加载状态
   isLoading.value = false
 })
 
-// 分类数据
-type CategoryItem = {
-  id: number
-  name: string
-  children?: CategoryItem[]
+// 获取一级分类列表数据
+const initCategoryListData = () => {
+  primaryCategoryData.value = initCategoryListAPI()
 }
 
-// 获取标签页数据
-const getTabsData = () => {
-  tabs.value = ['男生', '女生 ', '听书', '出版', '短剧']
-}
+// 获取二级分类和三级分类数据
+const initThreeCategoryListData = () => {
+  // 获取当前激活的一级分类id
+  const categoryId = primaryCategoryData.value[activePrimaryIndex.value].id
 
-// 点击触发
-const handleTabClick = (index: number) => {
-  currentTabIndex.value = index
-  activePrimaryIndex.value = 0
-  fetchOneCategoriesData(currentTabIndex.value)
-  fetchTwoCategoriesData(primaryCategories.value[0].id)
+  // 重制二级分类索引
+  activeSecondIndex.value = 0
+  // 获取所有二级分类以及三级分类数据
+  secondCategoryData.value = initThreeCategoryListAPI(categoryId)
 }
 
 // 滑动触发（删除重复定义）
 const onSwiperChange = (e: any) => {
-  currentTabIndex.value = e.detail.current
-  activePrimaryIndex.value = 0
-  fetchOneCategoriesData(1)
-  fetchTwoCategoriesData(primaryCategories.value[0].id)
+  // 设置当前激活的一级分类索引
+  activePrimaryIndex.value = e.detail.current
+  // 查询二级分类和三级分类数据
+  initThreeCategoryListData()
 }
-
-// 设置激活分类
-const setActivePrimaryCategory = (index: number) => {
-  console.log('index:' + index)
+/**
+ * 点击一级分类事件
+ * @param index 一级分类索引
+ */
+const handlePrimaryClick = (index: number) => {
+  // 设置当前激活的一级分类索引
   activePrimaryIndex.value = index
-
-  // 滚动到对应的二级分类容器
-  // 右边scroll-view滚动到对应区块
-  // 修正类型错误，正确访问 ref 变量的值
-  rightScrollTop.value = rightDomsTop.value[index]
-  console.log('rightScrollTop.value:' + rightScrollTop.value)
+  // 查询二级分类和三级分类数据
+  initThreeCategoryListData()
+}
+/**
+ *  点击二级分类事件
+ * @param index 二级分类索引
+ */
+const handleSecondClick = (index: number) => {
+  // 设置当前激活的二级分类索引
+  // activeSecondIndex.value = index
+  // 计算出右边scroll-view的scrollTop值
+  rightScrollTop.value = rightDomsTop.value[index - 1]
+  console.log('触发二级分类索引:' + index)
 }
 
 //滚动右侧区域，左侧联动，具体这个284值，需要根据自己的实际情况来调整
 const onRightScroll = (e: any) => {
+  console.log('onRightScroll:' + e.detail.scrollTop)
   const scrollTop = e.detail.scrollTop // 当前滚动值
   let minGreater = Infinity // 记录比scrollTop大的最小值
   let minIndex = -1 // 记录对应的索引
 
+  // 找到比scrollTop大的最小元素
   rightDomsTop.value.forEach((v, k) => {
     if (v > scrollTop && v < minGreater) {
       minGreater = v
@@ -193,7 +222,7 @@ const onRightScroll = (e: any) => {
   })
 
   if (minIndex !== -1) {
-    activePrimaryIndex.value = minIndex
+    activeSecondIndex.value = minIndex
     console.log(
       `找到比${scrollTop}大的最小元素：${minGreater}，索引：${minIndex}`
     )
@@ -201,57 +230,11 @@ const onRightScroll = (e: any) => {
     console.log(`未找到比${scrollTop}大的元素`)
   }
 }
-// 获取分类数据方法
-const categoryNames = [
-  '历史',
-  '文学经典',
-  '影视小说',
-  '精品小说',
-  '社会文化',
-  '心理',
-  '个人成长',
-  '经历管理',
-  '艺术',
-  '生活百科',
-  '养生健康',
-  '玄幻',
-  '科幻',
-  '都市',
-  '诸天万界'
-]
-
-const fetchOneCategoriesData = async (index: number) => {
-  setTimeout(() => {
-    primaryCategories.value = Array(16)
-      .fill({})
-      .map((_, i) => ({
-        id: i + 1,
-        name: categoryNames[i % categoryNames.length],
-        children: Array(10)
-          .fill({})
-          .map((_, j) => ({
-            id: j + 1,
-            name: categoryNames[j % categoryNames.length]
-          }))
-      }))
-  })
-}
-
-const fetchTwoCategoriesData = async (parentId: number) => {
-  setTimeout(() => {
-    secondaryCategories.value = Array(50)
-      .fill({})
-      .map((_, i) => ({
-        id: i + 1,
-        name: categoryNames[i % categoryNames.length]
-      }))
-  })
-}
 </script>
 
 <style lang="scss">
 /* 一级分类样式 */
-.left-primary-category-container {
+.left-category-container {
   /* 隐藏溢出内容 */
   overflow: hidden;
   /* 设置宽度 */
@@ -270,32 +253,27 @@ const fetchTwoCategoriesData = async (parentId: number) => {
     height: 96rpx;
     /* 设置字体大小 */
     font-size: 26rpx;
-    /* 设置文字颜色 */
-    color: black;
     /* 设置相对定位 */
     position: relative;
   }
-
-  /* 激活的一级分类项样式 */
-  .left-category-item-active {
-    color: #e96846;
-  }
 }
 /* 二级分类样式 */
-.right-secondary-category-container {
+.right-category-container {
   flex: 1;
-  .right-secondary-category-item {
+  margin: 10px;
+  .right-category-item {
     display: flex;
     flex-direction: column;
-    // border: 1px solid #e96846;
-    .right-secondary-category-item-top-name {
+    .right-category-item-top {
       height: 50px;
-      // border: 1px solid #757575;
       display: flex;
       align-items: center;
       justify-content: space-around;
+      font-size: 15px;
+      background-color: antiquewhite;
+      border-radius: 10px;
     }
-    .right-secondary-category-item-bottom-content {
+    .right-category-item-bottom-content {
       flex: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
