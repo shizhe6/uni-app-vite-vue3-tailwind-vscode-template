@@ -54,7 +54,7 @@
 		{
 			"path": "pages/search/search",
 			"style": {
-				"navigationStyle": "custom",
+				// "navigationStyle": "custom",
 				"navigationBarTitleText": "搜索"
 			}
 		},
