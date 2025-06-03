@@ -22,7 +22,11 @@
 
     <!-- 列表模式 -->
     <view class="book-container-list" v-else>
-      <navigator v-for="book in bookList" :key="book.id" class="book-item" url="/pages/book/detail">
+      <navigator
+        v-for="book in bookList"
+        :key="book.id"
+        class="book-item"
+        url="/pages/book/detail">
         <!-- 书籍封面 -->
         <image class="book-cover" :src="book.cover" mode="aspectFill" />
 
@@ -76,7 +80,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天3小时',
     latestChapter: '第201章 二向箔降临',
-    totalChapters: 256,
+    totalChapters: 256
   },
   {
     id: 2,
@@ -86,7 +90,7 @@ const bookList = ref<BookItem[]>([
     unread: 5,
     lastUpdate: '3天2小时',
     latestChapter: '第105章 地球启航',
-    totalChapters: 150,
+    totalChapters: 150
   },
   {
     id: 3,
@@ -96,7 +100,7 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天5小时',
     latestChapter: '第87章 宏原子核',
-    totalChapters: 120,
+    totalChapters: 120
   },
   {
     id: 4,
@@ -106,7 +110,7 @@ const bookList = ref<BookItem[]>([
     unread: 4,
     lastUpdate: '4天1小时',
     latestChapter: '第130章 新纪元开始',
-    totalChapters: 180,
+    totalChapters: 180
   },
   {
     id: 5,
@@ -116,7 +120,7 @@ const bookList = ref<BookItem[]>([
     unread: 1,
     lastUpdate: '5小时前',
     latestChapter: '第35章 知识的传承',
-    totalChapters: 50,
+    totalChapters: 50
   },
   {
     id: 6,
@@ -126,7 +130,7 @@ const bookList = ref<BookItem[]>([
     unread: 6,
     lastUpdate: '5天3小时',
     latestChapter: '第98章 文明的碰撞',
-    totalChapters: 140,
+    totalChapters: 140
   },
   {
     id: 7,
@@ -136,7 +140,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天4小时',
     latestChapter: '第76章 用诗征服宇宙',
-    totalChapters: 110,
+    totalChapters: 110
   },
   {
     id: 8,
@@ -146,7 +150,7 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天6小时',
     latestChapter: '第62章 真理祭坛',
-    totalChapters: 90,
+    totalChapters: 90
   },
   {
     id: 9,
@@ -156,7 +160,7 @@ const bookList = ref<BookItem[]>([
     unread: 5,
     lastUpdate: '3天5小时',
     latestChapter: '第115章 电磁干扰战',
-    totalChapters: 160,
+    totalChapters: 160
   },
   {
     id: 10,
@@ -166,7 +170,7 @@ const bookList = ref<BookItem[]>([
     unread: 4,
     lastUpdate: '4天2小时',
     latestChapter: '第103章 宇宙的真相',
-    totalChapters: 145,
+    totalChapters: 145
   },
   {
     id: 11,
@@ -176,7 +180,7 @@ const bookList = ref<BookItem[]>([
     unread: 1,
     lastUpdate: '6小时前',
     latestChapter: '第28章 大脑的奥秘',
-    totalChapters: 40,
+    totalChapters: 40
   },
   {
     id: 12,
@@ -186,7 +190,7 @@ const bookList = ref<BookItem[]>([
     unread: 6,
     lastUpdate: '6天1小时',
     latestChapter: '第121章 地球保卫战',
-    totalChapters: 170,
+    totalChapters: 170
   },
   {
     id: 13,
@@ -196,7 +200,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天7小时',
     latestChapter: '第82章 微观世界的繁荣',
-    totalChapters: 115,
+    totalChapters: 115
   },
   {
     id: 14,
@@ -206,7 +210,7 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天8小时',
     latestChapter: '第57章 基因改造的人类',
-    totalChapters: 80,
+    totalChapters: 80
   },
   {
     id: 15,
@@ -216,7 +220,7 @@ const bookList = ref<BookItem[]>([
     unread: 5,
     lastUpdate: '3天6小时',
     latestChapter: '第109章 时间的漩涡',
-    totalChapters: 155,
+    totalChapters: 155
   },
   {
     id: 16,
@@ -226,7 +230,7 @@ const bookList = ref<BookItem[]>([
     unread: 4,
     lastUpdate: '4天3小时',
     latestChapter: '第137章 未来的中国',
-    totalChapters: 190,
+    totalChapters: 190
   },
   {
     id: 17,
@@ -236,7 +240,7 @@ const bookList = ref<BookItem[]>([
     unread: 1,
     lastUpdate: '7小时前',
     latestChapter: '第43章 泡泡的奇迹',
-    totalChapters: 60,
+    totalChapters: 60
   },
   {
     id: 18,
@@ -246,7 +250,7 @@ const bookList = ref<BookItem[]>([
     unread: 6,
     lastUpdate: '7天2小时',
     latestChapter: '第112章 信息的传递',
-    totalChapters: 165,
+    totalChapters: 165
   },
   {
     id: 19,
@@ -256,7 +260,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天9小时',
     latestChapter: '第94章 海洋的梦幻',
-    totalChapters: 130,
+    totalChapters: 130
   },
   {
     id: 20,
@@ -266,8 +270,8 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天10小时',
     latestChapter: '第71章 微观纤维世界',
-    totalChapters: 100,
-  },
+    totalChapters: 100
+  }
 ])
 
 // 用于控制宫格和列表的切换状态
@@ -343,8 +347,8 @@ onShow(() => {
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 
     .book-cover {
-      width: 100%;;
-      height: 140px;
+      width: 180rpx;
+      height: 240rpx;
       border-radius: 8rpx;
       margin-right: 30rpx;
     }
@@ -411,8 +415,8 @@ onShow(() => {
     align-items: flex-start;
 
     .grid-cover {
-      width: 180rpx;
-      height: 240rpx;
+      width: 100%;
+      height: 140px;
       border-radius: 8rpx;
       margin-bottom: 15rpx;
       border: 1px solid #ccc;

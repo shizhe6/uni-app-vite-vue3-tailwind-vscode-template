@@ -15,7 +15,7 @@
 
     <!-- 中间内容 -->
     <view class="flex-1 relative mt-[40px]">
-      <swiper class="h-[100vh]" @change="onSwiperChange">
+      <swiper class="remaining-content" @change="onSwiperChange">
         <swiper-item
           class="flex flex-row overflow-hidden"
           v-for="(item, index) in primaryCategoryData"
@@ -47,7 +47,7 @@
               <view class="right-category-item-top">
                 <view>{{ secondCategory.name }}</view>
                 <view
-                  v-if="secondCategory.children.length > 30"
+                  v-if="secondCategory.children!.length > 30"
                   @click="toggleShowAll = !toggleShowAll">
                   {{ toggleShowAll ? '收起 ˄' : '展开 ˅' }}
                 </view>
@@ -58,7 +58,7 @@
                   class="item-name"
                   v-for="(threeCategory, subIndex) in toggleShowAll
                     ? secondCategory.children
-                    : secondCategory.children.slice(0, 30)"
+                    : secondCategory.children!.slice(0, 30)"
                   :key="subIndex">
                   {{ threeCategory.name }}
                 </view>
@@ -233,6 +233,10 @@ const onRightScroll = (e: any) => {
 </script>
 
 <style lang="scss">
+.remaining-content {
+  height: calc(100vh - 45px);
+}
+
 /* 一级分类样式 */
 .left-category-container {
   /* 隐藏溢出内容 */

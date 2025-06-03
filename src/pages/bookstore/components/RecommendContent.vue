@@ -1,6 +1,6 @@
 <template>
-  <loading v-if="isLoading"></loading>
-  <scroll-view v-else scroll-y @scrolltolower="handleScrollToLower">
+  <SzLoading v-if="isLoading"></SzLoading>
+  <scroll-view v-else scroll-y @scrolltolower="onScrollToLower">
     <!-- 1.榜单模块 -->
     <view class="rounded-lg bg-white mx-2">
       <!--  榜单标题 -->
@@ -14,7 +14,7 @@
       </view>
       <!-- 完整榜单 -->
       <navigator
-        class="inline-block py-2 mx-3  text-gray-600 text-sm"
+        class="inline-block py-2 mx-3 text-gray-600 text-sm"
         url="/pages/rank/rank">
         完整榜单 >
       </navigator>
@@ -22,57 +22,58 @@
       <!-- 当前榜单内容 -->
       <swiper class="h-[65vh]" circular :autoplay="false">
         <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
-            <!--  书籍项   -->
-            <navigator
-              url="/pages/book/detail"
-              v-for="(book, bIndex) in page"
-              :key="bIndex"
-              class="h-24 flex items-center p-2">
+          <!--  书籍项   -->
+          <navigator
+            url="/pages/book/detail"
+            v-for="(book, bIndex) in page"
+            :key="bIndex"
+            class="h-24 flex items-center p-2">
+            <!-- 封面 -->
+            <view class="h-24 w-20 rounded-lg">
+              <image
+                class="h-full w-full rounded-lg"
+                :src="book.cover"
+                mode="aspectFill" />
+            </view>
 
-              <!-- 封面 -->
-              <view class="h-24 w-20 rounded-lg">
-                <image
-                  class="h-full w-full rounded-lg"
-                  :src="book.cover"
-                  mode="aspectFill" />
-              </view>
+            <!-- 排名  -->
+            <view
+              class="h-20 text-lg mx-3"
+              :class="{
+                'text-amber-600':
+                  book.rank !== undefined && [1, 2, 3].includes(book.rank)
+              }">
+              <text>{{ book.rank }}</text>
+            </view>
 
-              <!-- 排名  -->
-              <view
-                class="h-20 text-lg mx-3"
-                :class="{
-                  'text-amber-600':
-                    book.rank !== undefined && [1, 2, 3].includes(book.rank)
-                }">
-                <text>{{ book.rank }}</text>
+            <!-- 书籍信息 -->
+            <view class="flex-1">
+              <view class="flex justify-start">
+                <text>{{ book.name }}</text>
               </view>
-
-              <!-- 书籍信息 -->
-              <view class="flex-1">
-                <view class="flex justify-start">
-                  <text>{{ book.name }}</text>
-                </view>
-                <view class="flex">
-                  <text class="text-amber-300">{{ book.genre }}</text>
-                  <text>🔥 {{ book.popularity }}万</text>
-                </view>
+              <view class="flex">
+                <text class="text-amber-300">{{ book.genre }}</text>
+                <text>🔥 {{ book.popularity }}万</text>
               </view>
-            </navigator>
+            </view>
+          </navigator>
         </swiper-item>
       </swiper>
     </view>
 
     <!-- 2.推荐书籍模块 -->
-    <BookRecommend ref="recommendRef" />
+    <SzBookRecommend ref="bookRecommendRef" />
   </scroll-view>
 </template>
 
 <script setup lang="ts">
+import { bookRecommendList } from '@/composables'
 import { initRankListAPI } from '@/services/book'
 import { BookItem, RankListItem } from '@/types/book'
 import { computed, onMounted, ref } from 'vue'
-import BookRecommend from './BookRecommend.vue'
-import Loading from './Loading.vue'
+// 猜你喜欢
+const { bookRecommendRef, onScrollToLower } = bookRecommendList()
+
 // 当前 榜单索引
 const activeRank = ref(0)
 // 榜单列表
@@ -80,12 +81,10 @@ const rankList = ref<RankListItem[]>([])
 // 页面加载状态
 const isLoading = ref(false)
 
-
-
 /**
  * 页面挂载时加载数据
- * 
- */ 
+ *
+ */
 onMounted(() => {
   //开启数据加载状态
   isLoading.value = true
@@ -152,14 +151,6 @@ const pagedBooks = computed<BookItem[][]>(() => {
 
   return resultArray
 })
-
-/**
- * 滚动到底部加载更多,触发子组件BookRecommend的handleScrollToLower方法
- */
-const recommendRef = ref<InstanceType<typeof BookRecommend>>()
-const handleScrollToLower = () => {
-  recommendRef.value?.handleScrollToLower()
-}
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,30 +1,28 @@
 <template>
-    <loading v-if="isLoading"></loading>
-  <view class="content-container" v-else> 3333333 </view>
+  <SzLoading v-if="isLoading"></SzLoading>
+  <view class="content-container" v-else>3333333</view>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import Loading from './Loading.vue'
 // 数据加载方法
 const loadData = async () => {
   console.log('经典页面加载数据')
 }
 
-// 页面加载状态 
+// 页面加载状态
 const isLoading = ref(false)
 // 触发加载：页面显示或组件挂载时
 onMounted(() => {
-    //开启数据加载状态
-    isLoading.value = true
-    // 加载数据
+  //开启数据加载状态
+  isLoading.value = true
+  // 加载数据
   loadData()
 
   // 关闭数据加载状态
   setTimeout(() => {
-    isLoading.value = false 
+    isLoading.value = false
   }, 1000)
-
 })
 </script>
 
