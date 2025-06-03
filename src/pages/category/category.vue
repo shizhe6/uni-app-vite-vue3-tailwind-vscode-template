@@ -56,11 +56,13 @@
               <view class="right-category-item-bottom-content">
                 <view
                   class="item-name"
+                  @click="handleThreeClick(index, subIndex)"
                   v-for="(threeCategory, subIndex) in toggleShowAll
                     ? secondCategory.children
                     : secondCategory.children!.slice(0, 30)"
                   :key="subIndex">
                   {{ threeCategory.name }}
+                  
                 </view>
               </view>
             </view>
@@ -204,6 +206,17 @@ const handleSecondClick = (index: number) => {
   // 计算出右边scroll-view的scrollTop值
   rightScrollTop.value = rightDomsTop.value[index - 1]
   console.log('触发二级分类索引:' + index)
+}
+
+/**
+ * 点击三级分类事件
+ * @param index 三级分类索引
+ */
+const handleThreeClick = (index: number, subIndex: number) => {
+  console.log('触发三级分类索引:' + index + '---' + subIndex)
+  uni.navigateTo({
+    url: '/pages/search/categorySearch'
+  })  
 }
 
 //滚动右侧区域，左侧联动，具体这个284值，需要根据自己的实际情况来调整

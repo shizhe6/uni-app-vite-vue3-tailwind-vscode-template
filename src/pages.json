@@ -6,7 +6,7 @@
 		"custom": {
 			// uni-ui 规则如下配置
 			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
-      // 以 Sz 开头的组件，在 components 目录中查找
+			// 以 Sz 开头的组件，在 components 目录中查找
 			"^Sz(.*)": "@/components/Sz$1.vue"
 		}
 	},
@@ -69,6 +69,12 @@
 			"path": "pages/chart/chart",
 			"style": {
 				"navigationBarTitleText": "聊天记录"
+			}
+		},
+		{
+			"path": "pages/search/categorySearch",
+			"style": {
+				"navigationBarTitleText": "分类搜索"
 			}
 		}
 	],

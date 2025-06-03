@@ -42,7 +42,10 @@
             <view
               v-for="(list, index) in hotSearchData"
               :key="index"
-              class="w-52 m-4 p-4 rank-backgroud-color rounded-lg">
+              class="w-52 m-4 p-4  rounded-lg"  
+               :class=" 'rank-background-' + index">
+
+            
               <!-- 推荐榜单名称 -->
               <view class="flex items-center mb-5">
                 <text class="font-bold pl-2.5 mr-2.5">
@@ -132,8 +135,19 @@ onShow(() => {
 </script>
 
 <style lang="scss">
-.rank-backgroud-color {
-  background-color: #ebb6b6;
-  border: 1px solid #e61d1d;
+/* 分别定义三个元素的背景色 */
+.rank-background-0 {
+  background: #020024;
+  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+}
+
+.rank-background-1 {
+  background: #22C1C3;
+  background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
+}
+
+.rank-background-2 {
+  background: #833AB4;
+  background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
 }
 </style>
