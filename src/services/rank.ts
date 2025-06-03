@@ -2,8 +2,8 @@ import { BookItem } from '@/types/book'
 import { PrimaryRankItem, SecondaryRankItem } from '@/types/rank'
 
 /**
- *
- * @returns 书签列表
+ *查询一级分类列表和二级分类列表
+ * @returns 一级分类列表和二级分类列表
  */
 export const initPrimaryListAPI = (): PrimaryRankItem[] => {
   return [
@@ -91,39 +91,51 @@ export const initPrimaryListAPI = (): PrimaryRankItem[] => {
   ]
 }
 
-export const initSecondaryListAPI = (id: number): SecondaryRankItem[] => {
-  return [
-    { id: 1, name: '推荐棒' },
-    { id: 2, name: '新书榜' },
-    { id: 3, name: '畅销榜' }
-  ]
-}
-
+/**
+ *  查询排行榜列表
+ * @param primaryId 一级分类id
+ * @param secondaryId  二级分类id
+ * @returns 排行榜列表，只有30条数据
+ */
 export const initBookListAPI = (
   primaryId: number,
   secondaryId: number
 ): BookItem[] => {
-
-
-
-
-
   // 预定义随机书名池（扩展了更多不同类型的书名）
   const bookNames = [
     // 玄幻类
-    '九界独尊：我的玄铁剑', '玄幻世界的穿越者', '仙途问道：千年剑修', '万族争霸：我为帝', '九霄之上：逆天成神',
+    '九界独尊：我的玄铁剑',
+    '玄幻世界的穿越者',
+    '仙途问道：千年剑修',
+    '万族争霸：我为帝',
+    '九霄之上：逆天成神',
     // 都市类
-    '放下个人素质，享无敌人生', '都市修仙：从送外卖开始', '职场风云：我是金牌总监', '都市异能：觉醒读心术', '重生之都市巨贾',
+    '放下个人素质，享无敌人生',
+    '都市修仙：从送外卖开始',
+    '职场风云：我是金牌总监',
+    '都市异能：觉醒读心术',
+    '重生之都市巨贾',
     // 历史类
-    '历史演义：盛唐风华', '王朝争霸：大明崛起', '架空穿越：回到贞观', '清史迷踪：探秘紫禁城', '宋末风云：抗元奇侠',
+    '历史演义：盛唐风华',
+    '王朝争霸：大明崛起',
+    '架空穿越：回到贞观',
+    '清史迷踪：探秘紫禁城',
+    '宋末风云：抗元奇侠',
     // 言情类
-    '现代言情：先婚后爱', '都市甜宠：总裁的小娇妻', '职场婚姻：双向奔赴的幸福', '校园初恋：那年樱花雨', '暗恋成真：藏了十年的秘密',
+    '现代言情：先婚后爱',
+    '都市甜宠：总裁的小娇妻',
+    '职场婚姻：双向奔赴的幸福',
+    '校园初恋：那年樱花雨',
+    '暗恋成真：藏了十年的秘密',
     // 科幻类
-    '星际冒险：未知星域', '未来科技：机械飞升', '太空殖民：火星新家园', '平行宇宙：另一个我', '星际战争：银河守护者'
+    '星际冒险：未知星域',
+    '未来科技：机械飞升',
+    '太空殖民：火星新家园',
+    '平行宇宙：另一个我',
+    '星际战争：银河守护者'
   ]
 
-
-  return Array.from({ length: 10 }, (_, i) => ({
+  return Array.from({ length: 30 }, (_, i) => ({
     id: primaryId * 1000 + secondaryId * 100 + i, // 生成唯一ID
     sortNumber: i + 1, // 排序号从1开始
     cover: `https://picsum.photos/200/300?n=${i + primaryId * 100 + secondaryId}`,
