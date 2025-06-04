@@ -18,6 +18,7 @@
           class="whitespace-nowrap overflow-x-auto flex items-center pl-2 mt-2">
           <view
             v-for="(item, index) in tagList"
+            @click="handleTag(item)"
             :class="{
               'font-bold text-amber-600 border bg-orange-200':
                 selectedTags.includes(item)
@@ -27,7 +28,10 @@
           </view>
         </view>
         <view class="ml-3" @click="showTags = !showTags">
-          {{ selectedTags.length > 0 ? selectedTags.length : '>' }}
+          <uni-badge
+            :text="
+              selectedTags.length > 0 ? selectedTags.length : '>'
+            "></uni-badge>
         </view>
       </view>
 
@@ -269,6 +273,24 @@ const handleQuery3 = (query: string) => {
   selectedQuery3.value = query
 }
 
+// 选中标签，如果超过3个，提示最多可选3个标签，反之则添加标签
+const handleTag = (tag: string) => {
+  if (selectedTags.value.includes(tag)) {
+    // 如果标签已选中，则移除该标签
+    selectedTags.value = selectedTags.value.filter((item) => item !== tag)
+  } else {
+    if (selectedTags.value.length >= 3) {
+      // 提示最多可选3个标签
+      uni.showToast({
+        title: '最多可选3个标签',
+        icon: 'none'
+      })
+    } else {
+      // 添加标签
+      selectedTags.value.push(tag)
+    }
+  }
+}
 // showTags
 const showTags = ref(false)
 </script>
