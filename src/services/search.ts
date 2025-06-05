@@ -78,3 +78,20 @@ export const initSearchHistoryAPI = (): SearchHistoryItem[] => {
     { id: 15, name: '神医毒妃狠嚣张' }
   ]
 }
+
+// queryRecommendSearchNameAPI
+export const queryRecommendSearchNameAPI = (searchKeyword:string): string[] => {
+  return [
+    '财务自由，从大学开始',
+    '爱上你，就别想离开',
+    '我的理想是……',
+    '我要成为一个什么样的人',
+    '我叫小林，我是谁',
+    '我要成为一个什么样的人',
+    '我叫小林，我是谁',
+    '我的理想是……',
+    '我要成为一个什么样的人',
+    '我叫小林，我是谁',
+    '我要成为一个什么样的人'
+  ]
+}
