@@ -6,11 +6,11 @@
       <!--  榜单标题 -->
       <view
         class="inline-block py-2 mx-3 text-sm"
-        v-for="(rank, index) in rankList"
+        v-for="(ranktTitle, index) in ranktTitleData"
         :key="index"
-        :class="{ 'text-amber-600': activeRank === index }"
+        :class="{ 'text-amber-600': activeRankIndex === index }"
         @click="switchRank(index)">
-        {{ rank.title }}
+        {{ ranktTitle }}
       </view>
       <!-- 完整榜单 -->
       <navigator
@@ -21,7 +21,7 @@
 
       <!-- 当前榜单内容 -->
       <swiper class="h-[65vh]" circular :autoplay="false">
-        <swiper-item v-for="(page, pIndex) in pagedBooks" :key="pIndex">
+        <swiper-item v-for="(page, pIndex) in currentPagedBooks" :key="pIndex">
           <!--  书籍项   -->
           <navigator
             url="/pages/book/detail"
@@ -32,7 +32,7 @@
             <view class="h-24 w-20 rounded-lg">
               <image
                 class="h-full w-full rounded-lg"
-                :src="book.cover"
+                :src="book.image"
                 mode="aspectFill" />
             </view>
 
@@ -68,73 +68,71 @@
 
 <script setup lang="ts">
 import { bookRecommendList } from '@/composables'
-import { initRankListAPI } from '@/services/book'
-import { BookItem, RankListItem } from '@/types/book'
+import { queryRecommendRankListAPI } from '@/services/rank'
+import { BookItem } from '@/types/book'
+
 import { computed, onMounted, ref } from 'vue'
 // 猜你喜欢
 const { bookRecommendRef, onScrollToLower } = bookRecommendList()
-
 // 当前 榜单索引
-const activeRank = ref(0)
+const activeRankIndex = ref(0)
 // 榜单列表
-const rankList = ref<RankListItem[]>([])
+const rankData = ref< BookItem[]>([])
 // 页面加载状态
 const isLoading = ref(false)
+// 榜单定义
+const ranktTitleData = ref<string[]>(['畅销榜', '新书榜','人气榜'])
 
 /**
  * 页面挂载时加载数据
- *
+ *为什么使用onMounted，而不是onShow？ 
  */
 onMounted(() => {
-  //开启数据加载状态
+  //1.开启数据加载状态
   isLoading.value = true
 
-  // 加载数据
-  loadData()
+  // 2.初始化榜单数据
+  queryRecommendRankData()
 
-  // 关闭数据加载状态
+  // 3.关闭数据加载状态
   setTimeout(() => {
     isLoading.value = false
   }, 1000)
 })
 /**
- * 加载数据
- * 包括榜单和推荐书籍
- * 可以根据需要添加更多数据加载逻辑
+ * 初始化榜单数据
  */
-const loadData = async () => {
-  console.log('推荐页面加载数据')
-
-  // 模拟加载推荐书籍数据
-  rankList.value = initRankListAPI()
+const queryRecommendRankData = async () => {
+  console.log('queryRecommendRankData')
+  rankData.value = queryRecommendRankListAPI(ranktTitleData.value[activeRankIndex.value])
 }
 
 /**
- *
- * @param index 切换榜单
- * 切换榜单时重置页码
+ * 切换榜单
+ * @param index 切换榜单的索引
+ * 
  */
 const switchRank = (index: number) => {
-  activeRank.value = index
-  console.log('切换榜单', index)
+  console.log('switchRank', index)
+  activeRankIndex.value = index
+
+  // 切换榜单数据 
+  queryRecommendRankData()
 }
 
+
 /**
- * 获取当前榜单书籍，监听器
- * 当前榜单书籍 = 榜单列表[当前榜单索引].books
+ * 
+ * @returns 分页后的书籍列表
+ * 为什么使用computed？
+ * 1. 计算属性会根据其依赖的响应式数据自动更新，当依赖的数据发生变化时，计算属性会重新计算并返回新的值。
+ * 2. 计算属性可以缓存其计算结果，当依赖的数据没有变化时，计算属性会直接返回缓存的结果，避免重复计算。
  */
-const currentBooks = computed(() => {
-  return rankList.value[activeRank.value]?.books || []
-})
-/**
- * 定义一个计算属性 pagedBooks，返回类型是 BookItem 数组的数组
- * 每页显示4本书
- */
-const pagedBooks = computed<BookItem[][]>(() => {
+const currentPagedBooks = computed<BookItem[][]>(() => {
   // 每页显示4本书
   const pageSize = 4
   // 当前榜单书籍
-  const currentItems = currentBooks.value
+  const currentItems =rankData.value 
   // 定义一个空数组，用于存储分页后的数据
   const resultArray: BookItem[][] = []
   //遍历当前书籍列表，将其分成每页4本书的数组

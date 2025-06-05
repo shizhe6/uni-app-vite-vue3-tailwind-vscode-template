@@ -11,7 +11,7 @@
         :key="idx"
         class="recommend-item"
         url="/pages/book/detail">
-        <image class="recommend-cover" :src="item.cover" mode="aspectFill" />
+        <image class="recommend-cover" :src="item.image" mode="aspectFill" />
         <text class="recommend-book-name">
           {{ item.name }}
         </text>
@@ -24,34 +24,59 @@
 </template>
 
 <script lang="ts" setup>
-import { initRecommendListAPI } from '@/services/book'
+import { queryRecommendListAPI } from '@/services/book'
 import { BookItem } from '@/types/book'
+import { PageParams } from '@/types/global'
 
-// recommendList 添加数据
+// 推荐列表 
 const recommendList = ref<BookItem[]>([])
-// 触发加载：页面显示或组件挂载时
+/**
+ * 页面加载完成后加载数据
+ */
 onMounted(() => {
-  loadData()
+  pageQueryRecommendListData()
 })
-
+// 是否加载完成
+const finish = ref(false)
+// 是否正在加载
+const isLoading = ref(true)
+// 分页参数
+const pageParams: Required<PageParams> = {
+  current: 1,
+  size: 8,
+}
 /**
  * 加载数据
  * 包括榜单和推荐书籍
  * 可以根据需要添加更多数据加载逻辑
  */
-const loadData = async () => {
-  console.log('推荐页面加载数据')
+const pageQueryRecommendListData = async () => {
+  if (finish.value) {
+    return uni.showToast({ icon: 'none', title: '没有更多数据~' })
+  }
 
+  isLoading.value = true
   // 模拟加载推荐书籍数据
-  recommendList.value = initRecommendListAPI()
+  const response = queryRecommendListAPI(query.sourceType,pageParams)
+
+  // 数据追加到推荐列表中
+  recommendList.value.push(...response)
+  // 
+  isLoading.value = false
+  if (pageParams.current < response.data.pages) {
+    pageParams.current++
+  } else {
+    finish.value = true
+  }
+
 }
 
 /**
  * 触底加载更多数据
  */
 const handleScrollToLower = () => {
-  recommendList.value = [...recommendList.value, ...initRecommendListAPI()]
-  console.log('触底加载更多数据')
+  console.log('handleScrollToLower')
+  recommendList.value = [...recommendList.value, ...queryRecommendListAPI(query.sourceType)]
 }
 /**
  * 将handleScrollToLower暴露给父组件
@@ -59,6 +84,14 @@ const handleScrollToLower = () => {
 defineExpose({
   handleScrollToLower
 })
+
+/**
+ * 接收父组件传递的参数，来源字段sourceType
+ */
+const query = defineProps<{
+  sourceType: string,
+}>()
+
 </script>
 
 <style lang="scss">

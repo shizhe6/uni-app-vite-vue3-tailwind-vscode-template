@@ -18,25 +18,34 @@ export type ChapterItem = {
 
 export type BookItem = {
   id: number
+  // 排名
   rank?: number
+  // 名称 
   name?: string
+  // 封面
   genre?: string
+  // 作者
   author?: string
+  // 热度 
   popularity?: string
+  // 评分
   score?: number
+  // 简介
   description?: string
+  // 排名
   sortNumber?: number
-  cover?: string
+  // 图片
+  image?: string
+  // 
   type?: string
+  // 
   status?: string
+  // 
   hot?: string
+  // 标签集合
   tagList?: string[]
 }
 
-export type RankListItem = {
-  title: string
-  books: BookItem[]
-}
 
 // 段落数据
 interface ParagraphItem {

@@ -3,7 +3,6 @@ import {
   BookMarkItem,
   ChapterItem,
   ParagraphItem,
-  RankListItem
 } from '@/types/book'
 
 /**
@@ -207,60 +206,14 @@ export const initChapterItemListAPI = (): ChapterItem[] => {
   ]
 }
 
+
 /**
  *
- * @returns 榜单数据
- *
- */
-export const initRankListAPI = (): RankListItem[] => {
-  return [
-    {
-      title: '畅销榜',
-      books: Array(16)
-        .fill({})
-        .map((_, i) => ({
-          id: i + 1,
-          rank: i + 1,
-          cover: `https://picsum.photos/200/300?random=${i + 1}`,
-          name: `畅销书籍 ${i + 1}`,
-          genre: ['都市', '言情', '科幻'][i % 3],
-          popularity: (300 + i * 10).toFixed(1)
-        }))
-    },
-    {
-      title: '新书榜',
-      books: Array(16)
-        .fill({})
-        .map((_, i) => ({
-          id: i + 1,
-          rank: i + 1,
-          cover: `https://picsum.photos/200/300?n=${i + 100}`,
-          name: `新书推荐 ${i + 1}`,
-          genre: ['悬疑', '历史', '奇幻'][i % 3],
-          popularity: (200 + i * 15).toFixed(1)
-        }))
-    },
-    {
-      title: '人气榜',
-      books: Array(16)
-        .fill({})
-        .map((_, i) => ({
-          id: i + 1,
-          rank: i + 1,
-          cover: `https://picsum.photos/200/300?p=${i + 200}`,
-          name: `人气作品 ${i + 1}`,
-          genre: ['武侠', '职场', '玄幻'][i % 3],
-          popularity: (400 + i * 20).toFixed(1)
-        }))
-    }
-  ]
-}
-/**
- *
+ * @param sourceType 来源类型： 推荐  经典  知识  
  * @returns 推荐列表
  *
  */
-export const initRecommendListAPI = (): BookItem[] => {
+export const queryRecommendListAPI = ( sourceType: string): BookItem[] => {
   // 预定义随机书名池
   const bookNames = [
     '放下个人素质，享无敌人生',

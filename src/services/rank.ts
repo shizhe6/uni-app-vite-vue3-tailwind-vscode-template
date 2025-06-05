@@ -1,5 +1,5 @@
 import { BookItem } from '@/types/book'
-import { PrimaryRankItem, SecondaryRankItem } from '@/types/rank'
+import { PrimaryRankItem } from '@/types/rank'
 
 /**
  *查询一级分类列表和二级分类列表
@@ -151,5 +151,24 @@ export const initBookListAPI = (
       ['更新', '全本']
     ][secondaryId % 3][i % 2],
     hot: `${Math.floor(Math.random() * (10000 + secondaryId * 500))}万热度`
+  }))
+}
+
+
+/**
+ *  初始化推荐榜单数据
+ * @param ranktTitle 榜单标题
+ * @returns 推荐榜单数据
+ */
+ export const queryRecommendRankListAPI = (ranktTitle: string): BookItem[] => {
+  return  Array(16)
+  .fill({})
+  .map((_, i) => ({
+    id: i + 1,
+    rank: i + 1,
+    cover: `https://picsum.photos/200/300?random=${i + 1}`,
+    name: ranktTitle+`${+i + 1}`,
+    genre: ['都市', '言情', '科幻'][i % 3],
+    popularity: (300 + i * 10).toFixed(1)
   }))
 }
