@@ -7,6 +7,7 @@
       <!-- 搜索框 -->
       <uni-easyinput
         prefixIcon="search"
+        v-model="searchKeyword"
         :placeholder="searchKeywords"
         @focus="handleSearch"></uni-easyinput>
     </view>
@@ -51,7 +52,7 @@ import Knowledge from './components/KnowledgeContent.vue'
 import NewArrival from './components/LatestContent.vue'
 import Audiobook from './components/ListeningContent.vue'
 import Recommend from './components/RecommendContent.vue'
-// 页面加载状态 
+// 页面加载状态
 const isLoading = ref(false)
 // 标签页组件加载状态
 const isRecommendLoaded = ref(false)
@@ -60,14 +61,15 @@ const isKnowledgeLoaded = ref(false)
 const isAudiobookLoaded = ref(false)
 const isDramaLoaded = ref(false)
 const isNewArrivalLoaded = ref(false)
-
+// 搜索关键词
+const searchKeyword = ref('')
 // 推荐搜索书籍名称ji
 const searchKeywords = ref('重生之我在ktv当少爷')
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
-// 标签页数据 
+// 标签页数据
 const tabs = ref(['推荐', '经典', '知识', '听书', '看剧', '最新上架'])
 // 当前标签索引
 const currentIndex = ref(0)
@@ -87,13 +89,11 @@ onShow(() => {
 
   // 加载完成
   isLoading.value = false
-
 })
 // 重置所有组件加载状态
 const resetLoadedStates = () => {
-  Object.values(tabLoadedMap).forEach(loaded => loaded.value = false);
+  Object.values(tabLoadedMap).forEach((loaded) => (loaded.value = false))
 }
-
 
 // 新增：创建标签索引与加载状态的映射对象
 const tabLoadedMap: Record<number, Ref<boolean>> = {

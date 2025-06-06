@@ -33,7 +33,7 @@
         <!-- 书籍封面 -->
         <image
           class="w-[80px] h-[100px] rounded-lg mr-2"
-          :src="book.cover"
+          :src="book.image"
           mode="aspectFill" />
 
         <!-- 书籍信息 -->
@@ -134,7 +134,7 @@
 </template>
 
 <script lang="ts" setup>
-import { querySearchBookAPI } from '@/services/categorySearch'
+import { queryBookBySearchKeywordAPI } from '@/services/category'
 import {
   initHotSearchListsAPI,
   initSearchHistoryAPI,
@@ -290,7 +290,7 @@ const initHotSearchListsData = () => {
  * 查询书籍列表
  */
 const querySearchBookData = () => {
-  searchBookData.value = querySearchBookAPI()
+  searchBookData.value = queryBookBySearchKeywordAPI(searchKeyword.value)
   searchBookData.value.forEach((book) => {
     book.description =
       book.description!.length > 25

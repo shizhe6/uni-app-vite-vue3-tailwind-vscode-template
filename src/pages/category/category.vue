@@ -124,13 +124,13 @@ onMounted(() => {
         // 如果 data 不是数组，将 leftDomsTop 设为空数组
         leftDomsTop.value = []
       }
-      console.log('左边top：', leftDomsTop.value)
+      // console.log('左边top：', leftDomsTop.value)
     })
     .exec()
   query
     .selectAll('.right-category-item')
     .boundingClientRect((data) => {
-      console.log('右边data：', data)
+      // console.log('右边data：', data)
 
       // 检查 data 是否为数组，避免类型错误
       if (Array.isArray(data)) {
@@ -142,7 +142,7 @@ onMounted(() => {
         // 如果 data 不是数组，将 rightDomsTop 设为空数组
         rightDomsTop.value = []
       }
-      console.log('右边top：', rightDomsTop.value)
+      // console.log('右边top：', rightDomsTop.value)
     })
     .exec()
 })
@@ -204,7 +204,7 @@ const handleSecondClick = (index: number) => {
   // activeSecondIndex.value = index
   // 计算出右边scroll-view的scrollTop值
   rightScrollTop.value = rightDomsTop.value[index - 1]
-  console.log('触发二级分类索引:' + index)
+  // console.log('触发二级分类索引:' + index)
 }
 
 /**
@@ -212,7 +212,7 @@ const handleSecondClick = (index: number) => {
  * @param index 三级分类索引
  */
 const handleThreeClick = (index: number, subIndex: number) => {
-  console.log('触发三级分类索引:' + index + '---' + subIndex)
+  // console.log('触发三级分类索引:' + index + '---' + subIndex)
   uni.navigateTo({
     url: '/pages/search/categorySearch'
   })
@@ -220,7 +220,7 @@ const handleThreeClick = (index: number, subIndex: number) => {
 
 //滚动右侧区域，左侧联动，具体这个284值，需要根据自己的实际情况来调整
 const onRightScroll = (e: any) => {
-  console.log('onRightScroll:' + e.detail.scrollTop)
+  // console.log('onRightScroll:' + e.detail.scrollTop)
   const scrollTop = e.detail.scrollTop // 当前滚动值
   let minGreater = Infinity // 记录比scrollTop大的最小值
   let minIndex = -1 // 记录对应的索引

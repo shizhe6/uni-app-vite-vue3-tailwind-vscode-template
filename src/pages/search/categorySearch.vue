@@ -5,20 +5,23 @@
       class="h-[40px] flex items-end justify-center fixed w-full z-1000 bg-white px-4">
       <uni-easyinput
         prefixIcon="search"
+        focus
         placeholder="请输入搜索关键词"
         v-model="searchKeyword"
-        @confirm="handleSearch"></uni-easyinput>
+        @clear="handleClear"
+        @change="handleSearch"></uni-easyinput>
     </view>
 
     <!-- 2.搜索条件 -->
     <view
-      class="h-[180px] flex flex-col gap-5 mt-[40px] border-b border-gray-100">
-      <!-- 标签 -->
+      class="h-[180px] flex flex-col gap-5 mt-[40px] fixed bg-white border-b border-gray-100">
+      <!-- 2.1 标签 -->
       <view class="h-[40px] flex">
         <view
           class="whitespace-nowrap overflow-x-auto flex items-center pl-2 mt-2">
           <view
             v-for="(tagItem, index) in queryTagData"
+            :key="index"
             @click="handleTag(tagItem)"
             :class="{
               'font-bold text-amber-600  bg-orange-200':
@@ -33,14 +36,16 @@
         </view>
       </view>
 
-      <!-- 查询条件 -->
+      <!-- 2.2 查询条件 -->
       <view class="h-[120px] flex flex-col justify-center">
+        <!-- 字数 -->
         <view
           class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
           <view
             class="inline-block ml-3"
             @click="handleQueryWordCount(wordCountItem)"
             v-for="(wordCountItem, index) in queryWordCountData"
+            :key="index"
             :class="{
               'font-bold text-amber-600':
                 wordCountItem === selectedQueryWordCount
@@ -48,13 +53,14 @@
             {{ wordCountItem }}
           </view>
         </view>
-
+        <!--  状态 -->
         <view
           class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
           <view
             class="inline-block ml-3"
             @click="handleQueryStatus(statusItem)"
             v-for="(statusItem, index) in queryStatusData"
+            :key="index"
             :class="{
               'font-bold text-amber-600': statusItem === selectedQueryStatus
             }">
@@ -62,12 +68,14 @@
           </view>
         </view>
 
+        <!-- 标签 -->
         <view
           class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
           <view
             class="inline-block ml-3"
             @click="handleQueryType(typeItem)"
             v-for="(typeItem, index) in queryTypeData"
+            :key="index"
             :class="{
               'font-bold text-amber-600': typeItem === selectedQueryType
             }">
@@ -77,11 +85,16 @@
       </view>
     </view>
     <!-- 3.搜索结果 -->
-    <view class="flex-1 flex flex-col mt-4">
+    <scroll-view
+      enable-flex
+      scroll-y
+      @scrolltolower="pageQueryBookByCategoryData"
+      class="flex-1 flex flex-col h-[50vh] mt-[220px]">
       <!-- 圈子 -->
       <view class="h-[40px] flex flex-row justify-start items-center">
         <view
-          v-for="item in selectedTueryTag"
+          v-for="(item, index) in selectedTueryTag"
+          :key="index"
           class="h-[40px] rounded-lg ml-3 px-3 flex flex-row justify-center items-center bg-gray-100">
           <image
             class="w-[30px] h-[30px] rounded-full mr-2"
@@ -95,13 +108,13 @@
       <view class="flex-1 mx-3">
         <navigator
           url="/pages/book/detail"
-          v-for="book in bookData"
-          :key="book.id"
+          v-for="(book, index) in bookData"
+          :key="index"
           class="flex flex-row justify-center mt-10">
           <!-- 书籍封面 -->
           <image
             class="w-[80px] h-[100px] rounded-lg mr-2"
-            :src="book.cover"
+            :src="book.image"
             mode="aspectFill" />
 
           <!-- 书籍信息 -->
@@ -123,12 +136,14 @@
 
             <!-- 标签 -->
             <view class="text-sm text-gray-400 mt-2">
-              <text v-for="(tag, index) in book.tagList">{{ tag }}·</text>
+              <text v-for="(tag, index) in book.tagList" :key="index">
+                {{ tag }}·
+              </text>
             </view>
           </view>
         </navigator>
       </view>
-    </view>
+    </scroll-view>
 
     <!-- 4.底部弹窗 -->
     <view class="tagView" v-if="showTags">底部弹窗</view>
@@ -137,14 +152,16 @@
 
 <script lang="ts" setup>
 import {
-  initBookDataAPI,
+  queryBookByCategoryAPI,
   initQueryStatusDataAPI,
   initQueryTagAPI,
   initQueryTypeDataAPI,
   initQueryWordCountDataAPI
 } from '@/services/categorySearch'
+import { commonPageQueryData } from '@/services/global'
 import { BookItem } from '@/types/book'
 import { CategorySearchParams } from '@/types/categorySearch'
+import { PageParams, PageResult } from '@/types/global'
 
 // 搜索关键词
 const searchKeyword = ref('')
@@ -186,7 +203,7 @@ onShow(() => {
   // 初始化查询条件：类型
   initQueryTypeData()
   // 初始化书籍列表
-  initBookData()
+  pageQueryBookByCategoryData()
 })
 
 /**
@@ -197,6 +214,12 @@ const handleSearch = () => {
   console.log('搜索关键词：', searchKeyword.value)
 }
 
+// handleClear
+const handleClear = () => {
+  searchKeyword.value = ''
+  // 初始化书籍列表
+  pageQueryBookByCategoryData()
+}
 /**
  * 搜索条件：标签
  */
@@ -230,13 +253,31 @@ const initQueryTypeData = () => {
   selectedQueryType.value = queryTypeData.value[0]
 }
 
+// 是否加载完成
+const finish = ref(false)
+// 是否正在加载
+const isLoading = ref(true)
+// 分页参数
+const pageParams: Required<PageParams> = {
+  current: 1,
+  size: 8
+}
 /**
- * 初始化书籍列表
+ * 分页查询书籍列表
  */
-const initBookData = () => {
-  bookData.value = initBookDataAPI(queryParams.value)
-  // 书本的字段description， book.description!.length > 25? book.description!.slice(0, 25) + '...': book.description
-  // book.name!.length > 15? book.name!.slice(0, 14) + '...': book.name
+const pageQueryBookByCategoryData = async () => {
+  console.log('分页查询书籍列表')
+  // 分页查询书籍列表
+  await commonPageQueryData(
+    queryBookByCategoryAPI,
+    bookData,
+    finish,
+    isLoading,
+    pageParams,
+    queryParams
+  )
+
+  //  处理书籍列表数据
   bookData.value.forEach((book) => {
     book.description =
       book.description!.length > 25

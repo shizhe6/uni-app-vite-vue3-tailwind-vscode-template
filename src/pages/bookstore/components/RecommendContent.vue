@@ -52,7 +52,10 @@
                 <text>{{ book.name }}</text>
               </view>
               <view class="flex">
-                <text class="text-amber-300" v-for="tag in book.tagList">
+                <text
+                  class="text-amber-300"
+                  v-for="(tag, index) in book.tagList"
+                  :key="index">
                   {{ tag }}
                 </text>
                 <text>🔥 {{ book.popularity }}万</text>
@@ -106,7 +109,7 @@ onMounted(() => {
  * 初始化榜单数据
  */
 const queryRecommendRankData = async () => {
-  console.log('queryRecommendRankData')
+  // console.log('queryRecommendRankData')
   rankData.value = queryRecommendRankListAPI(
     ranktTitleData.value[activeRankIndex.value]
   )
@@ -118,7 +121,7 @@ const queryRecommendRankData = async () => {
  *
  */
 const switchRank = (index: number) => {
-  console.log('switchRank', index)
+  // console.log('switchRank', index)
   activeRankIndex.value = index
 
   // 切换榜单数据

@@ -25,9 +25,10 @@
 </template>
 
 <script lang="ts" setup>
+import { commonPageQueryData } from '@/services/global'
 import { pageQueryRecommendListAPI } from '@/services/SzBookRecommend'
 import { BookItem } from '@/types/book'
-import { PageParams } from '@/types/global'
+import { PageParams, PageResult } from '@/types/global'
 
 // 推荐列表
 const recommendBookData = ref<BookItem[]>([])
@@ -35,6 +36,9 @@ const recommendBookData = ref<BookItem[]>([])
  * 页面加载完成后加载数据
  */
 onMounted(() => {
+  // 请求参数
+  queryParams.value.sourceType = query.sourceType
+  // 加载推荐列表数据
   pageQueryRecommendListData()
 })
 // 是否加载完成
@@ -46,35 +50,27 @@ const pageParams: Required<PageParams> = {
   current: 1,
   size: 8
 }
+// 查询参数
+const queryParams = ref({
+  sourceType: ''
+})
 /**
- * 加载数据
- * 包括榜单和推荐书籍
- * 可以根据需要添加更多数据加载逻辑
+ * 分页加载数据
+ * @returns  void
  */
 const pageQueryRecommendListData = async () => {
-  if (finish.value) {
-    return uni.showToast({ icon: 'none', title: '没有更多数据~' })
-  }
+  await commonPageQueryData(
+    pageQueryRecommendListAPI,
+    recommendBookData,
+    finish,
+    isLoading,
+    pageParams,
+    queryParams
+  )
 
-  isLoading.value = true
-  // 模拟加载推荐书籍数据
-  const response = pageQueryRecommendListAPI(query.sourceType, pageParams)
-  console.log('response', response.records)
-  // 数据追加到推荐列表中
-  recommendBookData.value.push(...response.records)
-  //  处理描述字段
-  recommendBookData.value.forEach((item) => {
-    if (item.description && item.description.length > 20) {
-      item.description = item.description.slice(0, 20) + '...'
-    }
+  recommendBookData.value.forEach((item, index) => {
+    item.description = item.description.slice(0, 20) + '...'
   })
-
-  isLoading.value = false
-  if (pageParams.current < response.pages) {
-    pageParams.current++
-  } else {
-    finish.value = true
-  }
 }
 
 /**
@@ -102,3 +98,7 @@ console.log('query', query)
 </script>
 
 <style lang="scss"></style>
+
+const pageQueryRecommendListData = async () => {
+commonPageQueryData(pageQueryRecommendListAPI, recommendBookData, finish,
+isLoading, pageParams, query.sourceType) }

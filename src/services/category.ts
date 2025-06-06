@@ -1,3 +1,4 @@
+import { BookItem } from '@/types/book'
 import { CategoryItem } from '@/types/category'
 
 /**
@@ -95,6 +96,7 @@ export const queryOneTwoCategoryListAPI = (): CategoryItem[] => {
 
 /**
  *  查询一级分类列表和二级分类列表
+ * @param categoryId 一级分类id
  * @returns 一级分类列表和二级分类列表
  */
 export const queryTwoThreeCategoryListAPI = (
@@ -195,6 +197,109 @@ export const queryTwoThreeCategoryListAPI = (
         name: categoryNames[index % categoryNames.length],
         children: []
       }))
+    }
+  ]
+}
+
+/**
+ * 根据搜索名称查询书籍
+ * @param searchKeyword 搜索名称
+ * @returns 书籍列表
+ */
+export const queryBookBySearchKeywordAPI = (
+  searchKeyword: string
+): BookItem[] => {
+  return [
+    {
+      id: 1,
+      image: 'https://picsum.photos/200/300?random=1',
+      name: '三体：死神永生三体：死神永生',
+      author: '刘慈欣',
+      score: 3,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 2,
+      image: 'https://picsum.photos/200/300?random=2',
+      name: '流浪地球：之我从宝宝巴士开车-去学校好好学习',
+      author: '刘慈欣',
+      score: 5,
+      description:
+        '[轮回转世]+[平行宇宙]+[无固定女主][轮回转世]+[平行宇宙]+[无固定女主][轮回转世]+[平行宇宙]+[无固定女主][轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 3,
+      image: 'https://picsum.photos/200/300?random=3',
+      name: '球状闪电',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 4,
+      image: 'https://picsum.photos/200/300?random=4',
+      name: '超新星纪元',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      score: 5,
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
     }
   ]
 }
