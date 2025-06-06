@@ -154,21 +154,20 @@ export const initBookListAPI = (
   }))
 }
 
-
 /**
  *  初始化推荐榜单数据
  * @param ranktTitle 榜单标题
  * @returns 推荐榜单数据
  */
- export const queryRecommendRankListAPI = (ranktTitle: string): BookItem[] => {
-  return  Array(16)
-  .fill({})
-  .map((_, i) => ({
-    id: i + 1,
-    rank: i + 1,
-    cover: `https://picsum.photos/200/300?random=${i + 1}`,
-    name: ranktTitle+`${+i + 1}`,
-    genre: ['都市', '言情', '科幻'][i % 3],
-    popularity: (300 + i * 10).toFixed(1)
-  }))
+export const queryRecommendRankListAPI = (ranktTitle: string): BookItem[] => {
+  return Array(16)
+    .fill({})
+    .map((_, i) => ({
+      id: i + 1,
+      rank: i + 1,
+      image: `https://picsum.photos/200/300?random=${i + 1}`,
+      name: ranktTitle + `${+i + 1}`,
+      tagList: ['都市', '言情', '科幻'],
+      popularity: (300 + i * 10).toFixed(1)
+    }))
 }

@@ -1,10 +1,19 @@
 <template>
   <SzLoading v-if="isLoading"></SzLoading>
-  <view class="content-container" v-else>3333333</view>
+  <scroll-view v-else scroll-y @scrolltolower="onScrollToLower">
+    <!-- 2.推荐书籍模块 -->
+    <!-- 根据错误提示，需要补充 sourceType 属性，这里假设 sourceType 的值为 'recommend'，可根据实际情况修改 -->
+    <SzBookRecommend ref="bookRecommendRef" sourceType="推荐" />
+  </scroll-view>
 </template>
 
 <script setup lang="ts">
+import { bookRecommendList } from '@/composables'
 import { onMounted } from 'vue'
+
+// 猜你喜欢
+const { bookRecommendRef, onScrollToLower } = bookRecommendList()
+
 // 数据加载方法
 const loadData = async () => {
   console.log('经典页面加载数据')

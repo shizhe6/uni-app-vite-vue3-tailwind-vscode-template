@@ -15,9 +15,9 @@ export type PageResult<T> = {
 /** 通用分页参数类型 */
 export type PageParams = {
   /** 页码：默认值为 1 */
-  current?: number
+  current: number
   /** 页大小：默认值为 10 */
-  size?: number
+  size: number
 }
 
 /** 普通结果 */

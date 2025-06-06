@@ -22,8 +22,6 @@ export type BookItem = {
   rank?: number
   // 名称 
   name?: string
-  // 封面
-  genre?: string
   // 作者
   author?: string
   // 热度 

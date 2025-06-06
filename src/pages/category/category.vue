@@ -2,12 +2,14 @@
   <view class="h-full flex flex-col relative mb-6">
     <!-- 一级分类 -->
     <view
-      class="flex justify-start items-center h-[40px] overflow-x-auto flex-nowrap scroll-smooth fixed bg-white">
+      class="flex pl-8 justify-start items-center h-[40px] overflow-x-auto flex-nowrap scroll-smooth fixed bg-white">
       <view
         v-for="(primaryCategory, index) in primaryCategoryData"
         :key="index"
-        class="px-[20rpx] text-[32rpx] relative whitespace-nowrap"
-        :class="{ 'font-bold text-amber-600': activePrimaryIndex === index }"
+        class="px-[20rpx] font-medium relative whitespace-nowrap"
+        :class="{
+          'font-bold text-xl text-amber-600': activePrimaryIndex === index
+        }"
         @click="handlePrimaryClick(index)">
         {{ primaryCategory.name }}
       </view>
@@ -62,7 +64,6 @@
                     : secondCategory.children!.slice(0, 30)"
                   :key="subIndex">
                   {{ threeCategory.name }}
-                  
                 </view>
               </view>
             </view>
@@ -75,8 +76,8 @@
 
 <script setup lang="ts">
 import {
-  initCategoryListAPI,
-  initThreeCategoryListAPI
+  queryOneTwoCategoryListAPI,
+  queryTwoThreeCategoryListAPI
 } from '@/services/category'
 import { CategoryItem } from '@/types/category'
 import { onShow } from '@dcloudio/uni-app'
@@ -85,23 +86,19 @@ import { getCurrentInstance, onMounted, ref } from 'vue'
 const activePrimaryIndex = ref(0)
 // 当前激活的二级分类索引
 const activeSecondIndex = ref(0)
-
 // 一级分类和二级分类数据
 const primaryCategoryData = ref<CategoryItem[]>([])
 // 二级分类数据和三级分类数据
 const secondCategoryData = ref<CategoryItem[]>([])
-
 // 加载状态
 const isLoading = ref(false)
-
 // 滚动事件的节流定时器
 const rightScrollTop = ref(0)
 // 记录每个二级分类的 top 值
 const rightDomsTop = ref<number[]>([])
 // 记录每个三级分类的 top 值
 const leftDomsTop = ref<number[]>([])
-
-// toggleShowAll
+// 扩展全部
 const toggleShowAll = ref(false)
 
 /**
@@ -165,7 +162,7 @@ onShow(async () => {
 
 // 获取一级分类列表数据
 const initCategoryListData = () => {
-  primaryCategoryData.value = initCategoryListAPI()
+  primaryCategoryData.value = queryOneTwoCategoryListAPI()
 }
 
 // 获取二级分类和三级分类数据
@@ -176,7 +173,7 @@ const initThreeCategoryListData = () => {
   // 重制二级分类索引
   activeSecondIndex.value = 0
   // 获取所有二级分类以及三级分类数据
-  secondCategoryData.value = initThreeCategoryListAPI(categoryId)
+  secondCategoryData.value = queryTwoThreeCategoryListAPI(categoryId)
 }
 
 // 滑动触发（删除重复定义）
@@ -195,6 +192,8 @@ const handlePrimaryClick = (index: number) => {
   activePrimaryIndex.value = index
   // 查询二级分类和三级分类数据
   initThreeCategoryListData()
+  // 计算出右边scroll-view的scrollTop值
+  rightScrollTop.value = rightDomsTop.value[0]
 }
 /**
  *  点击二级分类事件
@@ -216,7 +215,7 @@ const handleThreeClick = (index: number, subIndex: number) => {
   console.log('触发三级分类索引:' + index + '---' + subIndex)
   uni.navigateTo({
     url: '/pages/search/categorySearch'
-  })  
+  })
 }
 
 //滚动右侧区域，左侧联动，具体这个284值，需要根据自己的实际情况来调整

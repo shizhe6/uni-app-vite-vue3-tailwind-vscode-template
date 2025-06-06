@@ -52,7 +52,9 @@
                 <text>{{ book.name }}</text>
               </view>
               <view class="flex">
-                <text class="text-amber-300">{{ book.genre }}</text>
+                <text class="text-amber-300" v-for="tag in book.tagList">
+                  {{ tag }}
+                </text>
                 <text>🔥 {{ book.popularity }}万</text>
               </view>
             </view>
@@ -62,7 +64,8 @@
     </view>
 
     <!-- 2.推荐书籍模块 -->
-    <SzBookRecommend ref="bookRecommendRef" />
+    <!-- 根据错误提示，需要补充 sourceType 属性，这里假设 sourceType 的值为 'recommend'，可根据实际情况修改 -->
+    <SzBookRecommend ref="bookRecommendRef" sourceType="推荐" />
   </scroll-view>
 </template>
 
@@ -77,15 +80,15 @@ const { bookRecommendRef, onScrollToLower } = bookRecommendList()
 // 当前 榜单索引
 const activeRankIndex = ref(0)
 // 榜单列表
-const rankData = ref< BookItem[]>([])
+const rankData = ref<BookItem[]>([])
 // 页面加载状态
 const isLoading = ref(false)
 // 榜单定义
-const ranktTitleData = ref<string[]>(['畅销榜', '新书榜','人气榜'])
+const ranktTitleData = ref<string[]>(['畅销榜', '新书榜', '人气榜'])
 
 /**
  * 页面挂载时加载数据
- *为什么使用onMounted，而不是onShow？ 
+ *为什么使用onMounted，而不是onShow？
  */
 onMounted(() => {
   //1.开启数据加载状态
@@ -104,25 +107,26 @@ onMounted(() => {
  */
 const queryRecommendRankData = async () => {
   console.log('queryRecommendRankData')
-  rankData.value = queryRecommendRankListAPI(ranktTitleData.value[activeRankIndex.value])
+  rankData.value = queryRecommendRankListAPI(
+    ranktTitleData.value[activeRankIndex.value]
+  )
 }
 
 /**
  * 切换榜单
  * @param index 切换榜单的索引
- * 
+ *
  */
 const switchRank = (index: number) => {
   console.log('switchRank', index)
   activeRankIndex.value = index
 
-  // 切换榜单数据 
+  // 切换榜单数据
   queryRecommendRankData()
 }
 
-
 /**
- * 
+ *
  * @returns 分页后的书籍列表
  * 为什么使用computed？
  * 1. 计算属性会根据其依赖的响应式数据自动更新，当依赖的数据发生变化时，计算属性会重新计算并返回新的值。
@@ -132,7 +136,7 @@ const currentPagedBooks = computed<BookItem[][]>(() => {
   // 每页显示4本书
   const pageSize = 4
   // 当前榜单书籍
-  const currentItems =rankData.value 
+  const currentItems = rankData.value
   // 定义一个空数组，用于存储分页后的数据
   const resultArray: BookItem[][] = []
   //遍历当前书籍列表，将其分成每页4本书的数组
