@@ -134,13 +134,15 @@
 </template>
 
 <script lang="ts" setup>
-import { queryBookBySearchKeywordAPI } from '@/services/category'
+import { pageQueryBookBySearchKeywordAPI } from '@/services/category'
+import { commonPageQueryData } from '@/services/global'
 import {
   initHotSearchListsAPI,
   initSearchHistoryAPI,
   queryRecommendSearchNameAPI
 } from '@/services/search'
 import { BookItem } from '@/types/book'
+import { PageParams } from '@/types/global'
 import { HotItem, SearchHistoryItem } from '@/types/search'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -178,7 +180,7 @@ const handleClear = () => {
  */
 const handleSearch = () => {
   // 获取搜索列表
-  querySearchBookData()
+  pageQuerySearchBookData()
   // 展示搜索列表
   showSearchBookPage()
 }
@@ -203,7 +205,7 @@ const handleSearchRecommend = (item: string) => {
   // 将搜索历史放到搜索框中
   searchKeyword.value = item
   // 查询书籍列表
-  querySearchBookData()
+  pageQuerySearchBookData()
   //展示搜索列表
   showSearchBookPage()
 }
@@ -285,12 +287,32 @@ const initSearchHistoryData = () => {
 const initHotSearchListsData = () => {
   hotSearchData.value = initHotSearchListsAPI()
 }
-
+// 是否加载完成
+const finish = ref(false)
+// 是否正在加载
+const isLoading = ref(true)
+// 分页参数
+const pageParams: Required<PageParams> = {
+  current: 1,
+  size: 8
+}
+// 查询参数
+const queryParams = ref({})
 /**
- * 查询书籍列表
+ * 分页查询书籍列表
  */
-const querySearchBookData = () => {
-  searchBookData.value = queryBookBySearchKeywordAPI(searchKeyword.value)
+const pageQuerySearchBookData = async () => {
+  // 查询书籍列表
+  await commonPageQueryData(
+    pageQueryBookBySearchKeywordAPI,
+    searchBookData,
+    finish,
+    isLoading,
+    pageParams,
+    queryParams
+  )
+
+  // 截取描述和书名
   searchBookData.value.forEach((book) => {
     book.description =
       book.description!.length > 25

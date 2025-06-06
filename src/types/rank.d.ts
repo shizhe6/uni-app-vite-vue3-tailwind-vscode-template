@@ -1,20 +1,25 @@
-import { BookItem } from "./book"
+import { BookItem } from './book'
 
-export type  PrimaryRankItem= {
+export type PrimaryRankItem = {
   id: number
   name: string
   subItems: SecondaryRankItem[]
 }
 
-export type  SecondaryRankItem ={
+export type SecondaryRankItem = {
   id: number
   name: string
 }
 
 /**
- * 排行榜列表项 
+ * 排行榜列表项
  */
 export type RankListItem = {
   title: string
   books: BookItem[]
+}
+
+export type SearchParams = {
+  primaryId: number
+  secondaryId: number
 }

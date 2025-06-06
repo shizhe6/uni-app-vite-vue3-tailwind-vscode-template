@@ -201,12 +201,12 @@ export const queryTwoThreeCategoryListAPI = (
   ]
 }
 
-/**
+/**分页查询
  * 根据搜索名称查询书籍
  * @param searchKeyword 搜索名称
  * @returns 书籍列表
  */
-export const queryBookBySearchKeywordAPI = (
+export const pageQueryBookBySearchKeywordAPI = (
   searchKeyword: string
 ): BookItem[] => {
   return [

@@ -34,10 +34,14 @@
             </view>
           </scroll-view>
           <!-- 排行榜对应的书本 -->
-          <scroll-view class="flex-1 p-[20rpx] bg-white" scroll-y>
-            <view
+          <scroll-view
+            class="flex-1 p-[20rpx] bg-white"
+            scroll-y
+            @scrolltolower="pageQueryBookListByRankData">
+            <navigator
               v-for="(book, bookIndex) in bookListData"
               :key="bookIndex"
+              url="/pages/book/detail"
               class="flex p-[20rpx] mb-[20rpx] rounded-[16rpx] bg-[#f8f8f8]">
               <view
                 class="text-[50rpx] font-medium text-[#999] mr-[10px] flex items-center"
@@ -48,7 +52,7 @@
                 {{ book.sortNumber }}
               </view>
               <image
-                :src="book.cover"
+                :src="book.image"
                 class="w-[160rpx] h-[220rpx] rounded-[8rpx]" />
               <view
                 class="flex-1 ml-[20rpx] flex flex-col justify-center items-start">
@@ -56,12 +60,12 @@
                   {{ book.name }}
                 </text>
                 <view class="text-[#999]">
-                  <text>{{ book.type }} ·</text>
+                  <text>{{ book.tagOne }} ·</text>
                   <text>{{ book.status }} ·</text>
                   <text>{{ book.hot }}</text>
                 </view>
               </view>
-            </view>
+            </navigator>
           </scroll-view>
         </swiper-item>
       </swiper>
@@ -69,11 +73,13 @@
   </view>
 </template>
 <script lang="ts" setup>
-import { initBookListAPI, initPrimaryListAPI } from '@/services/rank'
+import { commonPageQueryData } from '@/services/global'
+import { initPrimaryListAPI, pageQueryBookListByRankAPI } from '@/services/rank'
 import { BookItem } from '@/types/book'
+import { PageParams } from '@/types/global'
 import { PrimaryRankItem, SecondaryRankItem } from '@/types/rank'
 import { onShow } from '@dcloudio/uni-app'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 
 // 一级排行榜当前选中状态
 const activePrimaryTab = ref<number>(0)
@@ -83,9 +89,9 @@ const activeSecondaryTab = ref<number>(0)
 // 一级排行榜数据
 const primaryListData = ref<PrimaryRankItem[]>([])
 // 二级排行榜数据
-const secondaryListData = reactive<SecondaryRankItem[]>([])
+const secondaryListData = ref<SecondaryRankItem[]>([])
 // 书籍数据
-const bookListData = reactive<BookItem[]>([])
+const bookListData = ref<BookItem[]>([])
 
 /**
  * 页面加载时调用
@@ -119,12 +125,8 @@ const handlePrimaryTabChange = async (index: number) => {
   // 设置一级导航选中状态
   activePrimaryTab.value = index
 
-  //使用 Infinity 表示删除所有旧数据，直接填充新数据
-  secondaryListData.splice(
-    0,
-    Infinity,
-    ...primaryListData.value[index].subItems
-  )
+  // 获取二级导航数据
+  secondaryListData.value = primaryListData.value[index].subItems
 
   // 重置二级导航选中状态
   await handleSecondaryTabChange(0)
@@ -137,12 +139,36 @@ const handlePrimaryTabChange = async (index: number) => {
 const handleSecondaryTabChange = async (index: number) => {
   activeSecondaryTab.value = index
 
-  // 初始化书籍数据
-  const books = await initBookListAPI(
-    activePrimaryTab.value,
-    activeSecondaryTab.value
+  // 分页书籍数据
+  pageQueryBookListByRankData()
+}
+// 是否加载完成
+const finish = ref(false)
+// 是否正在加载
+const isLoading = ref(true)
+// 分页参数
+const pageParams: Required<PageParams> = {
+  current: 1,
+  size: 8
+}
+// 查询参数
+const queryParams = ref({
+  activePrimaryTab: activePrimaryTab.value,
+  activeSecondaryTab: activeSecondaryTab.value
+})
+/**
+ * 查询分页数据
+ */
+const pageQueryBookListByRankData = async () => {
+  // 分页查询书籍列表
+  await commonPageQueryData(
+    pageQueryBookListByRankAPI,
+    bookListData,
+    finish,
+    isLoading,
+    pageParams,
+    queryParams
   )
-  bookListData.splice(0, Infinity, ...books)
 }
 </script>
 

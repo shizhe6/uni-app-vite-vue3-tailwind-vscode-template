@@ -1,8 +1,8 @@
 <template>
-  <view class="h-screen flex flex-col">
+  <view class="h-full flex flex-col">
     <!-- 1.搜索框 -->
     <view
-      class="h-[40px] flex items-end justify-center fixed w-full z-1000 bg-white px-4">
+      class="h-[40px] border flex items-end justify-center fixed w-full z-1000 bg-white px-4">
       <uni-easyinput
         prefixIcon="search"
         focus
@@ -12,136 +12,139 @@
         @change="handleSearch"></uni-easyinput>
     </view>
 
-    <!-- 2.搜索条件 -->
-    <view
-      class="h-[180px] flex flex-col gap-5 mt-[40px] fixed bg-white border-b border-gray-100">
-      <!-- 2.1 标签 -->
-      <view class="h-[40px] flex">
-        <view
-          class="whitespace-nowrap overflow-x-auto flex items-center pl-2 mt-2">
-          <view
-            v-for="(tagItem, index) in queryTagData"
-            :key="index"
-            @click="handleTag(tagItem)"
-            :class="{
-              'font-bold text-amber-600  bg-orange-200':
-                selectedTueryTag.includes(tagItem)
-            }"
-            class="inline-block ml-3 rounded-lg p-1">
-            {{ tagItem }}
-          </view>
-        </view>
-        <view class="ml-3" @click="showTags = !showTags">
-          <uni-badge :text="selectedTagsBadgeText"></uni-badge>
-        </view>
-      </view>
-
-      <!-- 2.2 查询条件 -->
-      <view class="h-[120px] flex flex-col justify-center">
-        <!-- 字数 -->
-        <view
-          class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
-          <view
-            class="inline-block ml-3"
-            @click="handleQueryWordCount(wordCountItem)"
-            v-for="(wordCountItem, index) in queryWordCountData"
-            :key="index"
-            :class="{
-              'font-bold text-amber-600':
-                wordCountItem === selectedQueryWordCount
-            }">
-            {{ wordCountItem }}
-          </view>
-        </view>
-        <!--  状态 -->
-        <view
-          class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
-          <view
-            class="inline-block ml-3"
-            @click="handleQueryStatus(statusItem)"
-            v-for="(statusItem, index) in queryStatusData"
-            :key="index"
-            :class="{
-              'font-bold text-amber-600': statusItem === selectedQueryStatus
-            }">
-            {{ statusItem }}
-          </view>
-        </view>
-
-        <!-- 标签 -->
-        <view
-          class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
-          <view
-            class="inline-block ml-3"
-            @click="handleQueryType(typeItem)"
-            v-for="(typeItem, index) in queryTypeData"
-            :key="index"
-            :class="{
-              'font-bold text-amber-600': typeItem === selectedQueryType
-            }">
-            {{ typeItem }}
-          </view>
-        </view>
-      </view>
-    </view>
-    <!-- 3.搜索结果 -->
+    <!-- 2.搜索条件和结果列表 -->
     <scroll-view
       enable-flex
       scroll-y
       @scrolltolower="pageQueryBookByCategoryData"
-      class="flex-1 flex flex-col h-[50vh] mt-[220px]">
-      <!-- 圈子 -->
-      <view class="h-[40px] flex flex-row justify-start items-center">
-        <view
-          v-for="(item, index) in selectedTueryTag"
-          :key="index"
-          class="h-[40px] rounded-lg ml-3 px-3 flex flex-row justify-center items-center bg-gray-100">
-          <image
-            class="w-[30px] h-[30px] rounded-full mr-2"
-            src="https://picsum.photos/200/300?random=1"
-            mode="aspectFill" />
-          <view>{{ item }} ›</view>
-        </view>
-      </view>
-
-      <!-- 书本列表 -->
-      <view class="flex-1 mx-3">
-        <navigator
-          url="/pages/book/detail"
-          v-for="(book, index) in bookData"
-          :key="index"
-          class="flex flex-row justify-center mt-10">
-          <!-- 书籍封面 -->
-          <image
-            class="w-[80px] h-[100px] rounded-lg mr-2"
-            :src="book.image"
-            mode="aspectFill" />
-
-          <!-- 书籍信息 -->
-          <view class="flex-1">
-            <!-- 标题和评分 -->
-            <view class="flex items-center justify-between">
-              <view class="overflow-hidden whitespace-nowrap text-ellipsis">
-                {{ book.name }}
-              </view>
-              <view class="w-[40px] font-bold text-amber-600">
-                {{ book.score }}分
-              </view>
-            </view>
-
-            <!-- 描述信息 -->
-            <view class="text-sm text-gray-400 mt-2">
-              {{ book.description }}
-            </view>
-
-            <!-- 标签 -->
-            <view class="text-sm text-gray-400 mt-2">
-              <text v-for="(tag, index) in book.tagList" :key="index">
-                {{ tag }}·
-              </text>
+      class="h-[100vh] flex flex-col">
+      <!-- 2.1搜索条件 -->
+      <view
+        class="h-[180px] flex flex-col gap-5 mt-[40px] bg-white border-b border-gray-100">
+        <!-- 2.1 标签 -->
+        <view class="h-[40px] flex">
+          <view
+            class="whitespace-nowrap overflow-x-auto items-center pl-2 mt-2">
+            <view
+              v-for="(tagItem, index) in queryTagData"
+              :key="index"
+              @click="handleTag(tagItem)"
+              :class="{
+                'font-bold text-amber-600  bg-orange-200':
+                  selectedTueryTag.includes(tagItem)
+              }"
+              class="inline-block ml-3 rounded-lg p-1">
+              {{ tagItem }}
             </view>
           </view>
-        </navigator>
+          <view class="ml-3" @click="showTags = !showTags">
+            <uni-badge :text="selectedTagsBadgeText"></uni-badge>
+          </view>
+        </view>
+
+        <!-- 2.2 查询条件 -->
+        <view class="h-[120px] flex flex-col justify-center">
+          <!-- 字数 -->
+          <view
+            class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
+            <view
+              class="inline-block ml-3"
+              @click="handleQueryWordCount(wordCountItem)"
+              v-for="(wordCountItem, index) in queryWordCountData"
+              :key="index"
+              :class="{
+                'font-bold text-amber-600':
+                  wordCountItem === selectedQueryWordCount
+              }">
+              {{ wordCountItem }}
+            </view>
+          </view>
+          <!--  状态 -->
+          <view
+            class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
+            <view
+              class="inline-block ml-3"
+              @click="handleQueryStatus(statusItem)"
+              v-for="(statusItem, index) in queryStatusData"
+              :key="index"
+              :class="{
+                'font-bold text-amber-600': statusItem === selectedQueryStatus
+              }">
+              {{ statusItem }}
+            </view>
+          </view>
+
+          <!-- 标签 -->
+          <view
+            class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
+            <view
+              class="inline-block ml-3"
+              @click="handleQueryType(typeItem)"
+              v-for="(typeItem, index) in queryTypeData"
+              :key="index"
+              :class="{
+                'font-bold text-amber-600': typeItem === selectedQueryType
+              }">
+              {{ typeItem }}
+            </view>
+          </view>
+        </view>
+      </view>
+      <!-- 2.2结果列表 -->
+      <view class="flex-1 flex flex-col">
+        <!-- 圈子 -->
+        <view class="h-[40px] flex flex-row justify-start items-center">
+          <view
+            v-for="(item, index) in selectedTueryTag"
+            :key="index"
+            class="h-[40px] rounded-lg ml-3 px-3 flex flex-row justify-center items-center bg-gray-100">
+            <image
+              class="w-[30px] h-[30px] rounded-full mr-2"
+              src="https://picsum.photos/200/300?random=1"
+              mode="aspectFill" />
+            <view>{{ item }} ›</view>
+          </view>
+        </view>
+
+        <!-- 书本列表 -->
+        <view class="flex-1 mx-3">
+          <navigator
+            url="/pages/book/detail"
+            v-for="(book, index) in bookData"
+            :key="index"
+            class="flex flex-row justify-center mt-10">
+            <!-- 书籍封面 -->
+            <image
+              class="w-[80px] h-[100px] rounded-lg mr-2"
+              :src="book.image"
+              mode="aspectFill" />
+
+            <!-- 书籍信息 -->
+            <view class="flex-1">
+              <!-- 标题和评分 -->
+              <view class="flex items-center justify-between">
+                <view class="overflow-hidden whitespace-nowrap text-ellipsis">
+                  {{ book.name }}
+                </view>
+                <view class="w-[40px] font-bold text-amber-600">
+                  {{ book.score }}分
+                </view>
+              </view>
+
+              <!-- 描述信息 -->
+              <view class="text-sm text-gray-400 mt-2">
+                {{ book.description }}
+              </view>
+
+              <!-- 标签 -->
+              <view class="text-sm text-gray-400 mt-2">
+                <text v-for="(tag, index) in book.tagList" :key="index">
+                  {{ tag }}·
+                </text>
+              </view>
+            </view>
+          </navigator>
+        </view>
       </view>
     </scroll-view>
 
@@ -161,7 +164,7 @@ import {
 import { commonPageQueryData } from '@/services/global'
 import { BookItem } from '@/types/book'
 import { CategorySearchParams } from '@/types/categorySearch'
-import { PageParams, PageResult } from '@/types/global'
+import { PageParams } from '@/types/global'
 
 // 搜索关键词
 const searchKeyword = ref('')

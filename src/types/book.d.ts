@@ -34,13 +34,13 @@ export type BookItem = {
   sortNumber?: number
   // 图片
   image?: string
-  //
-  type?: string
-  //
+  //单一标签
+  tagOne?: string
+  //状态
   status?: string
-  //
+  //热度值
   hot?: string
-  // 标签集合
+  // 标签列表
   tagList?: string[]
 }
 

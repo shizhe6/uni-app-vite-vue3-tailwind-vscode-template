@@ -1,5 +1,6 @@
 import { BookItem } from '@/types/book'
-import { PrimaryRankItem } from '@/types/rank'
+import { PageParams, PageResult } from '@/types/global'
+import { PrimaryRankItem, SearchParams } from '@/types/rank'
 
 /**
  *查询一级分类列表和二级分类列表
@@ -97,61 +98,93 @@ export const initPrimaryListAPI = (): PrimaryRankItem[] => {
  * @param secondaryId  二级分类id
  * @returns 排行榜列表，只有30条数据
  */
-export const initBookListAPI = (
-  primaryId: number,
-  secondaryId: number
-): BookItem[] => {
-  // 预定义随机书名池（扩展了更多不同类型的书名）
-  const bookNames = [
-    // 玄幻类
-    '九界独尊：我的玄铁剑',
-    '玄幻世界的穿越者',
-    '仙途问道：千年剑修',
-    '万族争霸：我为帝',
-    '九霄之上：逆天成神',
-    // 都市类
-    '放下个人素质，享无敌人生',
-    '都市修仙：从送外卖开始',
-    '职场风云：我是金牌总监',
-    '都市异能：觉醒读心术',
-    '重生之都市巨贾',
-    // 历史类
-    '历史演义：盛唐风华',
-    '王朝争霸：大明崛起',
-    '架空穿越：回到贞观',
-    '清史迷踪：探秘紫禁城',
-    '宋末风云：抗元奇侠',
-    // 言情类
-    '现代言情：先婚后爱',
-    '都市甜宠：总裁的小娇妻',
-    '职场婚姻：双向奔赴的幸福',
-    '校园初恋：那年樱花雨',
-    '暗恋成真：藏了十年的秘密',
-    // 科幻类
-    '星际冒险：未知星域',
-    '未来科技：机械飞升',
-    '太空殖民：火星新家园',
-    '平行宇宙：另一个我',
-    '星际战争：银河守护者'
+export const pageQueryBookListByRankAPI = (
+  params: SearchParams,
+  pageParams: PageParams
+): PageResult<BookItem> => {
+  const records = [
+    {
+      id: 1,
+      image: 'https://picsum.photos/200/300?random=1',
+      name: '三体：死神永生三体：死神永生',
+      author: '刘慈欣',
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      hot: '1345.5万',
+      score: 5,
+      status: '完本',
+      tagOne: '诸天万界',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 2,
+      image: 'https://picsum.photos/200/300?random=2',
+      name: '流浪地球：之我从宝宝巴士开车-去学校好好学习',
+      author: '刘慈欣',
+      hot: '1144.5万',
+      score: 5,
+      status: '连载',
+      tagOne: '玄幻脑洞',
+      description:
+        '[轮回转世]+[平行宇宙]+[无固定女主][轮回转世]+[平行宇宙]+[无固定女主][轮回转世]+[平行宇宙]+[无固定女主][轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 3,
+      image: 'https://picsum.photos/200/300?random=3',
+      name: '球状闪电',
+      author: '刘慈欣',
+      hot: '3256.5万',
+      score: 5,
+      status: '完本',
+      tagOne: '玄幻脑洞',
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 4,
+      image: 'https://picsum.photos/200/300?random=4',
+      name: '超新星纪元',
+      author: '刘慈欣',
+      hot: '1000.5万',
+      score: 5,
+      status: '连载',
+      tagOne: '玄幻',
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 5,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      hot: '1.5万',
+      status: '连载',
+      score: 5,
+      tagOne: '穿越',
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    },
+    {
+      id: 6,
+      image: 'https://picsum.photos/200/300?random=7',
+      name: '乡村教师',
+      author: '刘慈欣',
+      status: '连载',
+      hot: '1.5万',
+      score: 5,
+      tagOne: '系统',
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      tagList: ['玄幻脑洞', '玄幻', '穿越', '系统', '天才', '诸天万界']
+    }
   ]
 
-  return Array.from({ length: 30 }, (_, i) => ({
-    id: primaryId * 1000 + secondaryId * 100 + i, // 生成唯一ID
-    sortNumber: i + 1, // 排序号从1开始
-    cover: `https://picsum.photos/200/300?n=${i + primaryId * 100 + secondaryId}`,
-    name: bookNames[Math.floor(Math.random() * bookNames.length)], // 随机书名（使用扩展后的书名池）
-    type: [
-      '玄幻',
-      '言情',
-      '历史' // 根据一级分类显示类型
-    ][primaryId % 3],
-    status: [
-      ['连载', '完本'], // 二级分类0-1对应不同状态比例
-      ['热更', '完结'],
-      ['更新', '全本']
-    ][secondaryId % 3][i % 2],
-    hot: `${Math.floor(Math.random() * (10000 + secondaryId * 500))}万热度`
-  }))
+  return {
+    records,
+    total: records.length,
+    current: pageParams.current + 1,
+    pages: 100,
+    size: pageParams.size
+  }
 }
 
 /**
@@ -167,6 +200,12 @@ export const queryRecommendRankListAPI = (ranktTitle: string): BookItem[] => {
       rank: i + 1,
       image: `https://picsum.photos/200/300?random=${i + 1}`,
       name: ranktTitle + `${+i + 1}`,
+      author: '刘慈欣',
+      description: '[轮回转世]+[平行宇宙]+[无固定女主]',
+      hot: '1345.5万',
+      score: 5,
+      status: '完本',
+      tagOne: '玄幻脑洞',
       tagList: ['都市', '言情', '科幻'],
       popularity: (300 + i * 10).toFixed(1)
     }))
