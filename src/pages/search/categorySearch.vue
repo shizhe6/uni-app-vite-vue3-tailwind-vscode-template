@@ -2,7 +2,7 @@
   <view class="h-full flex flex-col">
     <!-- 1.搜索框 -->
     <view
-      class="h-[40px] border flex items-end justify-center fixed w-full z-50 bg-white px-4">
+      class="h-[40px]  flex items-end justify-center fixed w-full z-50 bg-white px-4">
       <uni-easyinput
         prefixIcon="search"
         focus
@@ -155,11 +155,11 @@
 
 <script lang="ts" setup>
 import {
-  queryBookByCategoryAPI,
   initQueryStatusDataAPI,
   initQueryTagAPI,
   initQueryTypeDataAPI,
-  initQueryWordCountDataAPI
+  initQueryWordCountDataAPI,
+  queryBookByCategoryAPI
 } from '@/services/categorySearch'
 import { commonPageQueryData } from '@/services/global'
 import { BookItem } from '@/types/book'

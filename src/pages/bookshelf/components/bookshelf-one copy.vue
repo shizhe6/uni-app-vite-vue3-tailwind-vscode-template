@@ -7,49 +7,30 @@
     </view>
     <!-- 功能样式 -->
     <view class="top-book-type">
-      <!-- 使用常量遍历生成标签 -->
-      <view
-        v-for="(type, index) in bookTypeList"
-        :key="index"
-        @click="selectedTypeIndex = index"
-        :class="{
-          'activeSelectedType': selectedTypeIndex === index
-        }"
-        class="book-type-item">
+   <!-- 使用常量遍历生成标签 -->
+   <view 
+        v-for="(type, index) in bookTypeList" 
+        :key="index" 
+        class="book-type-item"
+      >
         {{ type }}
       </view>
-      <!-- 添加帅选按钮navigator -->
-      <navigator class=" py-2 mx-3 text-gray-600 text-sm flex" url="/pages/bookshelf/components/bookFilter">
-        <uni-icons type="settings" size="30"></uni-icons>
-        <view>筛选</view>
-      </navigator>
     </view>
     <!-- 宫格模式 -->
-
-    <scroll-view scroll-y class="flex-1" v-if="isGrid">
-      <view class="book-container-grid">
-        <navigator
-          v-for="book in bookList"
-          :key="book.id"
-          class="grid-book-item"
-          url="/pages/book/detail">
-          <image class="grid-cover" :src="book.cover" mode="aspectFill" />
-          <view class="grid-info">
-            <text class="grid-title">{{ book.title }}</text>
-            <text class="grid-update">更新至{{ book.totalChapters }}章</text>
-          </view>
-        </navigator>
-      </view>
-
+    <scroll-view scroll-y class="book-container-grid" v-if="isGrid">
+      <navigator v-for="book in bookList" :key="book.id" class="grid-book-item" url="/pages/book/detail">
+        <image class="grid-cover" :src="book.cover" mode="aspectFill" />
+        <view class="grid-info">
+          <text class="grid-title">{{ book.title }}</text>
+          <text class="grid-update">更新至{{ book.totalChapters }}章</text>
+        </view>
+      </navigator>
     </scroll-view>
 
     <!-- 列表模式 -->
-    <scroll-view scroll-y class="book-container-list" v-else>
-      <navigator
-        v-for="book in bookList"
-        :key="book.id"
-        class="book-item"
-        url="/pages/book/detail">
+     <view class="flex-1"  v-else>
+      <scroll-view scroll-y class="book-container-list">
+      <navigator v-for="book in bookList" :key="book.id" class="book-item" url="/pages/book/detail">
         <!-- 书籍封面 -->
         <image class="book-cover" :src="book.cover" mode="aspectFill" />
 
@@ -75,12 +56,15 @@
         </view>
       </navigator>
     </scroll-view>
+     </view>
+ 
   </view>
 </template>
 
 <script setup lang="ts">
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+
 interface BookItem {
   id: number
   cover: string
@@ -92,9 +76,7 @@ interface BookItem {
   totalChapters: number
 }
 // 新增：定义分类标签常量
-const bookTypeList = ref(['全部', '阅读', '听书'])
-// 定义选中的标签索引
-const selectedTypeIndex = ref(0)
+const bookTypeList = ref(['全部', '阅读', '听书', '短剧'])
 // 模拟数据
 const bookList = ref<BookItem[]>([
   {
@@ -105,7 +87,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天3小时',
     latestChapter: '第201章 二向箔降临',
-    totalChapters: 256
+    totalChapters: 256,
   },
   {
     id: 2,
@@ -115,7 +97,7 @@ const bookList = ref<BookItem[]>([
     unread: 5,
     lastUpdate: '3天2小时',
     latestChapter: '第105章 地球启航',
-    totalChapters: 150
+    totalChapters: 150,
   },
   {
     id: 3,
@@ -125,7 +107,7 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天5小时',
     latestChapter: '第87章 宏原子核',
-    totalChapters: 120
+    totalChapters: 120,
   },
   {
     id: 4,
@@ -135,7 +117,7 @@ const bookList = ref<BookItem[]>([
     unread: 4,
     lastUpdate: '4天1小时',
     latestChapter: '第130章 新纪元开始',
-    totalChapters: 180
+    totalChapters: 180,
   },
   {
     id: 5,
@@ -145,7 +127,7 @@ const bookList = ref<BookItem[]>([
     unread: 1,
     lastUpdate: '5小时前',
     latestChapter: '第35章 知识的传承',
-    totalChapters: 50
+    totalChapters: 50,
   },
   {
     id: 6,
@@ -155,7 +137,7 @@ const bookList = ref<BookItem[]>([
     unread: 6,
     lastUpdate: '5天3小时',
     latestChapter: '第98章 文明的碰撞',
-    totalChapters: 140
+    totalChapters: 140,
   },
   {
     id: 7,
@@ -165,7 +147,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天4小时',
     latestChapter: '第76章 用诗征服宇宙',
-    totalChapters: 110
+    totalChapters: 110,
   },
   {
     id: 8,
@@ -175,7 +157,7 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天6小时',
     latestChapter: '第62章 真理祭坛',
-    totalChapters: 90
+    totalChapters: 90,
   },
   {
     id: 9,
@@ -185,7 +167,7 @@ const bookList = ref<BookItem[]>([
     unread: 5,
     lastUpdate: '3天5小时',
     latestChapter: '第115章 电磁干扰战',
-    totalChapters: 160
+    totalChapters: 160,
   },
   {
     id: 10,
@@ -195,7 +177,7 @@ const bookList = ref<BookItem[]>([
     unread: 4,
     lastUpdate: '4天2小时',
     latestChapter: '第103章 宇宙的真相',
-    totalChapters: 145
+    totalChapters: 145,
   },
   {
     id: 11,
@@ -205,7 +187,7 @@ const bookList = ref<BookItem[]>([
     unread: 1,
     lastUpdate: '6小时前',
     latestChapter: '第28章 大脑的奥秘',
-    totalChapters: 40
+    totalChapters: 40,
   },
   {
     id: 12,
@@ -215,7 +197,7 @@ const bookList = ref<BookItem[]>([
     unread: 6,
     lastUpdate: '6天1小时',
     latestChapter: '第121章 地球保卫战',
-    totalChapters: 170
+    totalChapters: 170,
   },
   {
     id: 13,
@@ -225,7 +207,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天7小时',
     latestChapter: '第82章 微观世界的繁荣',
-    totalChapters: 115
+    totalChapters: 115,
   },
   {
     id: 14,
@@ -235,7 +217,7 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天8小时',
     latestChapter: '第57章 基因改造的人类',
-    totalChapters: 80
+    totalChapters: 80,
   },
   {
     id: 15,
@@ -245,7 +227,7 @@ const bookList = ref<BookItem[]>([
     unread: 5,
     lastUpdate: '3天6小时',
     latestChapter: '第109章 时间的漩涡',
-    totalChapters: 155
+    totalChapters: 155,
   },
   {
     id: 16,
@@ -255,7 +237,7 @@ const bookList = ref<BookItem[]>([
     unread: 4,
     lastUpdate: '4天3小时',
     latestChapter: '第137章 未来的中国',
-    totalChapters: 190
+    totalChapters: 190,
   },
   {
     id: 17,
@@ -265,7 +247,7 @@ const bookList = ref<BookItem[]>([
     unread: 1,
     lastUpdate: '7小时前',
     latestChapter: '第43章 泡泡的奇迹',
-    totalChapters: 60
+    totalChapters: 60,
   },
   {
     id: 18,
@@ -275,7 +257,7 @@ const bookList = ref<BookItem[]>([
     unread: 6,
     lastUpdate: '7天2小时',
     latestChapter: '第112章 信息的传递',
-    totalChapters: 165
+    totalChapters: 165,
   },
   {
     id: 19,
@@ -285,7 +267,7 @@ const bookList = ref<BookItem[]>([
     unread: 3,
     lastUpdate: '2天9小时',
     latestChapter: '第94章 海洋的梦幻',
-    totalChapters: 130
+    totalChapters: 130,
   },
   {
     id: 20,
@@ -295,8 +277,8 @@ const bookList = ref<BookItem[]>([
     unread: 2,
     lastUpdate: '1天10小时',
     latestChapter: '第71章 微观纤维世界',
-    totalChapters: 100
-  }
+    totalChapters: 100,
+  },
 ])
 
 // 用于控制宫格和列表的切换状态
@@ -308,28 +290,24 @@ const toggleView = () => {
 onShow(() => {
   // 页面加载时执行的逻辑
   console.log('two页面加载')
-  selectedTypeIndex.value = 0
 })
 </script>
 
 <style lang="scss">
 .bookshelf-container {
-  height: 100%;
-  width: 100%;;
+  height:   100vh;
+  width: 100vw;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
-  position: relative;
   // padding: 20rpx;
   .top-title {
-    z-index: 40;
     height: 30px;
+    // background-color: antiquewhite;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-right: 40px;
-    position: fixed;
-    background-color: #fff;
-    width: 100vw;
     .edit-button {
       position: relative;
       margin-left: 20rpx;
@@ -338,20 +316,12 @@ onShow(() => {
   }
 
   .top-book-type {
-    z-index: 40;
-    width: 100vw;
-    margin-top: 30px;
-    position: fixed;
-    height: 40px;
-    margin-bottom: 20px;
-    background-color: #fff;
-    // 内部元素水平排列，可以左右滑动
+    // background-color: rgb(128, 219, 110);
+    height: 30px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    scroll-behavior: smooth;
+    margin-bottom: 20px;
     .book-type-item {
       background-color: #fff0e9;
       margin-right: 10px;
@@ -363,19 +333,13 @@ onShow(() => {
   }
 }
 
-
-.activeSelectedType{
-  font-size: larger;
-  color: burlywood;
-}
 .book-container-list {
   height: 100vh;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 20rpx;
-
+  padding: 20rpx; 
   .book-item {
     display: flex;
     margin-bottom: 30rpx;
@@ -442,24 +406,22 @@ onShow(() => {
 }
 
 .book-container-grid {
-  margin-top: 70px;
-  height: 100vh;
-  flex: 1;
+  border: 1px solid #19ec82;
+  height: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding: 10px;
-  box-sizing: border-box;
-
-  padding: 10px;
+  grid-template-columns: 1fr ;
+  gap: 20rpx;
+  width: 80vw;
+  background-color: #e4393c;
   .grid-book-item {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: #030303 1px solid;
+    border: #030303 1px solid ;
+height: 200px;
 
     .grid-cover {
-      width: 100%;
+     width: 100%;;
       height: 140px;
       border-radius: 8rpx;
       margin-bottom: 15rpx;

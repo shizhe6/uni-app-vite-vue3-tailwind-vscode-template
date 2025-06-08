@@ -77,7 +77,12 @@
 				"navigationBarTitleText": "分类搜索"
 			}
 		},
-	
+		{
+			"path": "pages/bookshelf/components/bookFilter",
+			"style": {
+				"navigationBarTitleText": "书架筛选"
+			}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
