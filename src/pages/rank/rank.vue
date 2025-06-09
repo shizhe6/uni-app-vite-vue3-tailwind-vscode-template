@@ -1,28 +1,30 @@
 <template>
-  <view class="h-full flex flex-col">
+  <view class="h-screen flex flex-col">
     <!-- 头部 一级导航 -->
-    <scroll-view
-      class="w-full whitespace-nowrap h-[40px] bg-[#fafafa]"
-      scroll-x="true"
-      :scroll-left="scrollTop"
-      @scroll="handleTopScroll">
-      <view
-        v-for="(item, index) in primaryListData"
-        :key="index"
-        class="scroll-view-item_H"
-        :class="{
-          'font-bold text-amber-600 text-xl': activePrimaryTab === index
-        }"
-        @tap="handlePrimaryTabChange(index)">
-        {{ item.name }}
-      </view>
-    </scroll-view>
+    <view class="h-[30px]">
+      <scroll-view
+        class="w-full whitespace-nowrap h-[40px] bg-[#fafafa]"
+        scroll-x="true"
+        :scroll-left="scrollTop"
+        @scroll="handleTopScroll">
+        <view
+          v-for="(item, index) in primaryListData"
+          :key="index"
+          class="scroll-view-item_H"
+          :class="{
+            'font-bold text-amber-600 text-xl': activePrimaryTab === index
+          }"
+          @tap="handlePrimaryTabChange(index)">
+          {{ item.name }}
+        </view>
+      </scroll-view>
+    </view>
 
     <!-- 二级导航和内容 -->
-    <view class="flex-1">
+    <view class="flex-1 border border-gray-600">
       <swiper
         easing-function="linear"
-        class="h-[85vh]"
+        class="h-[100vh]"
         @change="onSwiperChange"
         :current="activePrimaryTab">
         <swiper-item
