@@ -11,7 +11,7 @@
         {{ tab }}
       </view>
     </view>
-    <view class="middle-container" >
+    <view class="middle-container">
       <swiper
         class="swiper"
         :current="currentTabIndex"
@@ -25,7 +25,6 @@
         </swiper-item>
       </swiper>
     </view>
-
 
     <!-- 底部标签栏    -->
   </view>
@@ -97,7 +96,6 @@ const onSwiperChange = (e: any) => {
 
 // 底部容器
 .middle-container {
-  border: #000000  1px solid;
   margin-top: 80px;
   flex: 1;
   .swiper {
@@ -108,7 +106,6 @@ const onSwiperChange = (e: any) => {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-
     }
   }
 }

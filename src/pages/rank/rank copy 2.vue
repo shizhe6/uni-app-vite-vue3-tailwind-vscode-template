@@ -4,8 +4,8 @@
     <scroll-view
       class="w-full whitespace-nowrap h-[40px] bg-[#fafafa]"
       scroll-x="true"
-      :scroll-left="scrollTop"
-      @scroll="handleTopScroll">
+      :scroll-left="scrollLeft"
+      @scroll="handleScroll">
       <view
         v-for="(item, index) in primaryListData"
         :key="index"
@@ -21,7 +21,6 @@
     <!-- 二级导航和内容 -->
     <view class="flex-1">
       <swiper
-        easing-function="linear"
         class="h-[85vh]"
         @change="onSwiperChange"
         :current="activePrimaryTab">
@@ -29,56 +28,55 @@
           class="h-[100vh] flex flex-row border border-black"
           v-for="(tab, index) in primaryListData"
           :key="index">
+          <!-- 二级导航 -->
+          <scroll-view class="w-[130rpx] bg-[#fafafa]" scroll-y>
+            <view
+              v-for="(subItem, subIndex) in secondaryListData"
+              :key="subIndex"
+              class="h-[96rpx] flex items-center justify-center text-[26rpx] relative"
+              :class="{
+                'font-bold text-amber-600': activeSecondaryTab === subIndex
+              }"
+              @tap="handleSecondaryTabChange(subIndex)">
+              {{ subItem.name }}
+            </view>
+          </scroll-view>
+          <!-- 排行榜对应的书本 -->
           <SzLoading v-if="isLoadingQueryBook"></SzLoading>
-          <view v-else class="flex">
-            <!-- 二级导航 -->
-            <scroll-view class="w-[130rpx] bg-[#fafafa]" scroll-y>
+          <scroll-view
+            v-else
+            class="flex-1 p-[20rpx] bg-white"
+            scroll-y
+            @scrolltolower="pageQueryBookListByRankData">
+            <navigator
+              v-for="(book, bookIndex) in bookListData"
+              :key="bookIndex"
+              url="/pages/book/detail"
+              class="flex p-[20rpx] mb-[20rpx] rounded-[16rpx] bg-[#f8f8f8]">
               <view
-                v-for="(subItem, subIndex) in secondaryListData"
-                :key="subIndex"
-                class="h-[96rpx] flex items-center justify-center text-[26rpx] relative"
+                class="text-[50rpx] font-medium text-[#999] mr-[10px] flex items-center"
                 :class="{
-                  'font-bold text-amber-600': activeSecondaryTab === subIndex
-                }"
-                @tap="handleSecondaryTabChange(subIndex)">
-                {{ subItem.name }}
+                  'text-[#d6a364] font-semibold':
+                    bookIndex === 0 || bookIndex === 1 || bookIndex === 2
+                }">
+                {{ book.sortNumber }}
               </view>
-            </scroll-view>
-            <!-- 排行榜对应的书本 -->
-            <scroll-view
-              class="flex-1 p-[20rpx] bg-white"
-              scroll-y
-              @scrolltolower="pageQueryBookListByRankData">
-              <navigator
-                v-for="(book, bookIndex) in bookListData"
-                :key="bookIndex"
-                url="/pages/book/detail"
-                class="flex p-[20rpx] mb-[20rpx] rounded-[16rpx] bg-[#f8f8f8]">
-                <view
-                  class="text-[50rpx] font-medium text-[#999] mr-[10px] flex items-center"
-                  :class="{
-                    'text-[#d6a364] font-semibold':
-                      bookIndex === 0 || bookIndex === 1 || bookIndex === 2
-                  }">
-                  {{ book.sortNumber }}
+              <image
+                :src="book.image"
+                class="w-[160rpx] h-[220rpx] rounded-[8rpx]" />
+              <view
+                class="flex-1 ml-[20rpx] flex flex-col justify-center items-start">
+                <text class="block text-[30rpx] font-medium mb-[10rpx]">
+                  {{ book.name }}
+                </text>
+                <view class="text-[#999]">
+                  <text>{{ book.tagOne }} ·</text>
+                  <text>{{ book.status }} ·</text>
+                  <text>{{ book.hot }}</text>
                 </view>
-                <image
-                  :src="book.image"
-                  class="w-[160rpx] h-[220rpx] rounded-[8rpx]" />
-                <view
-                  class="flex-1 ml-[20rpx] flex flex-col justify-center items-start">
-                  <text class="block text-[30rpx] font-medium mb-[10rpx]">
-                    {{ book.name }}
-                  </text>
-                  <view class="text-[#999]">
-                    <text>{{ book.tagOne }} ·</text>
-                    <text>{{ book.status }} ·</text>
-                    <text>{{ book.hot }}</text>
-                  </view>
-                </view>
-              </navigator>
-            </scroll-view>
-          </view>
+              </view>
+            </navigator>
+          </scroll-view>
         </swiper-item>
       </swiper>
     </view>
@@ -121,7 +119,6 @@ onShow(async () => {
  * 初始化一级排行榜数据
  */
 const initPrimaryListData = async () => {
-  console.log('initPrimaryListData')
   primaryListData.value = await initPrimaryListAPI()
 }
 /**
@@ -129,28 +126,20 @@ const initPrimaryListData = async () => {
  * @param e 一级排行榜切换事件
  */
 const onSwiperChange = (e: any) => {
-  // 说明此时是点击事件触发了一级菜单变化，不需要再次循环查询了
-  if (e.detail.current === activePrimaryTab.value) {
-    return
-  }
-  console.log('onSwiperChange' + e.detail.current)
+  // 一级榜单移动
+  handleScroll(e.detail.current)
 
-  // 正常的一级菜单左右滑动
-  // 计算一级榜单移动距离
-  handleTopScroll(e.detail.current)
-
-  //一级排行榜按钮点击事件
+  //
   handlePrimaryTabChange(e.detail.current)
 }
 
 /**
- * 一级排行榜按钮点击事件
+ *
  * @param index 一级排行榜索引
  */
 const handlePrimaryTabChange = async (index: number) => {
-  console.log('handlePrimaryTabChange' + index)
   isLoadingQueryBook.value = true
-  // 设置一级导航选中状态，这个会触发滑动事件
+  // 设置一级导航选中状态
   activePrimaryTab.value = index
 
   // 获取二级导航数据
@@ -167,12 +156,10 @@ const handlePrimaryTabChange = async (index: number) => {
  * @param index 二级排行榜索引
  */
 const handleSecondaryTabChange = async (index: number) => {
-  console.log('handleSecondaryTabChange' + index)
-  // 设置二级导航选中索引
   activeSecondaryTab.value = index
 
   // 分页书籍数据
-  await pageQueryBookListByRankData()
+  pageQueryBookListByRankData()
 }
 // 是否加载完成
 const finish = ref(false)
@@ -192,7 +179,6 @@ const queryParams = ref({
  * 查询分页数据
  */
 const pageQueryBookListByRankData = async () => {
-  console.log('pageQueryBookListByRankData')
   // 分页查询书籍列表
   await commonPageQueryData(
     pageQueryBookListByRankAPI,
@@ -205,20 +191,19 @@ const pageQueryBookListByRankData = async () => {
 }
 
 // 一级分类左右滑动距离
-const scrollTop = ref(0)
+const scrollLeft = ref(0)
 // 一级分类切换，触发左右滑动
-const handleTopScroll = (current: number) => {
-  console.log('handleTopScroll' + current)
+const handleScroll = (current: number) => {
   // 判断是左滑动还是右滑动
   if (current > activePrimaryTab.value) {
     // 右滑动
     if (current > 0) {
-      scrollTop.value = (current - 1) * 100
+      scrollLeft.value = (current - 1) * 100
     }
   } else {
     // 左滑动
     if (current >= 0) {
-      scrollTop.value = scrollTop.value - 100
+      scrollLeft.value = scrollLeft.value - 100
     }
   }
 }

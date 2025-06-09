@@ -13,13 +13,15 @@
         :key="index"
         @click="selectedTypeIndex = index"
         :class="{
-          'activeSelectedType': selectedTypeIndex === index
+          activeSelectedType: selectedTypeIndex === index
         }"
         class="book-type-item">
         {{ type }}
       </view>
       <!-- 添加帅选按钮navigator -->
-      <navigator class=" py-2 mx-3 text-gray-600 text-sm flex" url="/pages/bookshelf/components/bookFilter">
+      <navigator
+        class="py-2 mx-3 text-gray-600 text-sm flex"
+        url="/pages/bookshelf/components/bookFilter">
         <uni-icons type="settings" size="30"></uni-icons>
         <view>筛选</view>
       </navigator>
@@ -40,7 +42,6 @@
           </view>
         </navigator>
       </view>
-
     </scroll-view>
 
     <!-- 列表模式 -->
@@ -315,7 +316,7 @@ onShow(() => {
 <style lang="scss">
 .bookshelf-container {
   height: 100%;
-  width: 100%;;
+  width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -363,8 +364,7 @@ onShow(() => {
   }
 }
 
-
-.activeSelectedType{
+.activeSelectedType {
   font-size: larger;
   color: burlywood;
 }
@@ -456,7 +456,6 @@ onShow(() => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: #030303 1px solid;
 
     .grid-cover {
       width: 100%;
