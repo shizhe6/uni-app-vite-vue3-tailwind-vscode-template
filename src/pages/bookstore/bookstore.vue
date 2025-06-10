@@ -32,12 +32,12 @@
       @change="onSwiperChange"
       class="flex-1 bg-gray-100">
       <swiper-item v-for="(tab, index) in tabs" :key="index">
-        <Recommend v-if="isRecommendLoaded" />
-        <Classic v-if="isClassicLoaded" />
-        <Knowledge v-if="isKnowledgeLoaded" />
-        <Audiobook v-if="isAudiobookLoaded" />
-        <Drama v-if="isDramaLoaded" />
-        <NewArrival v-if="isNewArrivalLoaded" />
+        <Recommend v-if="isRecommendLoaded && index === currentIndex" />
+        <Classic v-if="isClassicLoaded && index === currentIndex" />
+        <Knowledge v-if="isKnowledgeLoaded && index === currentIndex" />
+        <Audiobook v-if="isAudiobookLoaded  && index === currentIndex" />
+        <Drama v-if="isDramaLoaded && index === currentIndex" />
+        <NewArrival v-if="isNewArrivalLoaded && index === currentIndex" />
       </swiper-item>
     </swiper>
   </view>

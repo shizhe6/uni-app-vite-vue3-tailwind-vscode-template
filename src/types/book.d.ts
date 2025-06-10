@@ -42,6 +42,14 @@ export type BookItem = {
   hot?: string
   // 标签列表
   tagList?: string[]
+  // 未读章节
+  unread: number
+  // 更新时间
+  lastUpdate: string
+  // 最新章节
+  latestChapter: string
+  // 总章节数
+  totalChapters: number
 }
 
 // 段落数据

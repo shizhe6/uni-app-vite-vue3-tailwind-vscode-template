@@ -78,6 +78,7 @@ import { queryRecommendRankListAPI } from '@/services/rank'
 import { BookItem } from '@/types/book'
 
 import { computed, onMounted, ref } from 'vue'
+
 // 猜你喜欢
 const { bookRecommendRef, onScrollToLower } = bookRecommendList()
 // 当前 榜单索引

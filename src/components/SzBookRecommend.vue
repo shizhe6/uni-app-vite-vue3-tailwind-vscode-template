@@ -59,7 +59,9 @@ const queryParams = ref({
  * @returns  void
  */
 const pageQueryRecommendListData = async () => {
-  console.log('pageQueryRecommendListData' + query.sourceType)
+  console.log(
+    'pageQueryRecommendListData' + query.sourceType + pageParams.current
+  )
   await commonPageQueryData(
     pageQueryRecommendListAPI,
     recommendBookData,
