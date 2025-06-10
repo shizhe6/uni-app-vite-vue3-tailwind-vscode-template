@@ -27,7 +27,6 @@
       </navigator>
     </view>
     <!-- 宫格模式 -->
-
     <scroll-view scroll-y class="flex-1" v-if="isGrid">
       <view class="book-container-grid">
         <navigator
@@ -168,6 +167,7 @@ const queryBookShelfData = async () => {
   color: burlywood;
 }
 .book-container-list {
+  margin-top: 70px;
   height: 100vh;
   flex: 1;
   display: flex;
