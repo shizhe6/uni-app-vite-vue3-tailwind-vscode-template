@@ -35,7 +35,7 @@
         <Recommend v-if="isRecommendLoaded && index === currentIndex" />
         <Classic v-if="isClassicLoaded && index === currentIndex" />
         <Knowledge v-if="isKnowledgeLoaded && index === currentIndex" />
-        <Audiobook v-if="isAudiobookLoaded  && index === currentIndex" />
+        <Audiobook v-if="isAudiobookLoaded && index === currentIndex" />
         <Drama v-if="isDramaLoaded && index === currentIndex" />
         <NewArrival v-if="isNewArrivalLoaded && index === currentIndex" />
       </swiper-item>

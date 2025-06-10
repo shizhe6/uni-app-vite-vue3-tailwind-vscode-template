@@ -5,13 +5,13 @@
     :style="{ backgroundColor: computedBgColor }">
     <!-- 1.章节内容 -->
     <!-- 标题 -->
-    <view class="flex justify-center items-center text-lg font-bold mb-8">
+    <view class="flex justify-center items-center mb-8 text-lg font-bold">
       {{ chapterItemList[0].title }}
     </view>
     <!-- 段落内容 -->
     <view
       @click="onPageClick"
-      class="ph-content mb-8  m-2"
+      class="m-2 mb-8 ph-content"
       v-for="(paragraphItem, index) in paragraphItemList"
       :key="index">
       <!-- 段落内容 -->
@@ -96,11 +96,11 @@
         <!-- 背景颜色调节面板 -->
         <view class="setting-panel-normal">
           <text>背景</text>
-          <view class="flex-1 flex flex-row justify-around items-center">
+          <view class="flex flex-row flex-1 justify-around items-center">
             <view
               v-for="(color, index) in backgroundColorList"
               :key="index"
-              class="rounded-full w-8 h-8"
+              class="w-8 h-8 rounded-full"
               :style="{ backgroundColor: color }"
               @click="changeBackgroundColor(color, index)"></view>
           </view>
@@ -115,8 +115,8 @@
             class="w-[60px] h-[80px] rounded mr-3"
             :src="novelInfo.cover"
             mode="widthFix" />
-          <view class="flex-1 flex flex-col justify-center">
-            <text class="text-base font-semibold mb-1">
+          <view class="flex flex-col flex-1 justify-center">
+            <text class="mb-1 text-base font-semibold">
               {{ novelInfo.title }}
             </text>
             <text class="text-sm text-gray-600">{{ novelInfo.author }}</text>

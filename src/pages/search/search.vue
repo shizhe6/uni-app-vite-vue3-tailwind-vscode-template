@@ -13,18 +13,18 @@
     </view>
 
     <!-- 2.1推荐搜索 -->
-    <view v-if="showRecommendSearchName" class="flex-1 flex flex-col mt-4">
+    <view v-if="showRecommendSearchName" class="flex flex-col flex-1 mt-4">
       <view
         @click="handleSearchRecommend(item)"
         v-for="item in recommendSearchNameData"
-        class="mb-4 px-4">
+        class="px-4 mb-4">
         <uni-icons type="search" size="20"></uni-icons>
         {{ item }}
       </view>
     </view>
 
     <!-- 2.2搜索结果  列表 -->
-    <view v-if="showSearchBook" class="flex-1 flex flex-col mt-4 mx-2">
+    <view v-if="showSearchBook" class="flex flex-col flex-1 mx-2 mt-4">
       <navigator
         url="/pages/book/detail"
         v-for="book in searchBookData"
@@ -39,7 +39,7 @@
         <!-- 书籍信息 -->
         <view class="flex-1">
           <!-- 标题和评分 -->
-          <view class="flex items-center justify-between">
+          <view class="flex justify-between items-center">
             <view class="overflow-hidden whitespace-nowrap text-ellipsis">
               {{ book.name }}
             </view>
@@ -49,12 +49,12 @@
           </view>
 
           <!-- 描述信息 -->
-          <view class="text-sm text-gray-400 mt-2">
+          <view class="mt-2 text-sm text-gray-400">
             {{ book.description }}
           </view>
 
           <!-- 标签 -->
-          <view class="text-sm text-gray-400 mt-2">
+          <view class="mt-2 text-sm text-gray-400">
             <text v-for="(tag, index) in book.tagList">{{ tag }}·</text>
           </view>
         </view>
@@ -67,9 +67,9 @@
       class="flex-1 flex flex-col mt-[40px] overflow-hidden"
       scroll-y>
       <!-- 2.1搜索历史 -->
-      <view class="h-auto mb-4 my-4">
+      <view class="my-4 mb-4 h-auto">
         <view class="flex justify-between items-center px-8">
-          <text class="title text-7 font-bold">搜索历史</text>
+          <text class="font-bold title text-7">搜索历史</text>
           <view @click="toggleShowAll = !toggleShowAll">
             <text>{{ toggleShowAll ? '收起 ˄' : '展开 ˅' }}</text>
           </view>
@@ -88,17 +88,17 @@
       </view>
 
       <!-- 2.2热搜榜单 -->
-      <view class="flex-1 overflow-y-auto">
+      <view class="overflow-y-auto flex-1">
         <scroll-view scroll-x class="w-full whitespace-nowrap">
           <view class="inline-flex">
             <view
               v-for="(list, index) in hotSearchData"
               :key="index"
-              class="w-52 m-4 p-4 rounded-lg"
+              class="p-4 m-4 w-52 rounded-lg"
               :class="'rank-background-' + index">
               <!-- 推荐榜单名称 -->
               <view class="flex items-center mb-5">
-                <text class="font-bold pl-2.5 mr-2.5">
+                <text class="pl-2.5 mr-2.5 font-bold">
                   {{ list.title }}
                 </text>
                 <uni-icons type="right" size="14" color="#999" />

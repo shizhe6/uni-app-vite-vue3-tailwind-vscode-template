@@ -2,7 +2,7 @@
   <SzLoading v-if="isLoading"></SzLoading>
   <scroll-view v-else scroll-y @scrolltolower="onScrollToLower">
     <!-- 1.榜单模块 -->
-    <view class="rounded-lg bg-white mx-2">
+    <view class="mx-2 bg-white rounded-lg">
       <!--  榜单标题 -->
       <view
         class="inline-block py-2 mx-3 text-sm"
@@ -14,7 +14,7 @@
       </view>
       <!-- 完整榜单 -->
       <navigator
-        class="inline-block py-2 mx-3 text-gray-600 text-sm"
+        class="inline-block py-2 mx-3 text-sm text-gray-600"
         url="/pages/rank/rank">
         完整榜单 >
       </navigator>
@@ -27,18 +27,18 @@
             url="/pages/book/detail"
             v-for="(book, bIndex) in page"
             :key="bIndex"
-            class="h-24 flex items-center p-2">
+            class="flex items-center p-2 h-24">
             <!-- 封面 -->
-            <view class="h-24 w-20 rounded-lg">
+            <view class="w-20 h-24 rounded-lg">
               <image
-                class="h-full w-full rounded-lg"
+                class="w-full h-full rounded-lg"
                 :src="book.image"
                 mode="aspectFill" />
             </view>
 
             <!-- 排名  -->
             <view
-              class="h-20 text-lg mx-3"
+              class="mx-3 h-20 text-lg"
               :class="{
                 'text-amber-600':
                   book.rank !== undefined && [1, 2, 3].includes(book.rank)

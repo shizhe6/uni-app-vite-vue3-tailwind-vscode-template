@@ -1,5 +1,5 @@
 <template>
-  <scroll-view class=" h-screen pb-3 bg-gray-50" scroll-y>
+  <scroll-view class="pb-3 h-screen bg-gray-50" scroll-y>
     <!-- 第一部分：书籍基础信息 -->
     <view class="book-base">
       <image class="cover" :src="bookInfo.cover" mode="widthFix"></image>
@@ -16,21 +16,21 @@
     <!-- 第二部分：作者信息 -->
     <view class="flex flex-col items-start justify-center m-[10px]">
       <!-- 作者信息 -->
-      <view class="flex flex-row items-center justify-around w-full">
+      <view class="flex flex-row justify-around items-center w-full">
         <image
           class="w-10 h-10 rounded-full"
           :src="authorInfo.avatar"
           mode="aspectFill"></image>
-        <view class="flex-1 flex flex-col pl-3">
+        <view class="flex flex-col flex-1 pl-3">
           <text class="text-black">{{ authorInfo.name }}</text>
-          <text class="text-slate-400 text-sm">关注我，掌握最新动态</text>
+          <text class="text-sm text-slate-400">关注我，掌握最新动态</text>
         </view>
-        <button class="text-sm text-red-500 px-2 py-2 rounded-lg">
+        <button class="px-2 py-2 text-sm text-red-500 rounded-lg">
           + 关注
         </button>
       </view>
       <!-- 评分和阅读数 -->
-      <view class="flex flex-row items-center justify-between w-full">
+      <view class="flex flex-row justify-between items-center w-full">
         <view class="flex flex-col">
           <text class="text-lg text-black">{{ authorInfo.rating }}★★★★★</text>
           <text class="text-sm text-slate-400">本书评分</text>
@@ -47,21 +47,21 @@
       <view class="text-lg text-black">书籍简介</view>
       <!-- 简介内容容器 -->
       <view
-        class="text-sm text-slate-400 overflow-hidden"
+        class="overflow-hidden text-sm text-slate-400"
         :class="{ 'line-clamp-3': !isExpanded }">
         {{ bookInfo.intro }}
       </view>
       <!-- 展开/收起按钮 -->
       <button
-        class="text-sm text-gray-500 mt-2"
+        class="mt-2 text-sm text-gray-500"
         @click="isExpanded = !isExpanded">
         {{ isExpanded ? '收起' : '展开' }}
       </button>
-      <view class="text-sm flex flex-row">
+      <view class="flex flex-row text-sm">
         <text
           v-for="tag in bookInfo.tags"
           :key="tag"
-          class="text-xs text-slate-400 pr-2 bg-gray-300 p-1 rounded-lg mr-2">
+          class="p-1 pr-2 mr-2 text-xs bg-gray-300 rounded-lg text-slate-400">
           {{ tag }}
         </text>
       </view>

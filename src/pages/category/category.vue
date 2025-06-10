@@ -1,5 +1,5 @@
 <template>
-  <view class="h-full flex flex-col relative mb-6">
+  <view class="flex relative flex-col mb-6 h-full">
     <!-- 一级分类 -->
     <view
       class="flex pl-8 justify-start items-center h-[40px] overflow-x-auto flex-nowrap scroll-smooth fixed bg-white">
@@ -22,7 +22,7 @@
         @change="onSwiperChange"
         :current="activePrimaryIndex">
         <swiper-item
-          class="flex flex-row overflow-hidden"
+          class="flex overflow-hidden flex-row"
           v-for="(item, index) in primaryCategoryData"
           :key="index">
           <!-- 左侧：二级分类 -->

@@ -1,5 +1,5 @@
 <template>
-  <view class="h-screen flex flex-col">
+  <view class="flex flex-col h-screen">
     <!-- 头部 一级导航 -->
     <view class="h-[30px]">
       <scroll-view

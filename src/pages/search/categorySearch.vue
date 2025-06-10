@@ -1,5 +1,5 @@
 <template>
-  <view class="h-full flex flex-col">
+  <view class="flex flex-col h-full">
     <!-- 1.搜索框 -->
     <view
       class="h-[40px]  flex items-end justify-center fixed w-full z-50 bg-white px-4">
@@ -24,7 +24,7 @@
         <!-- 2.1 标签 -->
         <view class="h-[40px] flex">
           <view
-            class="whitespace-nowrap overflow-x-auto items-center pl-2 mt-2">
+            class="overflow-x-auto items-center pl-2 mt-2 whitespace-nowrap">
             <view
               v-for="(tagItem, index) in queryTagData"
               :key="index"
@@ -33,7 +33,7 @@
                 'font-bold text-amber-600  bg-orange-200':
                   selectedTueryTag.includes(tagItem)
               }"
-              class="inline-block ml-3 rounded-lg p-1">
+              class="inline-block p-1 ml-3 rounded-lg">
               {{ tagItem }}
             </view>
           </view>
@@ -46,7 +46,7 @@
         <view class="h-[120px] flex flex-col justify-center">
           <!-- 字数 -->
           <view
-            class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
+            class="flex overflow-x-auto items-center pl-2 my-2 whitespace-nowrap">
             <view
               class="inline-block ml-3"
               @click="handleQueryWordCount(wordCountItem)"
@@ -61,7 +61,7 @@
           </view>
           <!--  状态 -->
           <view
-            class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
+            class="flex overflow-x-auto items-center pl-2 my-2 whitespace-nowrap">
             <view
               class="inline-block ml-3"
               @click="handleQueryStatus(statusItem)"
@@ -76,7 +76,7 @@
 
           <!-- 标签 -->
           <view
-            class="whitespace-nowrap overflow-x-auto flex items-center pl-2 my-2">
+            class="flex overflow-x-auto items-center pl-2 my-2 whitespace-nowrap">
             <view
               class="inline-block ml-3"
               @click="handleQueryType(typeItem)"
@@ -91,7 +91,7 @@
         </view>
       </view>
       <!-- 2.2结果列表 -->
-      <view class="flex-1 flex flex-col">
+      <view class="flex flex-col flex-1">
         <!-- 圈子 -->
         <view class="h-[40px] flex flex-row justify-start items-center">
           <view
@@ -122,7 +122,7 @@
             <!-- 书籍信息 -->
             <view class="flex-1">
               <!-- 标题和评分 -->
-              <view class="flex items-center justify-between">
+              <view class="flex justify-between items-center">
                 <view class="overflow-hidden whitespace-nowrap text-ellipsis">
                   {{ book.name }}
                 </view>
@@ -132,12 +132,12 @@
               </view>
 
               <!-- 描述信息 -->
-              <view class="text-sm text-gray-400 mt-2">
+              <view class="mt-2 text-sm text-gray-400">
                 {{ book.description }}
               </view>
 
               <!-- 标签 -->
-              <view class="text-sm text-gray-400 mt-2">
+              <view class="mt-2 text-sm text-gray-400">
                 <text v-for="(tag, index) in book.tagList" :key="index">
                   {{ tag }}·
                 </text>

@@ -20,7 +20,7 @@
       </view>
       <!-- 添加帅选按钮navigator -->
       <navigator
-        class="py-2 mx-3 text-gray-600 text-sm flex"
+        class="flex py-2 mx-3 text-sm text-gray-600"
         url="/pages/bookshelf/components/bookFilter">
         <uni-icons type="settings" size="30"></uni-icons>
         <view>筛选</view>
