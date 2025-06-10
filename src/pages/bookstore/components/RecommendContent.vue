@@ -20,7 +20,7 @@
       </navigator>
 
       <!-- 当前榜单内容 -->
-      <swiper class="h-[65vh]" circular :autoplay="false">
+      <swiper class="h-[65vh]" circular :autoplay="false" current="0">
         <swiper-item v-for="(page, pIndex) in currentPagedBooks" :key="pIndex">
           <!--  书籍项   -->
           <navigator

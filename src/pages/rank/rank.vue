@@ -21,7 +21,7 @@
     </view>
 
     <!-- 二级导航和内容 -->
-    <view class="flex-1 border border-gray-600">
+    <view class="flex-1">
       <swiper
         easing-function="linear"
         class="h-[100vh]"
@@ -161,6 +161,8 @@ const handlePrimaryTabChange = async (index: number) => {
   // 重置二级导航选中状态
   await handleSecondaryTabChange(0)
 
+  // 休息1秒
+  await new Promise((resolve) => setTimeout(resolve, 1000))
   isLoadingQueryBook.value = false
 }
 

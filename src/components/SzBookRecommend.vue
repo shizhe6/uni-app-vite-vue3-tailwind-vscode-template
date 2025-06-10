@@ -59,6 +59,7 @@ const queryParams = ref({
  * @returns  void
  */
 const pageQueryRecommendListData = async () => {
+  console.log('pageQueryRecommendListData' + query.sourceType)
   await commonPageQueryData(
     pageQueryRecommendListAPI,
     recommendBookData,
@@ -77,7 +78,7 @@ const pageQueryRecommendListData = async () => {
  * 触底加载更多数据
  */
 const handleScrollToLower = () => {
-  console.log('handleScrollToLower')
+  console.log('handleScrollToLower' + query.sourceType)
   pageQueryRecommendListData()
 }
 /**
@@ -93,8 +94,6 @@ defineExpose({
 const query = defineProps<{
   sourceType: string
 }>()
-
-console.log('query', query)
 </script>
 
 <style lang="scss"></style>

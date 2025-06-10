@@ -17,7 +17,10 @@
 
     <!-- 中间内容 -->
     <view class="flex-1 relative mt-[40px]">
-      <swiper class="remaining-content" @change="onSwiperChange">
+      <swiper
+        class="remaining-content"
+        @change="onSwiperChange"
+        :current="activePrimaryIndex">
         <swiper-item
           class="flex flex-row overflow-hidden"
           v-for="(item, index) in primaryCategoryData"
