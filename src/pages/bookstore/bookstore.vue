@@ -1,6 +1,6 @@
 <template>
   <view class="flex flex-col h-screen">
-    <!-- 安全区域 & 渐变背景 -->
+    <!-- 1.  搜索框 -->
     <view
       class="p-5 header-background"
       :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
@@ -12,26 +12,31 @@
         @focus="handleSearch"></uni-easyinput>
     </view>
 
-    <!-- 标题栏 -->
-    <view class="flex py-2 bg-gray-100">
+    <!-- 2.滑动页面标题栏 -->
+    <view class="flex bg-gray-100">
       <view
         v-for="(tab, index) in tabs"
         :key="index"
-        class="py-2 text-lg m-[10px]"
-        :class="{
-          'font-bold text-amber-600': currentIndex === index
-        }"
+        class="py-2 text-lg mx-[10px]"
+        :class="
+          currentIndex === index ? 'text-black text-xl ' : 'text-gray-600 '
+        "
         @click="handleTabClick(index)">
         {{ tab }}
       </view>
     </view>
 
-    <!-- 内容区域 -->
+    <!-- 3.滑动的页面内容区域 -->
     <swiper
       :current="currentIndex"
       @change="onSwiperChange"
       class="flex-1 bg-gray-100">
       <swiper-item v-for="(tab, index) in tabs" :key="index">
+        <!-- 为什么需要两个条件都满足？
+        因为 swiper-item 是多个，每个 swiper-item 都需要都会加载内部组件
+        但是并不是每个组件都要在swiper-item中展示，只有对应的swiper-item才需要展示对应的组件
+        所以，只有满足两个条件，才会展示对应的组件
+        -->
         <Recommend v-if="isRecommendLoaded && index === currentIndex" />
         <Classic v-if="isClassicLoaded && index === currentIndex" />
         <Knowledge v-if="isKnowledgeLoaded && index === currentIndex" />

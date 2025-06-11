@@ -1,9 +1,11 @@
 <template>
+  <!-- 加载中 -->
   <SzLoading v-if="isLoading"></SzLoading>
+  <!-- 列表模块 -->
   <scroll-view v-else scroll-y @scrolltolower="onScrollToLower">
     <!-- 1.榜单模块 -->
     <view class="mx-3 whitespace-nowrap bg-white rounded-lg">
-      <!--  榜单标题 -->
+      <!--  1.1榜单标题 -->
       <view class="flex justify-between items-center">
         <scroll-view scroll-x="true" enable-flex="true" class="w-[80%]">
           <view
@@ -21,13 +23,13 @@
         </scroll-view>
         <!-- 完整榜单 -->
         <navigator
-          class="py-2 mx-1 text-sm text-gray-600 w-[20%]"
+          class="py-2 mx-1 text-sm text-gray-600 w-[20%] shadow-md rounded-lg"
           url="/pages/rank/rank">
           完整榜单 >
         </navigator>
       </view>
 
-      <!-- 当前榜单内容 -->
+      <!-- 1.2当前榜单内容 -->
       <scroll-view scroll-x class="w-full whitespace-nowrap">
         <!-- 列 -->
         <view class="inline-flex">
