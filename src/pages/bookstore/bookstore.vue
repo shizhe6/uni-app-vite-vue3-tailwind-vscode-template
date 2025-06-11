@@ -2,7 +2,7 @@
   <view class="flex flex-col h-screen">
     <!-- 安全区域 & 渐变背景 -->
     <view
-      class="p-5 header"
+      class="p-5 header-background"
       :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
       <!-- 搜索框 -->
       <uni-easyinput
@@ -13,7 +13,7 @@
     </view>
 
     <!-- 标题栏 -->
-    <view class="flex py-2">
+    <view class="flex py-2 bg-gray-100">
       <view
         v-for="(tab, index) in tabs"
         :key="index"
@@ -142,7 +142,7 @@ const handleTabClick = (index: number) => {
 </script>
 
 <style lang="scss">
-.header {
+.header-background {
   background: linear-gradient(180deg, #f6ece0 0%, #f8f1eb 50%, #f7f5e6 100%);
 }
 </style>
