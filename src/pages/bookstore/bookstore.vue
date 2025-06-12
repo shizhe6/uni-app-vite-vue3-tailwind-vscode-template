@@ -71,6 +71,11 @@ const searchKeyword = ref('')
 // 推荐搜索书籍名称ji
 const searchKeywords = ref('重生之我在ktv当少爷')
 
+// 定时任务：每隔5秒更新 推荐搜索名称
+const searchRecommend = ['重生之我在ktv当少爷', '天榜', '人在现实，横推主天']
+let index = 0
+let timer: any = null
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -86,6 +91,7 @@ const currentIndex = ref(0)
  * 例如：加载数据、重置状态等
  */
 onShow(() => {
+  console.log('onShow')
   //开启数据加载状态
   isLoading.value = true
 
@@ -94,6 +100,33 @@ onShow(() => {
 
   // 加载完成
   isLoading.value = false
+})
+
+onLoad(() => {
+  console.log('onLoad')
+  timer = setInterval(() => {
+    searchKeywords.value = searchRecommend[index]
+    index = (index + 1) % searchRecommend.length
+  }, 5000)
+})
+
+/**
+ * 页面隐藏时触发
+ */
+onHide(() => {
+  console.log('onHide')
+  if (timer) {
+    clearInterval(timer)
+  }
+})
+/**
+ * 页面卸载时触发
+ */
+onUnload(() => {
+  console.log('onUnload')
+  if (timer) {
+    clearInterval(timer)
+  }
 })
 // 重置所有组件加载状态
 const resetLoadedStates = () => {
