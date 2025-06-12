@@ -8,7 +8,6 @@ import NewArrival from './components/LatestContent.vue'
 import Audiobook from './components/ListeningContent.vue'
 import Recommend from './components/RecommendContent.vue'
 
-//
 /* eslint no-console: ["error", { allow: ["log", "error"] }] */
 // 页面加载状态
 const isLoading = ref(false)
@@ -150,16 +149,10 @@ function handleTabClick(tabIndex: number) {
   <view class="flex h-screen flex-col">
     <!-- 1.  搜索框 -->
     <view
-      class="header-background p-5"
-      :style="{ paddingTop: `${safeAreaInsets!.top}px` }"
+      class="header-background "
     >
       <!-- 搜索框 -->
-      <uni-easyinput
-        v-model="searchKeyword"
-        prefixIcon="search"
-        :placeholder="searchKeywordPlaceholder"
-        @focus="handleSearch"
-      />
+      <uni-search-bar v-model="searchKeyword" class="h-[40rpx]" :placeholder="searchKeywordPlaceholder" @focus="handleSearch" />
     </view>
 
     <!-- 2.滑动页面标题栏 -->
