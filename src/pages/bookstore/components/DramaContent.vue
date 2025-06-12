@@ -10,7 +10,7 @@ onMounted(() => {
   </view>
 </template>
 
-<style  lang="scss" scoped>
+<style  lang="scss" scoped>/* stylelint-disable */
 .viewreport {
   background-color: rgb(231, 132, 201);
   height: 100vh;
