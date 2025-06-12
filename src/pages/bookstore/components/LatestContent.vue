@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-console.log('最新上架页面挂载')
+onMounted(() => {
+  console.log('最新上架页面挂载')
+})
 </script>
 
 <template>

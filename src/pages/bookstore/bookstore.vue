@@ -11,7 +11,13 @@ import Recommend from './components/RecommendContent.vue'
 /* eslint no-console: ["error", { allow: ["log", "error"] }] */
 // 页面加载状态
 const isLoading = ref(false)
-
+// 标签页组件加载状态
+const isRecommendLoaded = ref(false)
+const isClassicLoaded = ref(false)
+const isKnowledgeLoaded = ref(false)
+const isAudiobookLoaded = ref(false)
+const isDramaLoaded = ref(false)
+const isNewArrivalLoaded = ref(false)
 // 搜索关键词
 const searchKeyword = ref('')
 // 推荐搜索书籍名称ji
@@ -23,12 +29,13 @@ const searchRecommendDataIndex = ref(0)
 // timer定义
 const timer = ref<any>(null)
 
+// 获取屏幕边界到安全区域距离
+const { safeAreaInsets } = uni.getSystemInfoSync()
+
 // 标签页数据
 const tabs = ref(['推荐', '经典', '知识', '听书', '看剧', '最新上架'])
 // 当前标签索引
 const currentTabIndex = ref(0)
-// 加载组件名称
-const tabName = ref('推荐')
 
 /**
  * 页面显示时触发
@@ -40,6 +47,9 @@ onShow(() => {
   console.log('onShow')
   // 开启数据加载状态
   isLoading.value = true
+
+  // 加载推荐组件数据
+  isRecommendLoaded.value = true
 
   // 加载完成
   isLoading.value = false
@@ -79,6 +89,25 @@ onUnload(() => {
     clearInterval(timer.value)
   }
 })
+/**
+ * 重置所有组件加载状态
+ */
+function resetLoadedStates() {
+  Object.values(tabLoadedMap).forEach(loaded => (loaded.value = false))
+}
+
+/**
+ * 新增：创建标签索引与加载状态的映射对象
+ 
+ */
+const tabLoadedMap: Record<number, Ref<boolean>> = {
+  0: isRecommendLoaded,
+  1: isClassicLoaded,
+  2: isKnowledgeLoaded,
+  3: isAudiobookLoaded,
+  4: isDramaLoaded,
+  5: isNewArrivalLoaded,
+}
 
 /**
  * 修改滑动切换处理函数
@@ -88,8 +117,14 @@ function onSwiperChange(e: any) {
   // 1.获取当前页面索引
   currentTabIndex.value = e.detail.current
 
-  // 2.设置加载子组件
-  tabName.value = tabs.value[e.detail.current]
+  // 2.重置所有组件加载状态
+  resetLoadedStates()
+
+  // 3.根据当前索引加载对应组件
+  const targetLoaded = tabLoadedMap[currentTabIndex.value]
+  if (targetLoaded) {
+    targetLoaded.value = true // 确保索引有效时才设置
+  }
 }
 
 /**
@@ -107,8 +142,6 @@ function handleSearch() {
  */
 function handleTabClick(tabIndex: number) {
   currentTabIndex.value = tabIndex
-  tabName.value = tabs.value[tabIndex]
-  console.log(tabName.value, currentTabIndex.value)
 }
 </script>
 
@@ -149,12 +182,12 @@ function handleTabClick(tabIndex: number) {
         但是并不是每个组件都要在swiper-item中展示，只有对应的swiper-item才需要展示对应的组件
         所以，只有满足两个条件，才会展示对应的组件
         -->
-        <Classic v-if="`${tabName} === ${tab} && ${childIndex} === ${currentTabIndex}`" />
-        <Recommend v-if="`${tabName} === ${tab} && ${childIndex} === ${currentTabIndex}`" />
-        <Knowledge v-if="`${tabName} === ${tab} && ${childIndex} === ${currentTabIndex}`" />
-        <Audiobook v-if="`${tabName} === ${tab} && ${childIndex} === ${currentTabIndex}`" />
-        <Drama v-if="`${tabName} === ${tab} && ${childIndex} === ${currentTabIndex}`" />
-        <NewArrival v-if="`${tabName} === ${tab} && ${childIndex} === ${currentTabIndex}`" />
+        <Recommend v-if="isRecommendLoaded && childIndex === currentTabIndex" />
+        <Classic v-if="isClassicLoaded && childIndex === currentTabIndex" />
+        <Knowledge v-if="isKnowledgeLoaded && childIndex === currentTabIndex" />
+        <Audiobook v-if="isAudiobookLoaded && childIndex === currentTabIndex" />
+        <Drama v-if="isDramaLoaded && childIndex === currentTabIndex" />
+        <NewArrival v-if="isNewArrivalLoaded && childIndex === currentTabIndex" />
       </swiper-item>
     </swiper>
   </view>
