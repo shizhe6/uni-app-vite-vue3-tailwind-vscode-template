@@ -1,5 +1,5 @@
 <template>
-  <ZfLoading v-if="isLoading"></ZfLoading>
+  <ZfCommonLoading v-if="isLoading"></ZfCommonLoading>
   <scroll-view v-else scroll-y @scrolltolower="onScrollToLower">
     <!-- 2.推荐书籍模块 -->
     <!-- 根据错误提示，需要补充 sourceType 属性，这里假设 sourceType 的值为 'recommend'，可根据实际情况修改 -->
