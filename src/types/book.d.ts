@@ -29,7 +29,7 @@ export type BookItem = {
   // 评分
   score?: number
   // 简介
-  description: string
+  description?: string
   // 排名
   sortNumber?: number
   // 图片
@@ -43,13 +43,13 @@ export type BookItem = {
   // 标签列表
   tagList?: string[]
   // 未读章节
-  unread: number
+  unread?: number
   // 更新时间
-  lastUpdate: string
+  lastUpdate?: string
   // 最新章节
-  latestChapter: string
+  latestChapter?: string
   // 总章节数
-  totalChapters: number
+  totalChapters?: number
 }
 
 // 段落数据

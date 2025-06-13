@@ -28,7 +28,7 @@
 import { commonPageQueryData } from '@/services/global'
 import { pageQueryRecommendListAPI } from '@/services/BookRecommend'
 import { BookItem } from '@/types/book'
-import { PageParams, PageResult } from '@/types/global'
+import { PageParams } from '@/types/global'
 
 // 推荐列表
 const recommendBookData = ref<BookItem[]>([])
@@ -72,7 +72,7 @@ const pageQueryRecommendListData = async () => {
   )
 
   recommendBookData.value.forEach((item, index) => {
-    item.description = item.description.slice(0, 20) + '...'
+    item.description = item.description!.slice(0, 20) + '...'
   })
 }
 
@@ -101,4 +101,7 @@ const query = defineProps<{
 
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+
+  // 样式
+</style>
