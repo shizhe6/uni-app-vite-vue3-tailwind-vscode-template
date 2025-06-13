@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { commonPageQueryData } from '@/services/global'
-import { pageQueryRecommendListAPI } from '@/services/SzBookRecommend'
+import { pageQueryRecommendListAPI } from '@/services/BookRecommend'
 import { BookItem } from '@/types/book'
 import { PageParams, PageResult } from '@/types/global'
 
