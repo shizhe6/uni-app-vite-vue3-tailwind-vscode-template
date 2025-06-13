@@ -1,6 +1,6 @@
 <template>
   <!-- 加载中 -->
-  <SzLoading v-if="isLoading"></SzLoading>
+  <ZfLoading v-if="isLoading"></ZfLoading>
   <!-- 列表模块 -->
   <scroll-view v-else scroll-y @scrolltolower="onScrollToLower">
     <!-- 1.榜单模块 -->
