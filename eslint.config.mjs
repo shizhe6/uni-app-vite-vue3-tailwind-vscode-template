@@ -7,7 +7,7 @@ export default icebreaker({
   rules: {
     'vue/no-v-html': 'off',
     // 允许使用 console.log
-    'no-console': 'log',
+    'no-console':  ["error", { allow: ["log", "error"] }],
     // 允许使用 async/await
     'require-await': 'off',
   },

@@ -8,7 +8,6 @@ import NewArrival from './components/LatestContent.vue'
 import Audiobook from './components/ListeningContent.vue'
 import Recommend from './components/RecommendContent.vue'
 
-/* eslint no-console: ["error", { allow: ["log", "error"] }] */
 // 页面加载状态
 const isLoading = ref(false)
 // 标签页组件加载状态
@@ -20,7 +19,7 @@ const isDramaLoaded = ref(false)
 const isNewArrivalLoaded = ref(false)
 // 搜索关键词
 const searchKeyword = ref('')
-// 推荐搜索书籍名称ji
+// 推荐搜索书籍名称
 const searchKeywordPlaceholder = ref('')
 
 // 定时任务：每隔5秒更新 推荐搜索名称
@@ -28,9 +27,6 @@ const searchRecommendData = ['重生之我在ktv当少爷', '天榜', '人在现
 const searchRecommendDataIndex = ref(0)
 // timer定义
 const timer = ref<any>(null)
-
-// 获取屏幕边界到安全区域距离
-const { safeAreaInsets } = uni.getSystemInfoSync()
 
 // 标签页数据
 const tabs = ref(['推荐', '经典', '知识', '听书', '看剧', '最新上架'])
@@ -98,7 +94,7 @@ function resetLoadedStates() {
 
 /**
  * 新增：创建标签索引与加载状态的映射对象
- 
+
  */
 const tabLoadedMap: Record<number, Ref<boolean>> = {
   0: isRecommendLoaded,
@@ -151,7 +147,6 @@ function handleTabClick(tabIndex: number) {
     <view
       class="header-background "
     >
-      <!-- 搜索框 -->
       <uni-search-bar v-model="searchKeyword" class="h-[40rpx]" :placeholder="searchKeywordPlaceholder" @focus="handleSearch" />
     </view>
 
